@@ -23,7 +23,7 @@
                                 </div>
                                 <p class="text-lg font-semibold text-green-600 dark:text-green-400">✅ Presensi Tercatat</p>
                                 <p class="mt-2 text-gray-800 dark:text-gray-200 font-medium">Mata Kuliah:
-                                    {{ $presensi->matkul->nama_matkul }}
+                                    {{ $presensi->pertemuan->matkul->nama_matkul }}
                                 </p>
                                 <p class="text-gray-600 dark:text-gray-400">Ruangan: {{ $presensi->ruangan->nama_ruangan ?? '-' }}</p>
                                 <p class="text-gray-600 dark:text-gray-400"> Jam Perkuliahan:
@@ -38,7 +38,7 @@
                                     <p class="text-lg font-semibold">Belum Melakukan Presensi</p>
                                     <p class="text-sm">Silakan tap kartu RFID Anda</p>
                                     <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                        Jadwal Anda saat ini: {{ $presensi->matkul->nama_matkul }}
+                                        Jadwal Anda saat ini: {{ $presensi->pertemuan->matkul->nama_matkul }}
                                         ({{ $presensi->jam_awal }} - {{ $presensi->jam_akhir }})
                                     </p>
                                 </div>
@@ -57,13 +57,13 @@
                     <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Riwayat Presensi</h2>
 
                     <div class="flex-1 space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                        @if ($riwayat)
-                            @foreach ($riwayat as $r )
+                        {{-- @if ($riwayat) --}}
+                            @forelse ($riwayat as $r )
                                 <div class="bg-gradient-to-r from-white to-gray-100 dark:from-gray-800 dark:to-gray-700 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 transition hover:shadow-xl">
                                     <div class="flex justify-between items-center">
                                         <div>
                                             <p class="font-bold text-gray-800 dark:text-gray-100">{{$r->tgl_presensi}}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">{{$r->matkul->nama_matkul ?? '-'}}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">{{$r->pertemuan->matkul->nama_matkul ?? '-'}}</p>
                                             <p class="text-sm text-gray-600 dark:text-gray-300">Jam Kuliah: {{substr($r->jam_awal,0,5) .' - '. substr($r->jam_akhir,0,5) ?? '-'}}</p>
                                             <p class="text-sm text-gray-600 dark:text-gray-300">Presensi Masuk: {{$r->detailPresensi->first()->waktu_presensi ?? '-'}}</p>
                                         </div>
@@ -94,14 +94,14 @@
                                         <div class="{{$bg}}">{{$text}}</div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
+                            {{-- @endforeach --}}
+                        @empty
                             <div class="text-center text-gray-600 dark:text-gray-400 mt-10">
                                 <p class="text-8xl mb-2">📭</p>
                                 <p class="text-lg font-semibold">Belum Ada Riwayat Presensi</p>
                                 <p class="text-sm">Riwayat presensi akan muncul setelah jam perkuliahan selesai.</p>
                             </div>
-                        @endif
+                        @endforelse
                     </div>
                 </div>
             </div>

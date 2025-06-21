@@ -127,7 +127,8 @@ class RekapMahasiswaController extends Controller
         $dosen = Auth::user()->dosen;
 
         $tahunAjaranAktif = TahunAjaran::where('status',  true)->first();
-        $matkulId = Presensi::where('dosen_id',$dosen->id)->distinct()->pluck('matkul_id');
+        // $matkulId = Presensi::where('dosen_id',$dosen->id)->distinct()->pluck('matkul_id');
+        $matkulId = Presensi::where('dosen_id', $dosen->id)->with('pertemuan')->get()->pluck('pertemuan.matkul_id')->unique()->values();
 
         $query = Matkul::query()->whereIn('id', $matkulId)->where('tahun_ajaran_id', $tahunAjaranAktif->id);
 

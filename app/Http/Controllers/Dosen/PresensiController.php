@@ -77,7 +77,7 @@ class PresensiController extends Controller
                 })->exists();
 
             if ($conflictRuangan) {
-                return back()->withErrors(['ruangan_id' => 'Ruangan sedang dipakai pada waktu tersebut.'])->withInput();
+                return back()->withInput()->withErrors(['ruangan_id' => 'Ruangan sedang dipakai pada waktu tersebut.'])->withInput();
             }
 
             $conflictDosen = Presensi::where('tgl_presensi', $request['tgl_presensi'])
@@ -93,7 +93,7 @@ class PresensiController extends Controller
                 })->exists();
 
             if ($conflictDosen) {
-                return back()->withErrors(['dosen_id' => 'Dosen sedang mengajar pada waktu tersebut.'])->withInput();
+                return back()->withInput()->withErrors(['dosen_id' => 'Dosen sedang mengajar pada waktu tersebut.'])->withInput();
             }
 
             $conflictJadwal = Presensi::where('tgl_presensi', $request['tgl_presensi'])
@@ -115,14 +115,14 @@ class PresensiController extends Controller
                 })->exists();
 
             if ($conflictJadwal) {
-                return back()->withErrors(['semester' => 'Jadwal bentrok untuk prodi dan semester yang dipilih.'])->withInput();
+                return back()->withInput()->withErrors(['semester' => 'Jadwal bentrok untuk prodi dan semester yang dipilih.'])->withInput();
             }
 
             $mahasiswa = Mahasiswa::where('prodi_id', $request['prodi_id'])
                 ->where('semester', $request['semester'])->get();
 
             if ($mahasiswa->isEmpty()) {
-                return back()->withErrors(['semester' => 'Tidak ada mahasiswa untuk prodi dan semester ini.']);
+                return back()->withInput()->withErrors(['semester' => 'Tidak ada mahasiswa untuk prodi dan semester ini.']);
             }
 
             $pertemuan = Pertemuan::firstOrCreate([
@@ -152,18 +152,25 @@ class PresensiController extends Controller
                 'link_zoom' => $request['link_zoom'],
             ]);
 
-            foreach ($mahasiswa as $mhs) {
-                DetailPresensi::create([
-                    'presensi_id' => $presensi->id,
-                    'mahasiswa_id' => $mhs->id,
-                    'waktu_presensi' => null,
-                    'status' => 0,
-                    'alasan' => null,
-                    'bukti' => null
-                ]);
+            if ($request['status'] === 'aktif') {
+                foreach ($mahasiswa as $mhs) {
+                    DetailPresensi::create([
+                        'presensi_id' => $presensi->id,
+                        'mahasiswa_id' => $mhs->id,
+                        'waktu_presensi' => null,
+                        'status' => 0,
+                        'alasan' => null,
+                        'bukti' => null
+                    ]);
+                }
             }
 
+            return true;
         });
+
+        if($result !== true){
+            return $result;
+        }
 
         return redirect()->route('dosen.presensi.index')->with([
             'status' => 'success',
@@ -189,7 +196,7 @@ class PresensiController extends Controller
     public function show(string $id)
     {
         $title = 'Data Presensi';
-        $presensi = Presensi::with('dosen','prodi','ruangan','matkul','tahunAjaran')->findOrFail($id);
+        $presensi = Presensi::with('dosen','pertemuan.prodi','ruangan','pertemuan.matkul','pertemuan.tahun')->findOrFail($id);
         $detail = DetailPresensi::with('mahasiswa')->where('presensi_id', $id)->get();
         return view('dosen.info-presensi', compact('title','presensi','detail'));
     }

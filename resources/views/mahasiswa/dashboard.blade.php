@@ -52,7 +52,7 @@
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{$p->tgl_presensi ?? ''}}</td>
                 <td class="px-4 py-2">{{substr($p->jam_awal,0,5) .' - '. substr($p->jam_akhir,0,5)}}</td>
-                <td class="px-4 py-2">{{$p->matkul->nama_matkul ?? ''}}</td>
+                <td class="px-4 py-2">{{$p->pertemuan->matkul->nama_matkul ?? ''}}</td>
                 <td class="px-4 py-2">{{$p->dosen->nama ?? ''}}</td>
                 <td class="px-4 py-2">{{$p->ruangan->nama_ruangan ?? '-'}}</td>
               </tr>

@@ -42,7 +42,7 @@ class MahasiswaController extends Controller
             })
             ->orderBy('tahun_awal')
             ->get();
-        $hasil = $service->getRekap($mahasiswa->id);
+        $hasil = $service->getRekap();
         $data['rekap'] = $hasil['rekap'];
         $data['totalPertemuan'] = $hasil['totalPertemuan'];
         return view('mahasiswa.rekap_mahasiswa',$data);
@@ -53,10 +53,10 @@ class MahasiswaController extends Controller
         $mahasiswa = Auth::user()->mahasiswa;
 
         if (!$mahasiswa) {
-            abort(403, 'Dosen tidak ditemukan atau tidak terhubung dengan akun.');
+            abort(403, 'Mahasiswa tidak ditemukan atau tidak terhubung dengan akun.');
         }
 
-        $rekapData = $service->getRekap($mahasiswa->id);
+        $rekapData = $service->getRekap();
 
         $data = [
             'nim' => $mahasiswa->nim,
@@ -76,7 +76,7 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = Auth::user()->mahasiswa;
 
-        $rekapData = $service->getRekap($mahasiswa->id);
+        $rekapData = $service->getRekap();
 
         $totalPertemuan = $rekapData['totalPertemuan'] ?? 16;
 
@@ -213,13 +213,13 @@ class MahasiswaController extends Controller
 
         public function getFilterRekap(Request $request, RekapMahasiswaService $service)
     {
-        $data['title'] = 'Rekap Dosen';
-        $data['judul'] = 'Rekap Dosen';
+        $data['title'] = 'Rekap Mahasiswa';
+        $data['judul'] = 'Rekap Mahasiswa';
         $mahasiswa = Auth::user()->mahasiswa;
         $data['rekap'] = [];
         $data['totalPertemuan'] = 16;
 
-        $hasil = $service->getFilterRekap($mahasiswa->id, $request->tahun_ajaran);
+        $hasil = $service->getFilterRekap( $request->tahun_ajaran);
         $data['rekap'] = $hasil['rekap'];
         $data['totalPertemuan'] = $hasil['totalPertemuan'];
 

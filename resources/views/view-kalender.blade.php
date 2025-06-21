@@ -25,6 +25,7 @@
         <label for="bulan" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Bulan</label>
         <select x-model="selectedMonth" @change="updateDate" id="bulan"
           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 transition">
+          <option value="" hidden selected>Pilih bulan</option>
           <template x-for="(month, index) in months" :key="index">
             <option :value="index" x-text="month"></option>
           </template>

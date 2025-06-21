@@ -41,14 +41,15 @@
                 <td class="border border-gray-300 px-4 py-2">{{ $item['nama_matkul'] }}</td>
                 @for ($i = 0; $i < $totalPertemuan; $i++)
                     @php
-                        $tanggal = $item['tanggal_pertemuan'][$i] ?? null;
-                        $status = $tanggal ? 'M' : '-';
+                        $status = $item['status_pertemuan'][$i] ?? null;
                         $bg = match($status) {
-                            'M' => 'bg-green-500 text-white',
-                            '-' => 'bg-gray-500 text-white',
+                            'M' => 'text-green-500',
+                            '-' => 'text-gray-500',
+                            'UTS' => 'text-red-500',
+                            'UAS' => 'text-red-500'
                         };
                     @endphp
-                    <td class="border px-4 py-2 font-semibold {{ $bg }}" title="{{$tanggal}}">{{ $status }}</td>
+                    <td class="border px-4 py-2 font-semibold {{ $bg }}">{{ $status }}</td>
                 @endfor
                 <td class="border border-gray-300 px-4 py-2">{{$item['total_pertemuan']}}</td>
             </tr>
@@ -56,7 +57,9 @@
         </tbody>
     </table>
 
-    <p style="margin-top: 20px;">Keterangan: M = Mengajar, - = Tidak ada perkuliahan</p>
+    <p style="margin-top: 20px;">Keterangan:</p>
+    <p>M = Mengajar</p>
+    <p>- = Tidak terselenggara perkuliahan</p>
 
 </body>
 </html>

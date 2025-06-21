@@ -1,5 +1,5 @@
 <x-layout>
-    @vite(['resources/js/pages/admin/rekap-mahasiswa.js'])
+    @vite(['resources/js/pages/mahasiswa/rekap-mahasiswa.js'])
 
     <div class="h-full dark:text-white">
         <x-slot:title>{{ $title }}</x-slot:title>
@@ -63,6 +63,8 @@
                                             $status = $item['pertemuan'][$i] ?? '';
                                             $dosen = $item['nama_dosen'][$i] ?? '';
                                             switch ($status) {
+                                                case 'UTS': $bg = 'text-red-500'; break;
+                                                case 'UAS': $bg = 'text-red-500'; break;
                                                 case 'H': $bg = 'text-green-500'; break;
                                                 case 'I': $bg = 'text-blue-500'; break;
                                                 case 'S': $bg = 'text-yellow-500'; break;

@@ -76,7 +76,7 @@
     <p>I = Izin</p>
     <p>S = Sakit</p>
     <p>A = Alpha</p>
-    <p>- = Tidak ada perkuliahan</p>
+    <p>- = Tidak terselenggara perkuliahan</p>
 
 </body>
 </html>

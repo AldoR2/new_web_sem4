@@ -25,7 +25,7 @@ class JadwalController extends Controller
         $prodi = Prodi::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
         $dosen = Dosen::all();
-        $jadwal = Jadwal::with('dosen','prodi','ruangan','matkul','tahun')->get();
+        $jadwal = Jadwal::with('dosen','prodi','ruangan','matkul','tahun')->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
         return view('admin.master_data.jadwal', compact('jadwal','title','dosen','prodi','tahun'));
     }
 
@@ -171,7 +171,7 @@ class JadwalController extends Controller
         $dosen = $request->query('dosen');
         $prodi = $request->query('prodi');
 
-        $query = Jadwal::query()->with('prodi','tahun','dosen','matkul','ruangan');
+        $query = Jadwal::query()->with('prodi','tahun','dosen','matkul','ruangan')->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam');
 
         if ($tahun) {
             $query->where('tahun_ajaran_id', $tahun);

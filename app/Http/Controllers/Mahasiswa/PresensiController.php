@@ -31,7 +31,7 @@ class PresensiController extends Controller
         $mahasiswa = Auth::user()->mahasiswa;
         $biodata = Mahasiswa::findOrFail($mahasiswa->id);
 
-        $presensiHariIni = Presensi::with(['prodi','dosen','matkul','tahunAjaran','ruangan','detailPresensi' => function ($q) use ($mahasiswa){
+        $presensiHariIni = Presensi::with(['pertemuan','dosen','ruangan','detailPresensi' => function ($q) use ($mahasiswa){
             $q->where('mahasiswa_id', $mahasiswa->id);
         }])->whereDate('tgl_presensi', Carbon::today())->get();
 
@@ -39,9 +39,13 @@ class PresensiController extends Controller
         $start = $now->copy()->subMinutes(30);
         $end = $now->copy()->addMinutes(30);
 
-        $presensi = Presensi::with(['matkul', 'ruangan', 'detailPresensi' => function ($q) use ($mahasiswa) {
+        $presensi = Presensi::with('pertemuan.matkul', 'ruangan', 'detailPresensi')
+        ->whereHas('detailPresensi', function ($q) use ($mahasiswa) {
             $q->where('mahasiswa_id', $mahasiswa->id);
-        }])
+        })
+        ->whereHas('pertemuan', function ($q) {
+            $q->where('status','aktif');
+        })
         ->whereDate('tgl_presensi', Carbon::today())
         ->whereTime('jam_awal', '<=', $now->format('H:i:s'))
         ->whereTime('jam_akhir', '>=', $now->format('H:i:s'))
@@ -49,17 +53,20 @@ class PresensiController extends Controller
 
         $presensiTercatat = optional($presensi?->detailPresensi->first())->waktu_presensi;
 
-        $riwayat =  Presensi::with(['matkul','ruangan','detailPresensi' => function ($q) use ($mahasiswa){
+        $riwayat =  Presensi::with(['pertemuan','ruangan','detailPresensi' => function ($q) use ($mahasiswa){
             $q->where('mahasiswa_id', $mahasiswa->id);
         }])
+        // $riwayat =  Presensi::with('pertemuan','ruangan','detailPresensi')
         ->whereDate('tgl_presensi', '=', $now->toDateString()) // hari ini atau sebelumnya
         ->whereTime('jam_akhir', '<', $now->format('H:i:s'))     // pastikan sudah selesai
         ->whereHas('detailPresensi', function ($q) use ($mahasiswa) {
             $q->where('mahasiswa_id', $mahasiswa->id);
         })
+        // ->whereHas('pertemuan', function ($p) {
+        //     $p->where('status','aktif');
+        // })
         ->orderByDesc('tgl_presensi')
         ->get();
-
 
         return view('mahasiswa.presensi', compact('presensi','title','biodata','presensiTercatat','riwayat'));
     }
