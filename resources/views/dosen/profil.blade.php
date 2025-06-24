@@ -55,7 +55,7 @@
                       </div>
                       <div class="flex flex-col w-full mb-4">
                             <label class="mb-1 font-semibold text-gray-600 dark:text-gray-300">Jenis Kelamin:</label>
-                            <input type="text" disabled class="p-2 border-2 border-gray-700 bg-gray-100 text-gray-700 rounded-sm dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300" value="{{ $user->dosen->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}">
+                            <input type="text" disabled class="p-2 border-2 border-gray-700 bg-gray-100 text-gray-700 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" value="{{ $user->dosen->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}">
                       </div>
                   </div>
 

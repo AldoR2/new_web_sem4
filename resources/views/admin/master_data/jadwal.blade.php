@@ -54,7 +54,7 @@
                 </a>
             </div>
 
-            <div class="overflow-x-auto w-68 sm:w-150 md:w-full mt-3 pb-3">
+            <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
                 <table id="data-jadwal" class="text-sm text-left w-full pt-1 display nowrap">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white sticky top-0 z-10">
                         <tr>

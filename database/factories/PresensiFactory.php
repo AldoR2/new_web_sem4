@@ -22,7 +22,7 @@ class PresensiFactory extends Factory
             'jam_awal' => $jamAwal,
             'jam_akhir' => $jamAkhir,
             'dosen_id' => Dosen::inRandomOrder()->first()?->id ?? 1,
-            'prodi_id' => Prodi::inRandomOrder()->first()?->id ?? 1,
+            // 'prodi_id' => Prodi::inRandomOrder()->first()?->id ?? 1,
             'semester' => $this->faker->numberBetween(1, 8),
             'matkul_id' => Matkul::inRandomOrder()->first()?->id ?? 1,
             'ruangan_id' => Ruangan::inRandomOrder()->first()?->id ?? 1,
