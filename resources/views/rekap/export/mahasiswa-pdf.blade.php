@@ -12,11 +12,35 @@
 </head>
 <body>
 
-        <div style="text-align: center; margin-bottom: 10px;">
-            <img src="{{ public_path('images/stipress.png') }}" style="max-width: 50px; width: 100%;">
-
-            {{-- <img src="{{ asset('images/stipress.png') }}" alt="Kop Surat STIKES" style="max-width: 700px; width: 100%;"> --}}
-        </div>
+    <table style="width: 90%; border-collapse: collapse; border: none; margin: 0 auto;">
+        <tr>
+            <td style="width: 100px; text-align: center; border: none;">
+                <img src="{{ public_path('images/logo-dikbud.png') }}" alt="Logo STIPRESS" style="max-width: 120px;" />
+            </td>
+            <td style="text-align: center; border: none;">
+                <div style="font-size: 22px; font-weight: bold;">
+                    SEKOLAH TINGGI ILMU KESEHATAN
+                </div>
+                <div style="font-size: 22px; font-weight: bold;">
+                    STIKES PANTI WALUYA MALANG
+                </div>
+                <div style="font-size: 14px;">
+                    Jl. Yulius Usman No. 62, Kasin, Kec. Klojen, Kota Malang, Jawa Timur 65117
+                </div>
+                <div style="font-size: 14px;">
+                    Telp: 0341-369003 | Email: info@stikespantiwaluya.ac.id | Website: www.stikespantiwaluya.ac.id
+                </div>
+            </td>
+            <td style="width:100px; border: none;">
+                <img src="{{ public_path('images/stikes(1).png') }}" alt="Logo STIPRESS" style="max-width: 80px;" />
+            </td>
+        </tr>
+    </table>
+    <hr style="border: 2px solid #000; margin: 15px 0;" />
+    
+    
+    
+    
 
     <h3 align="center">REKAP KEHADIRAN MAHASISWA</h3>
 
