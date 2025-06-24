@@ -156,12 +156,18 @@
                            case 'A':
                                $bg = 'text-red-500';
                                break;
+                           case 'UTS':
+                               $bg = 'text-red-500';
+                               break;
+                           case 'UAS':
+                               $bg = 'text-red-500';
+                               break;
                            default:
                                $bg = 'text-gra-500';
                                break;
                        };
                    @endphp
-                       <td class="px-4 py-2 font-semibold {{ $bg }}" title="{{$tanggal .' '. $dosen}}">{{ $status }}</td>
+                       <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold {{ $bg }}" title="{{$tanggal .' '. $dosen}}">{{ $status }}</td>
                @endfor
                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['kehadiran']}}</td>
            </tr>
@@ -173,9 +179,9 @@
  <div class="mt-6">
    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-5">Keterangan:</h2>
         <p class="mt-2 dark:text-white"><span class="text-green-500 font-bold p-1">H  = Hadir</span></p>
-        <p class="mt-2 dark:text-white"><span class="text-blue-500 font-bold py-1 px-2">I  = Tidak masuk dengan Izin</span></p>
-        <p class="mt-2 dark:text-white"><span class="text-yellow-500 font-bold py-1 px-2">S  = Tidak masuk karena sakit</span></p>
-        <p class="mt-2 dark:text-white"><span class="text-red-500 font-bold p-1">A  = Tidak masuk tanpa keterangan</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-blue-500 font-bold py-1 px-2">I  = Izin</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-yellow-500 font-bold py-1 px-2">S  = Sakit</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-red-500 font-bold p-1">A  = Alpha</span></p>
         <p class="mt-2 dark:text-white"><span class="text-gray-500 font-bold p-1">-  = Tidak terselenggara perkuliahan</span></p>
  </div>
 </div>

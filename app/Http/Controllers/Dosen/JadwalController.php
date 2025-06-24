@@ -15,7 +15,7 @@ class JadwalController extends Controller
         $title = 'Jadwal Mengajar Dosen';
         $dosen = Auth::user()->dosen;
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
-        $jadwal = Jadwal::with('prodi','dosen','ruangan','tahun','matkul')->where('dosen_id', $dosen->id)->get();
+        $jadwal = Jadwal::with('prodi','dosen','ruangan','tahun','matkul')->where('dosen_id', $dosen->id)->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
         return view('dosen.jadwal', compact('title','jadwal','tahun'));
     }
 

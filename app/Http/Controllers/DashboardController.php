@@ -126,8 +126,16 @@ class DashboardController extends Controller
 
     public function indexMahasiswa(){
         $title = 'Dashboard';
-        $presensiHariIni = Presensi::with('prodi','dosen','matkul','tahunAjaran','ruangan')->whereDate('tgl_presensi', Carbon::today())->get();
         $mahasiswa = Auth::user()->mahasiswa;
+        $presensiHariIni = Presensi::with(['pertemuan','dosen','ruangan','detailPresensi' => function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        }])
+        ->whereHas('detailPresensi', function ($q) use ($mahasiswa) {
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        })
+        ->whereDate('tgl_presensi', Carbon::today())->get();
+        // $presensiHariIni = Presensi::with('pertemuan','dosen','ruangan')->whereHas('detailPresensi')
+        //     ->whereDate('tgl_presensi', Carbon::today())->get();
         $biodata = Mahasiswa::with('prodi','provinsi','kota','kecamatan','kelurahan')->findOrFail($mahasiswa->id);
 
         return view('mahasiswa.dashboard',compact('title','presensiHariIni','biodata'));

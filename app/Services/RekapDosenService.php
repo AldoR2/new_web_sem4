@@ -28,7 +28,7 @@ class RekapDosenService
     $rekap = [];
     $maxPertemuan = $pertemuans->count();
 
-    foreach ($pertemuans->groupBy('matkul_id') as $matkulId => $grouped) {
+    foreach ($pertemuans->groupBy('matkul_id') as $grouped) {
         $first = $grouped->first();
 
         $hadir = [];
@@ -58,13 +58,17 @@ class RekapDosenService
             $tanggal_pertemuan[] = $hadir[$i] ?? '-';
         }
 
+        $totalAktif = $grouped->filter(function ($p) {
+            return strtolower($p->status) === 'aktif';
+        })->count();
+
         $rekap[] = [
             'kode_matkul' => $first->matkul->kode_matkul,
             'nama_matkul' => $first->matkul->nama_matkul,
             'nama_prodi' => $first->prodi->nama_prodi,
             'semester' => $first->semester,
             'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
-            'total_pertemuan' => count($grouped),
+            'total_pertemuan' => $totalAktif,
             'status_pertemuan' => $tanggal_pertemuan,
         ];
     }
@@ -184,13 +188,17 @@ class RekapDosenService
                 $tanggal_pertemuan[] = $hadir[$i] ?? '-';
             }
 
+            $totalAktif = $grouped->filter(function ($p) {
+                return strtolower($p->status) === 'aktif';
+            })->count();
+
             $rekap[] = [
                 'kode_matkul' => $first->matkul->kode_matkul,
                 'nama_matkul' => $first->matkul->nama_matkul,
                 'nama_prodi' => $first->prodi->nama_prodi,
                 'semester' => $first->semester,
                 'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
-                'total_pertemuan' => count($grouped),
+                'total_pertemuan' => $totalAktif,
                 'status_pertemuan' => $tanggal_pertemuan,
             ];
         }
@@ -258,13 +266,17 @@ class RekapDosenService
                 $tanggal_pertemuan[] = $hadir[$i] ?? '-';
             }
 
+            $totalAktif = $grouped->filter(function ($p) {
+                return strtolower($p->status) === 'aktif';
+            })->count();
+
             $rekap[] = [
                 'kode_matkul' => $first->matkul->kode_matkul,
                 'nama_matkul' => $first->matkul->nama_matkul,
                 'nama_prodi' => $first->prodi->nama_prodi,
                 'semester' => $first->semester,
                 'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
-                'total_pertemuan' => count($grouped),
+                'total_pertemuan' => $totalAktif,
                 'status_pertemuan' => $tanggal_pertemuan,
             ];
         }

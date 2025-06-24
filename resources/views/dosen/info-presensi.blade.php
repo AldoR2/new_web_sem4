@@ -21,6 +21,7 @@
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Program Studi</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Semester</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Ruangan</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pertemuan Ke -</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Link Zoom</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Keterangan</th>
@@ -30,12 +31,13 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->tgl_presensi ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{substr($presensi->jam_awal,0,5) .' - '.substr($presensi->jam_akhir,0,5) ?? '-'}}</td>
-                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->matkul->nama_matkul ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->matkul->nama_matkul ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->dosen->nama ?? '-'}}</td>
-                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->prodi->jenjang .' '.$presensi->prodi->nama_prodi ?? '-'}}</td>
-                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->semester ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->prodi->jenjang .' '.$presensi->pertemuan->prodi->nama_prodi ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->semester ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->ruangan->nama_ruangan ?? '-'}}</td>
-                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->tahunAjaran->tahun_awal .'/'. $presensi->tahunAjaran->tahun_akhir .' '. $presensi->tahunAjaran->keterangan ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->pertemuan_ke ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->tahun->tahun_awal .'/'. $presensi->pertemuan->tahun->tahun_akhir .' '. $presensi->pertemuan->tahun->keterangan ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->link_zoom ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->link_zoom ? 'Daring' : 'Luring'}}</td>
                         </tr>

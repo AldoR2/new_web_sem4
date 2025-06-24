@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <h3 align="center">REKAP KEHADIRAN DOSEN</h3>
+    <h3 align="center">REKAP KEHADIRAN MAHASISWA</h3>
 
     <table class="header-info">
         <tr><td>ProgramStudi</td><td>: {{ $prodi }}</td></tr>
@@ -40,9 +40,7 @@
                     <td class="border border-gray-300 px-4 py-2">{{$item['nama_mahasiswa'] ?? ''}}</td>
                     @for ($i = 1; $i <= $totalPertemuan; $i++)
                         @php
-                            $tanggal = $item['tanggal_pertemuan'][$i] ?? null;
                             $status = $item['pertemuan'][$i] ?? '';
-                            $dosen = $item['nama_dosen'][$i] ?? '';
                             switch ($status) {
                                 case 'H':
                                     $bg = 'bg-green-500 text-white';
@@ -61,7 +59,7 @@
                                     break;
                             };
                         @endphp
-                            <td class="border px-4 py-2 font-semibold {{ $bg }}" title="{{$tanggal .' '. $dosen}}">{{ $status }}</td>
+                            <td class="border px-4 py-2 font-semibold {{ $bg }}">{{ $status }}</td>
                     @endfor
                     <td class="border border-gray-300 px-4 py-2">{{$item['kehadiran']}}</td>
                 </tr>
@@ -74,7 +72,7 @@
     <p>I = Izin</p>
     <p>S = Sakit</p>
     <p>A = Alpha</p>
-    <p>- = Tidak ada perkuliahan</p>
+    <p>- = Tidak terselenggara perkuliahan</p>
 
 </body>
 </html>
