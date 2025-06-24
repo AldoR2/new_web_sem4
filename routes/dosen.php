@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dosen\JadwalController;
 use App\Http\Controllers\Dosen\PresensiController;
 use App\Http\Controllers\Dosen\ProfileController;
+use App\Http\Controllers\RekapPresensi\RekapMatkulController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,6 +22,8 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dosen')->name('dosen.')->grou
     Route::get('/dashboard',[DashboardController::class,'indexDosen'])->name('dashboard');
 
     Route::get('/jadwal',[JadwalController::class,'index'])->name('jadwal');
+    Route::get('/jadwal/export/pdf', [JadwalController::class, 'exportPdf'])->name('export.jadwal.pdf');
+    Route::get('/jadwal/export/excel', [JadwalController::class, 'exportExcel'])->name('export.jadwal.excel');
     Route::get('/getFilterJadwal', [JadwalController::class, 'getFilterJadwal']);
 
     Route::get('/rekap-dosen/export/pdf', [RekapDosenDosenController::class, 'exportPdf'])->name('export.dosen.pdf');
@@ -42,6 +45,9 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dosen')->name('dosen.')->grou
     Route::resource('rekap-mahasiswa', RekapMahasiswaController::class);
     Route::get('/getMatkulDosen', [RekapMahasiswaController::class, 'getMatkulDosen']);
     Route::post('rekap-mahasiswa', [RekapMahasiswaController::class, 'rekapMahasiswa'])->name('rekap-mahasiswa.filter');
+
+    Route::resource('rekap-matkul', RekapMatkulController::class);
+    Route::post('rekap-mahasiswa', [RekapMatkulController::class, 'rekapMatkul'])->name('rekap-matkul.filter');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('change-password');

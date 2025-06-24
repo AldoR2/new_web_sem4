@@ -6,6 +6,13 @@
     {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
   </span></p>
 
+    @php
+        $mahasiswa = Auth::user()->mahasiswa;
+        $foto = $mahasiswa && $mahasiswa->jenis_kelamin === 'P'
+            ? asset('images/halo-cewe.png')
+            : asset('images/halo.png');
+    @endphp
+
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
     <!-- KOLOM KIRI -->
@@ -16,7 +23,7 @@
         <div class="bg-gradient-to-br from-sky-500 via-cyan-500 to-teal-400
          dark:bg-gradient-to-br dark:from-indigo-900 dark:via-blue-800 dark:to-teal-900
          text-white rounded-2xl p-6 sm:p-10 py-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 shadow-md">
-          <img src="{{ asset('images/halo.png') }}" alt="Halo Image" class="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-full border-4 border-white shadow-md">
+          <img src="{{ $foto }}" alt="Halo Image" class="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-full border-4 border-white shadow-md">
           <div class="text-center sm:text-left">
             <h2 class="text-2xl sm:text-3xl font-bold leading-snug">
               Selamat datang, <br>
@@ -66,8 +73,14 @@
 
     <div class="flex flex-col gap-6">
 
-      <div x-data="{ openModal: false, photoPreview: '{{ asset('images/profil.jpg') }}' }"
-        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 h-full">
+      {{-- <div x-data="{ openModal: false, photoPreview: '{{ asset('images/profil.jpg') }}' }"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 h-full"> --}}
+
+        <div x-data="{
+            openModal: false,
+            originalPhoto: '{{ isset($biodata) && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('images/profil-kosong.png') }}',
+            photoPreview: null
+            }" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 h-full">
 
       <h2 class="text-lg font-semibold text-gray-600 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-600 pb-3">
         Biodata Mahasiswa
@@ -100,7 +113,7 @@
       <div x-show="openModal" x-cloak
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 backdrop-blur-sm">
 
-      <div @click.outside="openModal = false"
+      <div @click.outside="photoPreview = null; openModal = false"
           class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-96 max-w-full p-6">
 
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center">Upload Foto Baru</h3>
@@ -110,12 +123,16 @@
             @method('put')
 
           <!-- Preview Foto -->
-          <template x-if="photoPreview">
+          {{-- <template x-if="photoPreview"> --}}
             <div class="mb-4">
-              <img src="{{ isset($biodata) && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('images/profil-kosong.png') }}" id="previewImage"
-                  class="w-32 h-32 mx-auto rounded-full object-cover border-2 border-sky-500 shadow">
+              {{-- <img src="{{ isset($biodata) && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('images/profil-kosong.png') }}" id="previewImage"
+                  class="w-32 h-32 mx-auto rounded-full object-cover border-2 border-sky-500 shadow"> --}}
+                <img :src="photoPreview ?? originalPhoto"
+                    id="previewImage"
+                    class="w-32 h-32 mx-auto rounded-full object-cover border-2 border-sky-500 shadow">
+
             </div>
-          </template>
+          {{-- </template> --}}
 
           <p class="text-gray-600 dark:text-gray-300 text-sm text-center mb-4">
             Format file yang didukung: <span class="font-medium">JPEG, JPG, PNG</span>
@@ -142,7 +159,7 @@
           <!-- Tombol Aksi -->
           <div class="flex justify-end mt-10 gap-3">
             <button type="button"
-                    @click="openModal = false"
+                    @click="photoPreview = null; openModal = false"
                     class="px-4 py-2 text-sm rounded bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-400 dark:hover:bg-gray-600">
               Batal
             </button>

@@ -10,6 +10,15 @@ $(document).ready(function () {
     $("#tahun-ajaran").on("change", function () {
         const tahunId = $("#tahun-ajaran").val();
 
+        $("#export-pdf").attr(
+            "href",
+            `/dosen/jadwal/export/pdf?tahun_ajaran=${tahunId}`
+        );
+        $("#export-excel").attr(
+            "href",
+            `/dosen/jadwal/export/excel?tahun_ajaran=${tahunId}`
+        );
+
         if (tahunId) {
             fetch(`/dosen/getFilterJadwal?tahun_ajaran=${tahunId}`)
                 .then((response) => response.json())

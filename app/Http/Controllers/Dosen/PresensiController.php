@@ -52,7 +52,7 @@ class PresensiController extends Controller
     public function store(StorePresensi $request)
     {
         try {
-            $tahunAjaranAktif = TahunAjaran::where('status', operator: true)->first();
+            $tahunAjaranAktif = TahunAjaran::where('status',  true)->first();
             $dosen = Auth::user()->dosen;
 
             if (!$tahunAjaranAktif) {

@@ -50,16 +50,16 @@ class PresensiController extends Controller
             $result = DB::transaction(function () use ($request, $tahunAjaranAktif) {
 
 
-                $duplikat = Pertemuan::where('matkul_id', $request->matkul_id)
-                    ->where('pertemuan_ke', $request->pertemuan_ke)
-                    ->where('prodi_id', $request->prodi_id)
-                    ->where('semester', $request->semester)
-                    ->where('tahun_ajaran_id', $tahunAjaranAktif->id)
-                    ->exists();
+                // $duplikat = Pertemuan::where('matkul_id', $request->matkul_id)
+                //     ->where('pertemuan_ke', $request->pertemuan_ke)
+                //     ->where('prodi_id', $request->prodi_id)
+                //     ->where('semester', $request->semester)
+                //     ->where('tahun_ajaran_id', $tahunAjaranAktif->id)
+                //     ->exists();
 
-                if ($duplikat) {
-                    return back()->withErrors(['pertemuan_ke' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada untuk matkul ini.'])->withInput();
-                }
+                // if ($duplikat) {
+                //     return back()->withErrors(['pertemuan_ke' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada untuk matkul ini.'])->withInput();
+                // }
 
                 $conflictRuangan = Presensi::where('tgl_presensi',$request['tgl_presensi'])
                 ->where('ruangan_id', $request['ruangan_id'])
@@ -96,24 +96,6 @@ class PresensiController extends Controller
             return back()->withInput()->withErrors(['dosen_id' => 'Dosen sedang mengajar pada waktu tersebut.'])->withInput();
         }
 
-        // $conflictJadwal = Presensi::where('tgl_presensi', $request['tgl_presensi'])
-        //     ->where('prodi_id', $request['prodi_id'])
-        //     ->where('semester', $request['semester'])
-        //     ->where(function ($query) use ($request) {
-        //         $query->where(function ($q) use ($request) {
-        //             $q->where('jam_awal', '<=', $request['jam_awal'])
-        //               ->where('jam_akhir', '>', $request['jam_awal']);
-        //         })->orWhere(function ($q) use ($request) {
-        //             $q->where('jam_awal', '<', $request['jam_akhir'])
-        //               ->where('jam_akhir', '>=', $request['jam_akhir']);
-        //         })->orWhere(function ($q) use ($request) {
-        //             $q->where('jam_awal', '>=', $request['jam_awal'])
-        //               ->where('jam_akhir', '<=', $request['jam_akhir']);
-        //         });
-        //     })->exists();
-
-
-
         $conflictJadwal = Presensi::where('tgl_presensi', $request['tgl_presensi'])
             ->whereHas('pertemuan', function ($query) use ($request) {
                 $query->where('prodi_id', $request['prodi_id'])
@@ -135,6 +117,21 @@ class PresensiController extends Controller
         if ($conflictJadwal) {
             return back()->withInput()->withErrors(['semester' => 'Jadwal bentrok untuk prodi dan semester yang dipilih.'])->withInput();
         }
+
+        // if (in_array($request->status, ['uts', 'uas'])) {
+        //     $sudahAda = Pertemuan::where('prodi_id', $request->prodi_id)
+        //         ->where('semester', $request->semester)
+        //         ->where('matkul_id', $request->matkul_id)
+        //         ->where('tahun_ajaran_id', $tahunAjaranAktif->id)
+        //         ->where('status', $request->status)
+        //         ->exists();
+
+        //     if ($sudahAda) {
+        //         return back()->withInput()->withErrors([
+        //             'status' => 'Pertemuan ' . strtoupper($request->status) . ' sudah pernah dibuat untuk matkul ini.'
+        //         ]);
+        //     }
+        // }
 
         $mahasiswa = Mahasiswa::where('prodi_id', $request['prodi_id'])
             ->where('semester', $request['semester'])->get();

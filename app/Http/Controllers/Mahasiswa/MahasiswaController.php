@@ -27,9 +27,90 @@ class MahasiswaController extends Controller
         $mahasiswa = Auth::user()->mahasiswa;
         $jadwal = Jadwal::with(['prodi','dosen','matkul','ruangan','detailJadwal' => function ($q) use ($mahasiswa){
             $q->where('mahasiswa_id', $mahasiswa->id);
-        }])->orderBy('hari')->get();
+        }])
+        ->whereHas('detailJadwal', function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        })->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
         return view('mahasiswa.jadwal',compact('title','jadwal','tahun'));
+    }
+
+    public function exportJadwalPdf(Request $request)
+    {
+        $mahasiswa = Auth::user()->mahasiswa;
+        $tahunId = $request->query('tahun_ajaran');
+        $tahunAjaran = $tahunId ? TahunAjaran::find($tahunId) : TahunAjaran::where('status', true)->first();
+
+        if (!$mahasiswa) {
+            abort(403, 'Mahasiswa tidak ditemukan atau tidak terhubung dengan akun.');
+        }
+
+        // $rekapData = $service->getRekapDosen($dosen->id);
+        $jadwal = Jadwal::with(['prodi','dosen','ruangan','tahun','matkul','detailJadwal' => function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        }])->whereHas('detailJadwal', function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        })->when($tahunAjaran, function ($q) use ($tahunAjaran){
+            $q->where('tahun_ajaran_id', $tahunAjaran->id);
+        })->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
+
+        $data = [
+            'nim' => $mahasiswa->nim,
+            'nama' => $mahasiswa->nama,
+            'prodi' => $mahasiswa->prodi->jenjang . ' ' . $mahasiswa->prodi->nama_prodi,
+            'tahun' => $tahunAjaran,
+            // 'tahun_ajaran' => $tahunAjaran ? "{$tahunAjaran->tahun_awal}/{$tahunAjaran->tahun_akhir}" : '-',
+            'jadwal' => $jadwal,
+            // 'totalPertemuan' => $rekapData['totalPertemuan'],
+        ];
+
+        $pdf = Pdf::loadView('mahasiswa.jadwal-mahasiswa-pdf', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('Jadwal Mahasiswa.pdf');
+    }
+
+    public function exportJadwalExcel(Request $request,)
+    {
+        $mahasiswa = Auth::user()->mahasiswa;
+
+        $tahunId = $request->query('tahun_ajaran');
+        $tahunAjaran = $tahunId ? TahunAjaran::find($tahunId) : TahunAjaran::where('status', true)->first();
+
+        // $rekapData = $service->getRekapDosen($dosen->id);
+        $jadwal = Jadwal::with(['prodi','dosen','ruangan','tahun','matkul','detailJadwal' => function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        }])->whereHas('detailJadwal', function ($q) use ($mahasiswa){
+            $q->where('mahasiswa_id', $mahasiswa->id);
+        })->when($tahunAjaran, function ($q) use ($tahunAjaran){
+            $q->where('tahun_ajaran_id', $tahunAjaran->id);
+        })->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
+        // $totalPertemuan = $rekapData['totalPertemuan'] ?? 16;
+
+        $export = new class($mahasiswa, $jadwal, $tahunAjaran) implements FromView {
+
+            protected $mahasiswa;
+            protected $jadwal;
+            protected $tahunAjaran;
+
+            public function __construct($mahasiswa, $jadwal, $tahunAjaran)
+            {
+                $this->mahasiswa = $mahasiswa;
+                $this->jadwal = $jadwal;
+                $this->tahunAjaran = $tahunAjaran;
+            }
+
+            public function view(): View
+            {
+                return view('mahasiswa.jadwal-mahasiswa-excel', [
+                    'nim' => $this->mahasiswa->nim,
+                    'nama' => $this->mahasiswa->nama,
+                    'prodi' => $this->mahasiswa->prodi->jenjang . ' ' . $this->mahasiswa->prodi->nama_prodi,
+                    'jadwal' => $this->jadwal,
+                    'tahun' => $this->tahunAjaran,
+
+                ]);
+            }
+        };
+        return Excel::download($export, 'Jadwal Mahasiswa.xlsx');
     }
 
     public function rekap(Request $request, RekapMahasiswaService $service){
@@ -48,7 +129,7 @@ class MahasiswaController extends Controller
         return view('mahasiswa.rekap_mahasiswa',$data);
     }
 
-    public function exportPdf(Request $request, RekapMahasiswaService $service)
+    public function exportRekapPdf(Request $request, RekapMahasiswaService $service)
     {
         $mahasiswa = Auth::user()->mahasiswa;
 
@@ -72,7 +153,7 @@ class MahasiswaController extends Controller
         return $pdf->download('Rekap Kehadiran Mahasiswa.pdf');
     }
 
-    public function exportExcel(Request $request, RekapMahasiswaService $service)
+    public function exportRekapExcel(Request $request, RekapMahasiswaService $service)
     {
         $mahasiswa = Auth::user()->mahasiswa;
 

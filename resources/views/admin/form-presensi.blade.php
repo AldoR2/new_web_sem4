@@ -76,6 +76,8 @@
                                 @for($i = 1; $i <= 16; $i++)
                                     <option value="{{ $i }}" {{ old('pertemuan_ke') == $i ? 'selected' : '' }}>
                                         {{$i}}
+                                        @if ($i == 8) — Rekomendasi UTS @endif
+                                        @if ($i == 16) — Rekomendasi UAS @endif
                                     </option>
                                 @endfor
                         </select>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mahasiswa;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -99,6 +100,8 @@ class TahunAjaranController extends Controller
 
             if ($request->status == 1) {
                 TahunAjaran::where('status', 1)->update(['status' => 0]);
+
+                Mahasiswa::query()->update(['tahun_ajaran_id' => $id]);
             }
 
             $tahun->update($request->only(['tahun_awal', 'tahun_akhir', 'keterangan', 'status']));

@@ -105,6 +105,9 @@
               <a href="{{route('admin.rekap-dosen.index')}}" class="mt-2 w-4/5">
                 <h1 class="cursor-pointer p-2 hover:bg-blue-400 dark:hover:bg-gray-700 dark:active:bg-gray-500 active:bg-blue-500 rounded-md mt-1">Rekap Presensi Dosen</h1>
               </a>
+              <a href="{{route('admin.rekap-matkul.index')}}" class="mt-2 w-4/5">
+                <h1 class="cursor-pointer p-2 hover:bg-blue-400 dark:hover:bg-gray-700 dark:active:bg-gray-500 active:bg-blue-500 rounded-md mt-1">Rekap Presensi Matkul</h1>
+              </a>
             </div>
           </li>
       </ul>
@@ -150,12 +153,15 @@
             </div>
 
             <div x-show="open" class="text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200">
-              <a href="{{route('dosen.rekap-mahasiswa.index')}}" class="mt-2 w-4/5">
-                <h1 class="cursor-pointer p-2 hover:bg-blue-400 active:bg-blue-500 dark:hover:bg-gray-700 dark:active:bg-gray-500 rounded-md mt-1">Rekap Presensi Mahasiswa</h1>
-              </a>
-              <a href="{{route('dosen.rekap-dosen.index')}}" class="mt-2 w-4/5">
-                <h1 class="cursor-pointer p-2 hover:bg-blue-400 active:bg-blue-500 dark:hover:bg-gray-700 dark:active:bg-gray-500 rounded-md mt-1">Rekap Presensi Dosen</h1>
-              </a>
+                <a href="{{route('dosen.rekap-mahasiswa.index')}}" class="mt-2 w-4/5">
+                    <h1 class="cursor-pointer p-2 hover:bg-blue-400 active:bg-blue-500 dark:hover:bg-gray-700 dark:active:bg-gray-500 rounded-md mt-1">Rekap Presensi Mahasiswa</h1>
+                </a>
+                <a href="{{route('dosen.rekap-dosen.index')}}" class="mt-2 w-4/5">
+                    <h1 class="cursor-pointer p-2 hover:bg-blue-400 active:bg-blue-500 dark:hover:bg-gray-700 dark:active:bg-gray-500 rounded-md mt-1">Rekap Presensi Dosen</h1>
+                </a>
+                <a href="{{route('dosen.rekap-matkul.index')}}" class="mt-2 w-4/5">
+                    <h1 class="cursor-pointer p-2 hover:bg-blue-400 dark:hover:bg-gray-700 dark:active:bg-gray-500 active:bg-blue-500 rounded-md mt-1">Rekap Presensi Matkul</h1>
+                </a>
             </div>
           </li>
       </ul>

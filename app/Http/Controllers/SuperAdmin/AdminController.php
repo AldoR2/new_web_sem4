@@ -5,7 +5,6 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Imports\AdminImport;
 use App\Models\Admin;
-use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
