@@ -1,5 +1,3 @@
-let table;
-
 $("#prodi").select2({
     placeholder: "Cari Program Studi",
     width: "100%",
@@ -29,6 +27,8 @@ $("#semester").select2({
     width: "100%",
     allowClear: true,
 });
+
+let table;
 
 $(document).ready(function () {
     table = $("#data-presensi").DataTable({

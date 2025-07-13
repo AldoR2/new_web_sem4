@@ -23,14 +23,18 @@ class PresensiController extends Controller
 {
     public function index()
     {
-        $title = 'Data Presensi';
+        $title = 'Data Perkuliahan';
         $presensi = Presensi::with('dosen','pertemuan.prodi','ruangan','pertemuan.matkul')->orderByDesc('tgl_presensi')->orderBy('jam_awal')->get();
+        // $pertemuan = Pertemuan::with('prodi','matkul','presensi')->get();
+        // $presensi = Pertemuan::with(['prodi','matkul','presensi' => function ($q){
+        //     $q->orderByDesc('tgl_presensi')->orderBy('jam_awal');
+        // }])->get();
         return view('admin.presensi', compact('presensi','title'));
     }
 
     public function create()
     {
-        $title = 'Tambah Presensi';
+        $title = 'Tambah Data Perkuliahan';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
         $matkul = Matkul::all();
@@ -206,15 +210,144 @@ class PresensiController extends Controller
 
     public function show(string $id)
     {
-        $title = 'Detail Presensi';
+        $title = 'Detail Data Perkuliahan';
         $presensi = Presensi::with('dosen','pertemuan.prodi','ruangan','pertemuan.matkul','pertemuan.tahun')->findOrFail($id);
         $detail = DetailPresensi::with('mahasiswa')->where('presensi_id', $id)->get();
         return view('admin.info-presensi', compact('title','presensi','detail'));
     }
 
+    public function update(StorePresensi $request, $id){
+        try {
+            $tahunAjaranAktif = TahunAjaran::where('status', operator: true)->first();
+
+            if (!$tahunAjaranAktif) {
+                return back()->withErrors(['tahun_ajaran_id' => 'Tahun ajaran aktif tidak ditemukan.'])->withInput();
+            };
+
+
+            $result = DB::transaction(function () use ($request, $tahunAjaranAktif, $id) {
+            $presensi = Presensi::with('pertemuan')->findOrFail($id);
+
+            $now = now();
+            $presensiStart = \Carbon\Carbon::parse($presensi->tgl_presensi . ' ' . $presensi->jam_awal);
+
+            if ($now->gte($presensiStart)) {
+                return back()->withInput()->withErrors([
+                    'jam_awal' => 'Perkuliahan tidak dapat diedit karena perkuliahan sedang berlangsung atau sudah selesai.'
+                ]);
+            }
+
+                $conflictRuangan = Presensi::where('tgl_presensi',$request['tgl_presensi'])
+                ->where('ruangan_id', $request['ruangan_id'])
+                ->where('id', '!=', $presensi->id)
+                ->where(function($query) use ($request){
+                $query->where(function ($q) use ($request) {
+                    $q->where('jam_awal', '<=', $request['jam_awal'])
+                    ->where('jam_akhir', '>', $request['jam_awal']);
+                })->orWhere(function ($q) use ($request) {
+                    $q->where('jam_awal', '<', $request['jam_akhir'])
+                    ->where('jam_akhir', '>=', $request['jam_akhir']);
+                })->orWhere(function ($q) use ($request) {
+                    $q->where('jam_awal', '>=', $request['jam_awal'])
+                    ->where('jam_akhir', '<=', $request['jam_akhir']);
+                });
+            })->exists();
+
+        if ($conflictRuangan) {
+            return back()->withInput()->withErrors(['ruangan_id' => 'Ruangan sedang dipakai pada waktu tersebut.'])->withInput();
+        }
+
+        $conflictDosen = Presensi::where('tgl_presensi', $request['tgl_presensi'])
+            ->where('dosen_id', $request->dosen_id)
+            ->where('id', '!=', $presensi->id)
+            ->where(function ($query) use ($request){
+                $query->where(function ($q) use ($request){
+                    $q->where('jam_awal', '<=', $request->jam_awal)
+                    ->where('jam_akhir', '>', $request->jam_awal);
+                })->orWhere(function ($q) use ($request) {
+                    $q->where('jam_awal', '<', $request->jam_akhir)
+                    ->where('jam_akhir', '>=', $request->jam_akhir);
+                });
+            })->exists();
+
+        if ($conflictDosen) {
+            return back()->withInput()->withErrors(['dosen_id' => 'Dosen sedang mengajar pada waktu tersebut.'])->withInput();
+        }
+
+        $statusLama = $presensi->pertemuan->getOriginal('status');
+
+        $presensi->pertemuan->update([
+            'pertemuan_ke' => $request['pertemuan_ke'],
+            'status' => $request['status'],
+        ]);
+
+        $statusBaru = $request->status;
+
+        // Hapus jika dari aktif → libur/uts/uas
+        if ($statusLama === 'aktif' && in_array($statusBaru, ['libur','uts','uas'])) {
+            DetailPresensi::where('presensi_id', $presensi->id)->delete();
+        }
+
+        // Tambah jika dari libur/uts/uas → aktif
+        if (in_array($statusLama, ['libur', 'uts', 'uas']) && $statusBaru === 'aktif') {
+            $mahasiswa = Mahasiswa::where('prodi_id', $presensi->pertemuan->prodi_id)
+                ->where('semester', $presensi->pertemuan->semester)
+                ->get();
+
+            foreach ($mahasiswa as $mhs) {
+                DetailPresensi::create([
+                    'presensi_id' => $presensi->id,
+                    'mahasiswa_id' => $mhs->id,
+                    'waktu_presensi' => null,
+                    'status' => 0,
+                    'alasan' => null,
+                    'bukti' => null,
+                ]);
+            }
+        }
+
+        $presensi->update([
+            'tgl_presensi' => $request['tgl_presensi'],
+            'jam_awal' => $request['jam_awal'],
+            'jam_akhir' => $request['jam_akhir'],
+            'dosen_id' => $request['dosen_id'],
+            'ruangan_id' => $request['ruangan_id'],
+            'link_zoom' => $request['link_zoom'],
+        ]);
+        return true;
+    });
+
+        if ($result !== true) {
+            return $result;
+        }
+
+            return redirect()->route('admin.presensi.index')->with([
+                'status' => 'success',
+                'message' => 'Data Berhasil Ditambahkan'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Gagal menambahkan Presensi', [
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+
+            return redirect()->back()->withInput()->with([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menambahkan data: ' . $e->getMessage()
+            ]);
+        }
+    }
+
     public function edit(string $id)
     {
-        //
+        $title = 'Update Data Perkuliahan';
+        $prodi = Prodi::all();
+        $ruangan = Ruangan::all();
+        $matkul = Matkul::all();
+        $dosen = Dosen::all();
+        $presensi = Presensi::with('dosen','pertemuan.prodi','ruangan','pertemuan.matkul','pertemuan.tahun')->findOrFail($id);
+        return view('admin.form-presensi', compact('title','prodi','ruangan','matkul','dosen','presensi'));
     }
 
     public function updateDetailPresensi(Request $request)
@@ -250,8 +383,37 @@ class PresensiController extends Controller
     public function destroy(string $id)
     {
         try {
+        // jika data presensi yang ingin dihapus
+            // $presensi = Presensi::findOrFail($id);
+            // $presensi->delete();
+
+            // $presensi = Presensi::findOrFail($id);
+            // $presensi->delete();
+
+        DB::transaction(function () use ($id) {
             $presensi = Presensi::findOrFail($id);
-            $presensi->delete();
+            $pertemuanId = $presensi->pertemuan_id;
+
+            $jumlahPresensi = Presensi::where('pertemuan_id', $pertemuanId)->count();
+
+                        // Jika hanya ada satu, artinya ini yang terakhir → hapus pertemuan langsung
+            if ($jumlahPresensi === 1) {
+                $presensi->delete();
+                Pertemuan::find($pertemuanId)?->delete();
+            } else {
+                // Masih ada presensi lain → hanya hapus presensi ini saja
+                $presensi->delete();
+            }
+        });
+
+            // Hapus semua presensi di pertemuan ini
+        //     Presensi::where('pertemuan_id', $id)->delete();
+
+        //     // Setelah presensi dihapus, pastikan sudah benar-benar kosong
+        //     if (Presensi::where('pertemuan_id', $id)->count() === 0) {
+        //         Pertemuan::find($id)?->delete();
+        //     }
+        // });
 
             return redirect()->route('admin.presensi.index')->with([
                 'status' => 'success',
@@ -266,7 +428,7 @@ class PresensiController extends Controller
 
             return redirect()->back()->withInput()->with([
                 'status' => 'error',
-                'message' => 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage()
+                'message' => 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage()
             ]);
         }
     }

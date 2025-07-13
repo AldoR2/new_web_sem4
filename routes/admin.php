@@ -68,18 +68,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('rekap-dosen', RekapDosenAdminController::class);
     Route::post('rekap-dosen', [RekapDosenAdminController::class, 'rekapDosen'])->name('rekap-dosen.filter');
-
-    Route::resource('rekap-mahasiswa', RekapMahasiswaController::class);
-    Route::post('rekap-mahasiswa', [RekapMahasiswaController::class, 'rekapMahasiswa'])->name('rekap-mahasiswa.filter');
-
-    Route::resource('rekap-matkul', RekapMatkulController::class);
-    Route::post('rekap-matkul', [RekapMatkulController::class, 'rekapMatkul'])->name('rekap-matkul.filter');
-
     Route::post('/rekap-dosen/export/pdf', [RekapDosenAdminController::class, 'exportPdf'])->name('export.dosen.pdf');
     Route::post('/rekap-dosen/export/excel', [RekapDosenAdminController::class, 'exportExcel'])->name('export.dosen.excel');
 
+    Route::resource('rekap-mahasiswa', RekapMahasiswaController::class);
+    Route::post('rekap-mahasiswa', [RekapMahasiswaController::class, 'rekapMahasiswa'])->name('rekap-mahasiswa.filter');
     Route::post('/rekap-mahasiswa/export/pdf', [RekapMahasiswaController::class, 'exportPdf'])->name('export.mahasiswa.pdf');
     Route::post('/rekap-mahasiswa/export/excel', [RekapMahasiswaController::class, 'exportExcel'])->name('export.mahasiswa.excel');
+
+    Route::resource('rekap-matkul', RekapMatkulController::class);
+    Route::post('rekap-matkul', [RekapMatkulController::class, 'rekapMatkul'])->name('rekap-matkul.filter');
+    Route::post('/rekap-matkul/export/pdf', [RekapMatkulController::class, 'exportPdf'])->name('export.matkul.pdf');
+    Route::post('/rekap-matkul/export/excel', [RekapMatkulController::class, 'exportExcel'])->name('export.matkul.excel');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('change-password');

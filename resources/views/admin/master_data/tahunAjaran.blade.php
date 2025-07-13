@@ -15,14 +15,14 @@
             </div>
 
             <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
-                <table id="data-tahun" class="text-sm text-left w-full pt-1 display nowrap">
+                <table id="data-tahun" class="text-sm w-full pt-1 display nowrap">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 sticky top-0 z-10">
-                        <tr>
+                        <tr class="text-center">
                             <th class=" dark:border-gray-600 px-4 py-2">No</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Keterangan</th>
-                            <th class=" dark:border-gray-600 px-4 py-2">Status</th>
-                            <th class=" dark:border-gray-600 px-4 py-2 text-center">Aksi</th>
+                            <th class=" dark:border-gray-600 px-4 py-2 !text-center">Status</th>
+                            <th class=" dark:border-gray-600 px-4 py-2 !text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

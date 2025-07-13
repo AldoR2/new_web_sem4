@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\Mahasiswa;
 use App\Models\Pertemuan;
 use App\Models\Presensi;
 use App\Models\DetailPresensi;
@@ -178,6 +179,8 @@ class RekapMatkulService
 
         $rekap = [];
         $maxPertemuan = $pertemuans->count();
+        $totalMahasiswa = Mahasiswa::where('prodi_id', $prodiId)->where('semester', $semester)->count();
+
         // $status_pertemuan = $this->getStatusPertemuan($grouped, $defaultPertemuan);
 
 
@@ -187,11 +190,17 @@ class RekapMatkulService
             // Cari pertemuan ke-i
             $pertemuan = $pertemuans->firstWhere('pertemuan_ke', $i);
 
+            $metode = $pertemuan && $pertemuan->presensi->isNotEmpty() ? $pertemuan->presensi->map(function ($q){
+                return $q->link_zoom ? 'Daring' : 'Luring';
+            })->unique()->values()->toArray() : ['-'];
+
             $rekap[] = [
                 'pertemuan_ke' => $i,
                 'tanggal' => $pertemuan && $pertemuan->presensi
                 ? $pertemuan->presensi->pluck('tgl_presensi')->unique()->values()->toArray()
                 : ['-'],
+                'totalMahasiswa' => $totalMahasiswa,
+                'metode' => $metode,
                 // 'tanggal' => $pertemuan->presensi->pluck('tgl_presensi')->unique()->values()->toArray() ?? '-',
                 // 'tanggal' => $pertemuan->tanggal ?? '-',
                 // 'dosen' => optional($pertemuan->presensi->first()->dosen ?? null)->nama ?? '-', // ambil dosen pertama yg mengisi presensi
@@ -204,6 +213,7 @@ class RekapMatkulService
                     ? $pertemuan->presensi
                         ->flatMap(fn($p) => $p->detailPresensi)
                         ->where('status', 1)
+                        ->unique('mahasiswa_id')
                         ->count()
                     : 0,
             ];

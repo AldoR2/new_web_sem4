@@ -21,8 +21,11 @@ class StorePresensi extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules($id = null): array
     {
+
+        $id = $id ??  $this->route('presensi');
+
         $rules = [
             'tgl_presensi' => 'required',
             'jam_awal' => 'required',

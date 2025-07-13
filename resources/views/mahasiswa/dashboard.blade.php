@@ -36,9 +36,9 @@
 
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 flex flex-col">
         <!-- Header -->
-        <div class="mb-4 px-4 py-3 rounded-t-xl border-b border-gray-300 dark:border-gray-600 flex justify-between items-center flex-wrap gap-2 bg-gray-50 dark:bg-gray-700">
-          <h1 class="text-gray-700 dark:text-gray-100 text-lg font-bold">Jadwal Perkuliahan Hari Ini</h1>
-        </div>
+            <div class="mb-3 p-4 rounded-t-xl border-b-2 border-gray-300 dark:border-gray-700 flex justify-between items-center flex-wrap gap-2">
+                <h1 class="text-gray-500 dark:text-gray-300 text-lg font-semibold">Jadwal Perkuliahan Hari ini</h1>
+            </div>
 
         <!-- Tabel Scrollable -->
         <div class="px-3 pb-3 overflow-x-auto max-h-[300px] overflow-y-auto">

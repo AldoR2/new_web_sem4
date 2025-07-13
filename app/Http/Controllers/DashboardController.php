@@ -90,7 +90,7 @@ class DashboardController extends Controller
                 ->whereDate('tgl_presensi', Carbon::today())
                 ->where('dosen_id', $user->id)
                 ->get(),
-            'tidakHadir' => DetailPresensi::with(['mahasiswa','pertemuan.matkul','presensi.ruangan','pertemuan.prodi'])->whereIn('status', [0,2,3])->whereHas('presensi', function ($query) use ($user){
+            'tidakHadir' => DetailPresensi::with(['mahasiswa','presensi.pertemuan.matkul','presensi.ruangan','presensi.pertemuan.prodi'])->whereIn('status', [0,2,3])->whereHas('presensi', function ($query) use ($user){
                 $query->whereDate('tgl_presensi', Carbon::today())->where('dosen_id', $user->id)->whereTime('jam_akhir', '<=', Carbon::now()->toTimeString());
             })->get(),
 

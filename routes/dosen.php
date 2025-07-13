@@ -43,11 +43,13 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dosen')->name('dosen.')->grou
     Route::get('/getFilterRekap', [RekapDosenDosenController::class, 'getFilterRekap']);
 
     Route::resource('rekap-mahasiswa', RekapMahasiswaController::class);
-    Route::get('/getMatkulDosen', [RekapMahasiswaController::class, 'getMatkulDosen']);
     Route::post('rekap-mahasiswa', [RekapMahasiswaController::class, 'rekapMahasiswa'])->name('rekap-mahasiswa.filter');
+    Route::get('/getMatkulDosen', [RekapMahasiswaController::class, 'getMatkulDosen']);
 
     Route::resource('rekap-matkul', RekapMatkulController::class);
-    Route::post('rekap-mahasiswa', [RekapMatkulController::class, 'rekapMatkul'])->name('rekap-matkul.filter');
+    Route::post('rekap-matkul', [RekapMatkulController::class, 'rekapMatkul'])->name('rekap-matkul.filter');
+    Route::post('/rekap-matkul/export/pdf', [RekapMatkulController::class, 'exportPdf'])->name('export.matkul.pdf');
+    Route::post('/rekap-matkul/export/excel', [RekapMatkulController::class, 'exportExcel'])->name('export.matkul.excel');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('change-password');

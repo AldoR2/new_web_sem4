@@ -55,7 +55,7 @@
             </div>
 
             <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
-                <table id="data-jadwal" class="text-sm text-left w-full pt-1 display nowrap">
+                <table id="data-jadwal" class="text-sm w-full pt-1 display nowrap">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white sticky top-0 z-10">
                         <tr>
                             <th class=" dark:border-gray-600 px-4 py-2">No</th>
@@ -65,7 +65,7 @@
                             <th class=" dark:border-gray-600 px-4 py-2">Dosen Koordinator</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Program Studi</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>
-                            <th class=" dark:border-gray-600 px-4 py-2">Semester</th>
+                            <th class=" dark:border-gray-600 px-4 py-2 !text-center">Semester</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Mata Kuliah</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Ruangan</th>
                             <th class=" dark:border-gray-600 px-4 py-2 !text-center">Aksi</th>
@@ -81,11 +81,17 @@
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->dosen->nama}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->prodi->jenjang .' '.$j->prodi->nama_prodi}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->tahun->tahun_awal .'/'.$j->tahun->tahun_akhir .' '. $j->tahun->keterangan }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{$j->semester}}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2 text-center">{{$j->semester}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->matkul->nama_matkul}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->ruangan->nama_ruangan}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">
                                     <div class="flex justify-center gap-2">
+                                        <a href="{{ route('admin.master-jadwal.edit', $j->id) }}">
+                                            <button class="cursor-pointer px-2 py-1 bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-white rounded-md">
+                                                <i class="bi bi-pencil-square text-lg"></i>
+                                            </button>
+                                        </a>
+
                                         <a href="{{route('admin.master-jadwal.show', $j->id)}}">
                                             <button class="cursor-pointer px-2 py-1 bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white rounded-md" title="Detail">
                                                 <i class="bi bi-card-text text-lg"></i>

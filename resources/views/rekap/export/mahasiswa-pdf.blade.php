@@ -37,10 +37,7 @@
         </tr>
     </table>
     <hr style="border: 2px solid #000; margin: 15px 0;" />
-    
-    
-    
-    
+
 
     <h3 align="center">REKAP KEHADIRAN MAHASISWA</h3>
 
@@ -104,11 +101,5 @@
     <p>S = Sakit</p>
     <p>A = Alpha</p>
     <p>- = Tidak terselenggara perkuliahan</p>
-
-
-
 </body>
-<footer>
-     <p style=" text-align: right;">Dicetak pada: {{ now()->format('d-m-Y') }}</p>
- </footer>
 </html>

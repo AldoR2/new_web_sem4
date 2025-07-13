@@ -102,15 +102,70 @@ class JadwalController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $title = 'Update Jadwal';
+        $prodi = Prodi::all();
+        $ruangan = Ruangan::all();
+        $matkul = Matkul::all();
+        $dosen = Dosen::all();
+        $tahun = TahunAjaran::orderBy('tahun_awal')->get();
+        $jadwal = Jadwal::with('dosen','prodi','ruangan','matkul','tahun')->findOrFail($id);
+        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','matkul','dosen','tahun','jadwal'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreMasterJadwal $request, string $id)
     {
-        //
+        try {
+            DB::transaction(function () use ($request, $id) {
+
+                $jadwal = Jadwal::with('dosen','prodi','ruangan','matkul','tahun')->findOrFail($id);
+
+                $jadwal->update([
+                    'jam' => $request->jam,
+                    'durasi' => $request->durasi,
+                    'hari' => $request->hari,
+                    'dosen_id' => $request->dosen_id,
+                    'prodi_id' => $request->prodi_id,
+                    'matkul_id' => $request->matkul_id,
+                    'ruangan_id' => $request->ruangan_id,
+                    'tahun_ajaran_id' => $request->tahun_ajaran,
+                    'semester' => $request->semester,
+                ]);
+
+                DetailJadwal::where('jadwal_id', $jadwal->id)->delete();
+
+                $mahasiswa = Mahasiswa::where('prodi_id', $request['prodi_id'])
+                ->where('semester', $request['semester'])->get();
+
+                if ($mahasiswa->isEmpty()) {
+                    return back()->withErrors(['semester' => 'Tidak ada mahasiswa untuk prodi dan semester ini.']);
+                }
+
+                foreach ($mahasiswa as $mhs) {
+                    DetailJadwal::create([
+                        'jadwal_id' => $jadwal->id,
+                        'mahasiswa_id' => $mhs->id,
+                    ]);
+                }
+            });
+
+            return redirect()->route('admin.master-jadwal.index')->with([
+                'status' => 'success',
+                'message' => 'Jadwal Berhasil DiPerbarui'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal perbarui Data', [
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+
+            return redirect()->back()->withInput()->with([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat update data: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**

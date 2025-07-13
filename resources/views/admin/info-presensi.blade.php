@@ -6,7 +6,7 @@
         <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="mb-5 justify-start flex">
                 <a href="{{route('admin.presensi.index')}}">
-                    <button class="px-5 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer">Batal</button>
+                    <button class="px-5 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer"><i class="bi bi-arrow-left-circle-fill"></i></button>
                 </a>
             </div>
 
@@ -23,6 +23,7 @@
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Semester</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Ruangan</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pertemuan Ke</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Status</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Link Zoom</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Keterangan</th>
@@ -38,6 +39,24 @@
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->semester ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->ruangan->nama_ruangan ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->pertemuan_ke ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
+                            @switch($presensi->pertemuan->status)
+                                @case('aktif')
+                                    <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Aktif</span>
+                                @break
+                                @case('uts')
+                                    <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">UTS</span>
+                                @break
+                                @case('uas')
+                                    <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">UAS</span>
+                                @break
+                                @case('libur')
+                                    <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">Libur</span>
+                                @break
+                                @default
+                                    <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-gray-500 rounded-full">-</span>
+                            @endswitch
+                            </td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->tahun->tahun_awal .'/'. $presensi->pertemuan->tahun->tahun_akhir .' '. $presensi->pertemuan->tahun->keterangan ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->link_zoom ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->link_zoom ? 'Daring' : 'Luring'}}</td>

@@ -107,15 +107,33 @@ $(document).ready(function () {
                 .then((response) => response.json())
                 .then((data) => {
                     const mataKuliahSelect = $("#matkul");
+                    const selectedId = mataKuliahSelect.data("old");
+                    const selectedText = mataKuliahSelect.data("matkul-text");
                     mataKuliahSelect.empty();
 
-                    data.forEach((item) => {
+                    if (mataKuliahSelect) {
                         mataKuliahSelect.append(
-                            `<option value="${item.id}" ${
-                                item.id == oldMatkulId ? "selected" : ""
-                            }>${item.nama_matkul}</option>`
+                            `<option value="${selectedId}" selected>${selectedText}</option>`
                         );
+                    }
+
+                    data.forEach((item) => {
+                        if (item.id != selectedId) {
+                            mataKuliahSelect.append(
+                                `<option value="${item.id}" ${
+                                    item.id == oldMatkulId ? "selected" : ""
+                                }>${item.nama_matkul}</option>`
+                            );
+                        }
                     });
+
+                    // data.forEach((item) => {
+                    //     mataKuliahSelect.append(
+                    //         `<option value="${item.id}" ${
+                    //             item.id == oldMatkulId ? "selected" : ""
+                    //         }>${item.nama_matkul}</option>`
+                    //     );
+                    // });
                 })
                 .catch((error) => {
                     console.error("Error fetching mata kuliah:", error);

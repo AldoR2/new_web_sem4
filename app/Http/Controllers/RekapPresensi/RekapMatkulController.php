@@ -35,26 +35,26 @@ class RekapMatkulController extends Controller
         return view('rekap.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
     }
 
-    public function exportPdf(Request $request, RekapMahasiswaService $service)
+    public function exportPdf(Request $request, RekapMatkulService $service)
     {
         try {
             $data = [
-                'prodiTerpilih' => Prodi::findOrFail($request->prodi),
-                'matkulTerpilih' => Matkul::findOrFail($request->matkul),
+                'prodi' => Prodi::findOrFail($request->prodi),
+                'matkul' => Matkul::findOrFail($request->matkul),
                 'semester' => $request->input('semester'),
                 'rekap' => [],
-                'totalPertemuan' => 16,
+                // 'totalPertemuan' => 16,
             ];
 
             if ($request->isMethod('post')) {
 
-                $hasil = $service->getRekapMahasiswa($request->prodi, $request->semester, $request->matkul);
+                $hasil = $service->getRekapMatkul($request->prodi, $request->semester, $request->matkul);
                 $data['rekap'] = $hasil['rekap'];
-                $data['totalPertemuan'] = $hasil['totalPertemuan'];
+                // $data['totalPertemuan'] = $hasil['totalPertemuan'];
             }
 
-            $pdf = Pdf::loadView('rekap.export.mahasiswa-pdf', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Rekap Kehadiran Mahasiswa.pdf');
+            $pdf = Pdf::loadView('rekap.export.matkul-pdf', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Rekap Kehadiran Per Mata Kuliah.pdf');
 
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with([
@@ -65,13 +65,13 @@ class RekapMatkulController extends Controller
 
     }
 
-    public function exportExcel(Request $request, RekapMahasiswaService $service)
+    public function exportExcel(Request $request, RekapMatkulService $service)
     {
         $prodi = $request->prodi;
         $semester = $request->semester;
         $matkul = $request->matkul;
 
-        $rekapData = $service->getRekapMahasiswa($prodi, $semester, $matkul);
+        $rekapData = $service->getRekapMatkul($prodi, $semester, $matkul);
 
         $export = new class($rekapData, $prodi, $matkul, $semester) implements FromView {
             protected  $rekapData, $prodiId, $matkulId, $semester;
@@ -86,16 +86,15 @@ class RekapMatkulController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.mahasiswa-excel', [
+                return view('rekap.export.matkul-excel', [
                     'prodi' => Prodi::find($this->prodiId)?->nama_prodi ?? '-',
                     'semester' => $this->semester,
                     'matkul' => Matkul::find($this->matkulId)?->nama_matkul ?? '-',
-                    'dataPresensi' => $this->rekapData['rekap'],
-                    'totalPertemuan' => $this->rekapData['totalPertemuan'],
+                    'rekap' => $this->rekapData['rekap'],
                 ]);
             }
         };
-        return Excel::download($export, 'Rekap Kehadiran Mahasiswa.xlsx');
+        return Excel::download($export, 'Rekap Kehadiran Per Mata Kuliah.xlsx');
     }
 
     public function rekapMatkul(Request $request, RekapMatkulService $service)

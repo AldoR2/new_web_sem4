@@ -47,7 +47,7 @@
 
             <h1 class="mb-2 mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-100">Mahasiswa</h1>
             <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
-                <table id="tbl-pres" class="text-sm text-left w-full pt-2">
+                <table id="detail-mahasiswa" class="text-sm text-left w-full pt-2">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 sticky top-0 z-10">
                         <tr>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">No</th>
@@ -153,3 +153,15 @@
         </div>
     </div>
 </x-layout>
+
+<script>
+    $(document).ready(function () {
+        table = $("#detail-mahasiswa").DataTable({
+            searching: true, // Aktifkan pencarian
+            paging: true, // Aktifkan pagination
+            info: true, // Menampilkan informasi tabel
+            scrollX: true, // Aktifkan scroll horizontal
+            autoWidth: false, // Hindari ukuran otomatis
+        });
+    });
+</script>

@@ -52,7 +52,7 @@
                         </div>
                     </form>
                         <div class="flex flex-col items-center justify-center w-full h-20 border-4 border-gray-400 border-dashed mb-4">
-                            <p class="text-gray-600 dark:text-gray-100">Unduh template file impor <a href="" class="text-blue-600">di sini</a></p>
+                            <p class="text-gray-600 dark:text-gray-100">Unduh template file impor <a href="{{asset('storage/template/template-dosen.xlsx')}}" download class="text-blue-600">di sini</a></p>
                         </div>
                     </div>
                 </div>

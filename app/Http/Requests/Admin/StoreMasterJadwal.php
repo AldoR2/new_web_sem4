@@ -21,8 +21,10 @@ class StoreMasterJadwal extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules($id = null): array
     {
+        $id = $id ??  $this->route('master_jadwal');
+
         return [
             'hari' => 'required',
             'jam' => 'required',

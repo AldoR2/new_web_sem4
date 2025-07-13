@@ -87,15 +87,15 @@
                             </div>
                         </form>
                             <div class="flex flex-col items-center justify-center w-full h-20 border-4 border-gray-400 border-dashed mb-4">
-                                <p class="text-gray-600 dark:text-gray-100">Unduh template file impor <a href="" class="text-blue-600">di sini</a></p>
+                                    <p class="text-gray-600 dark:text-gray-100">Unduh template file impor <a href="{{asset('storage/template/template-mahasiswa.xlsx')}}" download class="text-blue-600">di sini</a></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
 
                 <div x-data="{openView: false}">
                     <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
-                        <table id="data-mahasiswa" class="text-sm text-left w-full pt-1 dark:border-gray-700 display nowrap">
+                        <table id="data-mahasiswa" class="text-sm w-full pt-1 dark:border-gray-700 display nowrap">
                             <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 sticky top-0 z-10">
                                 <tr>
                                     <th class="dark:border-gray-600 px-4">No</th>
@@ -120,10 +120,10 @@
                                         </td>
                                         <td class=" px-4 py-2">{{$m->nim}}</td>
                                         <td class=" px-4 py-2">{{$m->nama}}</td>
-                                        <td class=" dark:border-gray-500 px-4 py-2">{{ $m->jenis_kelamin === 'L' ? 'Laki-laki' : ($m->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</td>
+                                        <td class=" px-4 py-2">{{ $m->jenis_kelamin === 'L' ? 'Laki-laki' : ($m->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</td>
                                         <td class=" px-4 py-2">{{$m->email}}</td>
                                         <td class=" px-4 py-2">{{$m->prodi->jenjang .' '. $m->prodi->nama_prodi}}</td>
-                                        <td class=" px-4 py-2">{{$m->semester}}</td>
+                                        <td class=" px-4 py-2 text-center">{{$m->semester}}</td>
                                         <td class=" px-4 py-2 text-center">
                                             <div class="flex justify-center gap-2">
                                                 <button @click="openView = true; $nextTick(() => loadMahasiswaDetail({{ $m->id }}))" class="cursor-pointer px-2 py-1 bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white rounded-md">

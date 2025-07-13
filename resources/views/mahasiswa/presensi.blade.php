@@ -35,12 +35,18 @@
                             @else
                                 <div class="text-center text-gray-600 dark:text-gray-400">
                                     <p class="text-7xl mb-2">🕓</p>
-                                    <p class="text-lg font-semibold">Belum Melakukan Presensi</p>
-                                    <p class="text-sm">Silakan tap kartu RFID Anda</p>
-                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <p class="text-lg font-semibold">Silakan tap kartu RFID Anda</p>
+                                    <p class="mt-2 text-gray-600 dark:text-gray-400">Mata Kuliah:
+                                        {{ $presensi->pertemuan->matkul->nama_matkul }}
+                                    </p>
+                                    <p class="text-gray-600 dark:text-gray-400">Ruangan: {{ $presensi->ruangan->nama_ruangan ?? '-' }}</p>
+                                    <p class="text-gray-600 dark:text-gray-400"> Jam Perkuliahan:
+                                        {{ $presensi->jam_awal . ' - ' . $presensi->jam_akhir }}
+                                    </p>
+                                    {{-- <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                         Jadwal Anda saat ini: {{ $presensi->pertemuan->matkul->nama_matkul }}
                                         ({{ $presensi->jam_awal }} - {{ $presensi->jam_akhir }})
-                                    </p>
+                                    </p> --}}
                                 </div>
                             @endif
                         @else
