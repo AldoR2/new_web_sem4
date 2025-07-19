@@ -29,9 +29,7 @@ $(document).ready(function () {
                         table.row.add([
                             `<div style="text-align:left;">${index + 1}</div>`,
                             `<div style="text-align:left;">${item.nama_matkul}</div>`,
-                            `${item.prodi?.jenjang ?? ""} ${
-                                item.prodi?.nama_prodi ?? ""
-                            }` || "",
+                            `${item.prodi?.nama_prodi ?? ""}` || "",
                             `<div style="text-align:left;">${
                                 item.durasi_matkul + " SKS"
                             }</div>`,

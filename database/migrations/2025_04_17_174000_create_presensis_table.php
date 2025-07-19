@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('presensi_id', '30');
             $table->foreignId('pertemuan_id')->constrained('pertemuans');
             $table->date('tgl_presensi');
-            $table->time('jam_awal');
-            $table->time('jam_akhir');
+            $table->time('jam_awal')->nullable();
+            $table->time('jam_akhir')->nullable();
             $table->foreignId('dosen_id')->constrained('dosens');
             $table->foreignId('ruangan_id')->constrained('ruangans')->nullable();
             $table->string('link_zoom', '255')->nullable();

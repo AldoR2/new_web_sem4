@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RekapPresensi;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dosen;
@@ -9,6 +9,7 @@ use App\Models\Presensi;
 use App\Models\Prodi;
 use App\Models\TahunAjaran;
 use App\Services\RekapMahasiswaService;
+use App\Services\RekapMatkulService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -16,14 +17,14 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Facades\Excel;
 
-class RekapMahasiswaController extends Controller
+class RekapMatkulController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $title = 'Rekap Mahasiswa';
+        $title = 'Rekap Matkul';
         $prodi = Prodi::all();
         $matkul = Matkul::all();
         $rekap = [];
@@ -31,29 +32,29 @@ class RekapMahasiswaController extends Controller
         $prodiTerpilih = $request->prodi ? Prodi::find($request->prodi) : null;
         $matkulTerpilih = $request->matkul ? Matkul::find($request->matkul) : null;
         $semesterTerpilih = $request->input('semester') ?? null;
-        return view('rekap.rekap-mahasiswa', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
+        return view('admin.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
     }
 
-    public function exportPdf(Request $request, RekapMahasiswaService $service)
+    public function exportPdf(Request $request, RekapMatkulService $service)
     {
         try {
             $data = [
-                'prodiTerpilih' => Prodi::findOrFail($request->prodi),
-                'matkulTerpilih' => Matkul::findOrFail($request->matkul),
+                'prodi' => Prodi::findOrFail($request->prodi),
+                'matkul' => Matkul::findOrFail($request->matkul),
                 'semester' => $request->input('semester'),
                 'rekap' => [],
-                'totalPertemuan' => 16,
+                // 'totalPertemuan' => 16,
             ];
 
             if ($request->isMethod('post')) {
 
-                $hasil = $service->getRekapMahasiswa($request->prodi, $request->semester, $request->matkul);
+                $hasil = $service->getRekapMatkul($request->prodi, $request->semester, $request->matkul);
                 $data['rekap'] = $hasil['rekap'];
-                $data['totalPertemuan'] = $hasil['totalPertemuan'];
+                // $data['totalPertemuan'] = $hasil['totalPertemuan'];
             }
 
-            $pdf = Pdf::loadView('rekap.export.mahasiswa-pdf', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Rekap Kehadiran Mahasiswa.pdf');
+            $pdf = Pdf::loadView('admin.export.rekap-matkul-pdf', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Rekap Kehadiran Per Mata Kuliah.pdf');
 
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with([
@@ -64,13 +65,13 @@ class RekapMahasiswaController extends Controller
 
     }
 
-    public function exportExcel(Request $request, RekapMahasiswaService $service)
+    public function exportExcel(Request $request, RekapMatkulService $service)
     {
         $prodi = $request->prodi;
         $semester = $request->semester;
         $matkul = $request->matkul;
 
-        $rekapData = $service->getRekapMahasiswa($prodi, $semester, $matkul);
+        $rekapData = $service->getRekapMatkul($prodi, $semester, $matkul);
 
         $export = new class($rekapData, $prodi, $matkul, $semester) implements FromView {
             protected  $rekapData, $prodiId, $matkulId, $semester;
@@ -85,22 +86,21 @@ class RekapMahasiswaController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.mahasiswa-excel', [
+                return view('admin.export.rekap-matkul-excel', [
                     'prodi' => Prodi::find($this->prodiId)?->nama_prodi ?? '-',
                     'semester' => $this->semester,
                     'matkul' => Matkul::find($this->matkulId)?->nama_matkul ?? '-',
-                    'dataPresensi' => $this->rekapData['rekap'],
-                    'totalPertemuan' => $this->rekapData['totalPertemuan'],
+                    'rekap' => $this->rekapData['rekap'],
                 ]);
             }
         };
-        return Excel::download($export, 'Rekap Kehadiran Mahasiswa.xlsx');
+        return Excel::download($export, 'Rekap Kehadiran Per Mata Kuliah.xlsx');
     }
 
-    public function rekapMahasiswa(Request $request, RekapMahasiswaService $service)
+    public function rekapMatkul(Request $request, RekapMatkulService $service)
     {
-        $data['title'] = 'Rekap Mahasiswa';
-        $data['judul'] = 'Rekap Mahasiswa';
+        $data['title'] = 'Rekap Matkul';
+        $data['judul'] = 'Rekap Matkul';
         $data['dosen'] = Dosen::all();
         $data['prodi'] = Prodi::all();
         $data['prodiTerpilih'] = Prodi::findOrFail($request->prodi);
@@ -108,16 +108,16 @@ class RekapMahasiswaController extends Controller
         $data['semesterTerpilih'] = $request->input('semester');
         $data['tahun'] = TahunAjaran::all();
         $data['rekap'] = [];
-        $data['totalPertemuan'] = 16;
+        // $data['totalPertemuan'] = 16;
 
         if ($request->isMethod('post')) {
 
-            $hasil = $service->getRekapMahasiswa($request->prodi, $request->semester, $request->matkul);
+            $hasil = $service->getRekapMatkul($request->prodi, $request->semester, $request->matkul);
             $data['rekap'] = $hasil['rekap'];
-            $data['totalPertemuan'] = $hasil['totalPertemuan'];
+            // $data['totalPertemuan'] = $hasil['totalPertemuan'];
         }
 
-        return view('rekap.rekap-mahasiswa', $data);
+        return view('admin.rekap-matkul', $data);
     }
 
     public function getMatkulDosen(Request $request)

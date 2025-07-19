@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RekapPresensi;
+namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dosen;
@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Http\Request;
 
-class RekapDosenDosenController extends Controller
+class RekapDosenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,7 @@ class RekapDosenDosenController extends Controller
         $data['totalPertemuan'] = $hasil['totalPertemuan'];
 
 
-        return view('rekap.rekap-dosen-dosen', $data);
+        return view('dosen.rekap-dosen', $data);
     }
 
     public function exportPdf(Request $request, RekapDosenService $service)
@@ -56,7 +56,7 @@ class RekapDosenDosenController extends Controller
             'totalPertemuan' => $rekapData['totalPertemuan'],
         ];
 
-        $pdf = Pdf::loadView('rekap.export.dosen-pdf', $data)->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('dosen.export.rekap-dosen-pdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('Rekap Kehadiran Dosen.pdf');
     }
 
@@ -83,7 +83,7 @@ class RekapDosenDosenController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.dosen-excel', [
+                return view('dosen.export.rekap-dosen-excel', [
                     'nip' => $this->dosen->nip,
                     'nama' => $this->dosen->nama,
                     'prodi' => $this->dosen->prodi->jenjang . ' ' . $this->dosen->prodi->nama_prodi,

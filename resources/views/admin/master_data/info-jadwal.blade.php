@@ -3,7 +3,7 @@
         <x-slot:title>{{ $title }}</x-slot:title>
         <p class="dark:text-white">Informasi Jadwal</p>
 
-        <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white rounded-sm shadow-xl 
+        <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white rounded-sm shadow-xl
                     dark:bg-gray-800 dark:text-gray-200">
             <h1 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-white">Dosen Pengajar</h1>
 
@@ -29,7 +29,7 @@
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->durasi . ' SKS' }}</td>
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->matkul->nama_matkul ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->dosen->nama ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->prodi->jenjang . ' ' . $jadwal->prodi->nama_prodi ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->prodi->nama_prodi ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->semester ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->ruangan->nama_ruangan ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 dark:border-gray-600">{{ $jadwal->tahun->tahun_awal . '/' . $jadwal->tahun->tahun_akhir . ' ' . $jadwal->tahun->keterangan ?? '-' }}</td>

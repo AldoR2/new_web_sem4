@@ -19,7 +19,7 @@
                             <option value="" hidden selected>Pilih Program Studi</option>
                             @foreach ($prodi as $p)
                                 <option value="{{ $p->id }}" {{ old('prodi_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->jenjang .' '.$p->nama_prodi}}
+                                    {{ $p->nama_prodi}}
                                 </option>
                             @endforeach
                         </select>
@@ -122,7 +122,7 @@
                                         <td class=" px-4 py-2">{{$m->nama}}</td>
                                         <td class=" px-4 py-2">{{ $m->jenis_kelamin === 'L' ? 'Laki-laki' : ($m->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</td>
                                         <td class=" px-4 py-2">{{$m->email}}</td>
-                                        <td class=" px-4 py-2">{{$m->prodi->jenjang .' '. $m->prodi->nama_prodi}}</td>
+                                        <td class=" px-4 py-2">{{$m->prodi->nama_prodi}}</td>
                                         <td class=" px-4 py-2 text-center">{{$m->semester}}</td>
                                         <td class=" px-4 py-2 text-center">
                                             <div class="flex justify-center gap-2">

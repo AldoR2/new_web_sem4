@@ -2,14 +2,14 @@
 
 use App\Http\Controllers\Admin\KalenderAkademikController;
 // use App\Http\Controllers\Dosen\RekapDosenController;
-use App\Http\Controllers\RekapPresensi\RekapDosenDosenController;
-use App\Http\Controllers\RekapPresensi\RekapMahasiswaController;
+use App\Http\Controllers\Dosen\DashboardController;
+use App\Http\Controllers\Dosen\RekapDosenController;
+use App\Http\Controllers\Dosen\RekapMahasiswaController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dosen\JadwalController;
 use App\Http\Controllers\Dosen\PresensiController;
 use App\Http\Controllers\Dosen\ProfileController;
-use App\Http\Controllers\RekapPresensi\RekapMatkulController;
+use App\Http\Controllers\Dosen\RekapMatkulController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,15 +19,15 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dosen')->name('dosen.')->grou
 
     Route::post('/validate-field/kalender-akademik', [KalenderAkademikController::class, 'validateField'])->name('admin.validate.field.kalender');
 
-    Route::get('/dashboard',[DashboardController::class,'indexDosen'])->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
 
     Route::get('/jadwal',[JadwalController::class,'index'])->name('jadwal');
     Route::get('/jadwal/export/pdf', [JadwalController::class, 'exportPdf'])->name('export.jadwal.pdf');
     Route::get('/jadwal/export/excel', [JadwalController::class, 'exportExcel'])->name('export.jadwal.excel');
     Route::get('/getFilterJadwal', [JadwalController::class, 'getFilterJadwal']);
 
-    Route::get('/rekap-dosen/export/pdf', [RekapDosenDosenController::class, 'exportPdf'])->name('export.dosen.pdf');
-    Route::get('/rekap-dosen/export/excel', [RekapDosenDosenController::class, 'exportExcel'])->name('export.dosen.excel');
+    Route::get('/rekap-dosen/export/pdf', [RekapDosenController::class, 'exportPdf'])->name('export.dosen.pdf');
+    Route::get('/rekap-dosen/export/excel', [RekapDosenController::class, 'exportExcel'])->name('export.dosen.excel');
 
     Route::post('/rekap-mahasiswa/export/pdf', [RekapMahasiswaController::class, 'exportPdf'])->name('export.mahasiswa.pdf');
     Route::post('/rekap-mahasiswa/export/excel', [RekapMahasiswaController::class, 'exportExcel'])->name('export.mahasiswa.excel');
@@ -38,9 +38,9 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dosen')->name('dosen.')->grou
 
     Route::post('/validate-field/presensi', [PresensiController::class, 'validateField'])->name('admin.validate.field.presensi');
 
-    Route::resource('rekap-dosen', RekapDosenDosenController::class);
-    Route::post('rekap-dosen', [RekapDosenDosenController::class, 'rekapDosen'])->name('rekap-dosen.filter');
-    Route::get('/getFilterRekap', [RekapDosenDosenController::class, 'getFilterRekap']);
+    Route::resource('rekap-dosen', RekapDosenController::class);
+    Route::post('rekap-dosen', [RekapDosenController::class, 'rekapDosen'])->name('rekap-dosen.filter');
+    Route::get('/getFilterRekap', [RekapDosenController::class, 'getFilterRekap']);
 
     Route::resource('rekap-mahasiswa', RekapMahasiswaController::class);
     Route::post('rekap-mahasiswa', [RekapMahasiswaController::class, 'rekapMahasiswa'])->name('rekap-mahasiswa.filter');

@@ -58,7 +58,7 @@
                                 <td class="px-6 py-4">{{$j->durasi}} SKS</td>
                                 <td class="px-6 py-4">{{$j->matkul->nama_matkul}}</td>
                                 <td class="px-6 py-4">{{$j->dosen->nama}}</td>
-                                <td class="px-6 py-4">{{$j->prodi->jenjang .' '. $j->prodi->nama_prodi}}</td>
+                                <td class="px-6 py-4">{{$j->prodi->nama_prodi}}</td>
                                 <td class="px-6 py-4">{{$j->ruangan->nama_ruangan}}</td>
                             </tr>
                         @endforeach

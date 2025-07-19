@@ -12,7 +12,7 @@
                     <select id="prodi" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600">
                         <option value="" hidden selected>Pilih Program Studi</option>
                         @foreach ($prodi as $p)
-                            <option value="{{ $p->id }}">{{ $p->jenjang .' '. $p->nama_prodi }}</option>
+                            <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -79,7 +79,7 @@
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->jam}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->durasi .' SKS'}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->dosen->nama}}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{$j->prodi->jenjang .' '.$j->prodi->nama_prodi}}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{$j->prodi->nama_prodi}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->tahun->tahun_awal .'/'.$j->tahun->tahun_akhir .' '. $j->tahun->keterangan }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">{{$j->semester}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$j->matkul->nama_matkul}}</td>

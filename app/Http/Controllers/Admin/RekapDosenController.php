@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RekapPresensi;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dosen;
@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Facades\Excel;
 
-class RekapDosenAdminController extends Controller
+class RekapDosenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +28,7 @@ class RekapDosenAdminController extends Controller
         $tahunTerpilih = $request->tahun_ajaran ? TahunAjaran::find($request->tahun_ajaran) : null;
         $rekap = [];
         $totalPertemuan = 16;
-        return view('rekap.rekap-dosen-admin', compact('title','judul','dosen','dosenTerpilih','tahunTerpilih','tahun','rekap','totalPertemuan'));
+        return view('admin.rekap-dosen', compact('title','judul','dosen','dosenTerpilih','tahunTerpilih','tahun','rekap','totalPertemuan'));
     }
 
     public function exportPdf(Request $request, RekapDosenService $service)
@@ -49,7 +49,7 @@ class RekapDosenAdminController extends Controller
                 $data['totalPertemuan'] = $hasil['totalPertemuan'];
             }
 
-            $pdf = Pdf::loadView('rekap.export.dosen-pdf', $data)->setPaper('a4', 'landscape');
+            $pdf = Pdf::loadView('admin.export.rekap-dosen-pdf', $data)->setPaper('a4', 'landscape');
             return $pdf->download('Rekap Kehadiran Dosen.pdf');
 
         } catch (\Exception $e) {
@@ -80,7 +80,7 @@ class RekapDosenAdminController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.dosen-excel', [
+                return view('admin.export.rekap-dosen-excel', [
                     'nip' => Dosen::find($this->dosenId)?->nip ?? '-',
                     'nama' => Dosen::find($this->dosenId)?->nama ?? '-',
                     'dataPresensi' => $this->rekapData['rekap'],
@@ -110,6 +110,6 @@ class RekapDosenAdminController extends Controller
             $data['totalPertemuan'] = $hasil['totalPertemuan'];
         }
 
-        return view('rekap.rekap-dosen-admin', $data);
+        return view('admin.rekap-dosen', $data);
     }
 }

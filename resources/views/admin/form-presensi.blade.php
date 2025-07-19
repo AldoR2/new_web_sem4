@@ -20,7 +20,7 @@
                             <option value="" hidden selected>Pilih Program Studi</option>
                             @foreach ($prodi as $p)
                             <option value="{{ $p->id }}" @if (old('prodi_id', $presensi->pertemuan->prodi_id ?? '') == $p->id) selected @endif>
-                                    {{ $p->jenjang.' '.$p->nama_prodi }}
+                                    {{ $p->nama_prodi }}
                                 </option>
                             @endforeach
                         </select>
@@ -101,14 +101,19 @@
                         </span>
                     </div>
 
-                    <div class="flex flex-col w-full mb-4 md:w-1/2">
+                    <div x-data="{ status: '' }" x-init='status = "{{old("status", $presensi->pertemuan->status ?? "") }}"' class="flex flex-col w-full mb-4 md:w-1/2">
                         <label for="status" class="mb-1 font-semibold dark:text-white">Status Pertemuan:</label>
-                        <select id="status" name="status" required class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
+                        <select id="status" name="status" x-model="status" required class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
                             <option value="" hidden selected>Pilih Status</option>
-                            <option value="aktif" {{old('status', $presensi->pertemuan->status ?? '') == 'aktif' ? 'selected' : ''}}>Aktif</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="libur">Libur</option>
+                            <option value="uts">UTS</option>
+                            <option value="uas">UAS</option>
+
+                            {{-- <option value="aktif" {{old('status', $presensi->pertemuan->status ?? '') == 'aktif' ? 'selected' : ''}}>Aktif</option>
                             <option value="libur" {{old('status', $presensi->pertemuan->status ?? '') == 'libur' ? 'selected' : ''}}>Libur</option>
                             <option value="uts" {{old('status', $presensi->pertemuan->status ?? '') == 'uts' ? 'selected' : ''}}>UTS</option>
-                            <option value="uas" {{old('status', $presensi->pertemuan->status ?? '') == 'uas' ? 'selected' : ''}}>UAS</option>
+                            <option value="uas" {{old('status', $presensi->pertemuan->status ?? '') == 'uas' ? 'selected' : ''}}>UAS</option> --}}
                         </select>
                         @error('status')
                             <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -116,6 +121,7 @@
                     </div>
                 </div>
 
+            <div x-show="status !== 'libur'" x-transition >
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                         <label for="ruangan" class="mb-1 font-semibold dark:text-white">Pilih Ruangan:</label>
@@ -157,6 +163,7 @@
                         </span>
                     </div>
                 </div>
+            </div>
 
                 <div class="w-full flex justify-end">
                     <a href="{{route('admin.presensi.index')}}" class="mr-2 px-5 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer">

@@ -38,9 +38,7 @@ $(document).ready(function () {
                                 ? "Laki-laki"
                                 : "Perempuan",
                             item.email,
-                            `${item.prodi?.jenjang ?? ""} ${
-                                item.prodi?.nama_prodi ?? ""
-                            }` || "-",
+                            `${item.prodi?.nama_prodi ?? ""}` || "-",
                             item.semester,
                             `<div class="flex gap-2 justify-center">
                                 <button @click="openView = true; $nextTick(() => loadMahasiswaDetail(${item.id}))"

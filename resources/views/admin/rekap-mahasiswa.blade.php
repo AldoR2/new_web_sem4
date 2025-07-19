@@ -1,10 +1,10 @@
 <x-layout>
-    @vite(['resources/js/pages/admin/rekap-matkul.js'])
+    @vite(['resources/js/pages/admin/rekap-mahasiswa.js'])
 <div class="h-full dark:bg-gray-700">
 <x-slot:title>{{ $title }}</x-slot:title>
 <p class="dark:text-white">Lihat Rekap Presensi Mahasiswa </p>
 <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
-   <form action="{{route(Auth::user()->role . '.rekap-matkul.filter')}}" method="post">
+   <form action="{{route(Auth::user()->role . '.rekap-mahasiswa.filter')}}" method="post">
        @csrf
 
    <div class="flex flex-col xl:flex-row">
@@ -16,7 +16,7 @@
                <option value="" hidden selected>Pilih Program Studi</option>
                @foreach ($prodi as $p)
                    <option value="{{ $p->id }}">
-                       {{ $p->jenjang .' '. $p->nama_prodi }}
+                       {{ $p->nama_prodi }}
                    </option>
                @endforeach
            </select>
@@ -41,7 +41,7 @@
                <option value="" hidden selected>Pilih Program Studi</option>
                @foreach ($prodi as $p)
                    <option value="{{ $p->id }}">
-                       {{ $p->jenjang .' '. $p->nama_prodi }}
+                       {{ $p->nama_prodi }}
                    </option>
                @endforeach
            </select>
@@ -74,7 +74,7 @@
 @if ($prodiTerpilih && $matkulTerpilih && $semesterTerpilih)
  <div class="mt-4 flex gap-4">
 
-   <form action="{{route(Auth::user()->role . '.export.matkul.excel')}}" method="post">
+   <form action="{{route(Auth::user()->role . '.export.mahasiswa.excel')}}" method="post">
        @csrf
        <input type="hidden" name="prodi" value="{{ request('prodi') }}">
        <input type="hidden" name="semester" value="{{ request('semester') }}">
@@ -86,7 +86,7 @@
        </button>
    </form>
 
-   <form action="{{ route(Auth::user()->role .'.export.matkul.pdf') }}" method="POST">
+   <form action="{{ route(Auth::user()->role .'.export.mahasiswa.pdf') }}" method="POST">
        @csrf
        <input type="hidden" name="prodi" value="{{ request('prodi') }}">
        <input type="hidden" name="semester" value="{{ request('semester') }}">
@@ -119,34 +119,70 @@
 @endif
 
  <div x-data="{ hovering: false }" class="overflow-x-auto w-60 sm:w-150 md:w-240 xl:min-w-full pb-3">
-   <table id="data-rekap-matkul" class="text-sm text-left w-full pt-4 dark:text-white display nowrap">
+   <table id="data-rekap-mahasiswa" class="text-sm text-left w-full pt-4 dark:text-white display nowrap">
        <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 sticky top-0 z-10">
            <tr>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pertemuan Ke</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tanggal</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Dosen Pengajar</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Hadir</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Mahasiswa</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Metode</th>
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">No</th>
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Nim</th>
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Nama</th>
+               @for ($i = 1; $i <= $totalPertemuan; $i++)
+                   <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">{{ $i }}</th>
+               @endfor
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">%Kehadiran</th>
            </tr>
        </thead>
        <tbody class="text-center">
            @if (count($rekap))
                @foreach ($rekap as $index => $item)
            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-               {{-- <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$loop->iteration}}</td> --}}
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['pertemuan_ke'] ?? ''}}</td>
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{ implode(', ', (array) $item['tanggal']) }}</td>
-               {{-- <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['tanggal'] ?? ''}}</td> --}}
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['dosen']}}</td>
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['jumlah_hadir']}}</td>
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['totalMahasiswa']}}</td>
-               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{ implode(', ', (array) $item['metode']) }}</td>
+               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$loop->iteration}}</td>
+               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['nim'] ?? ''}}</td>
+               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['nama_mahasiswa'] ?? ''}}</td>
+               @for ($i = 1; $i <= $totalPertemuan; $i++)
+                   @php
+                       $tanggal = $item['tanggal_pertemuan'][$i] ?? null;
+                       $status = $item['pertemuan'][$i] ?? '';
+                       $dosen = $item['nama_dosen'][$i] ?? '';
+                       switch ($status) {
+                           case 'H':
+                               $bg = 'text-green-500';
+                               break;
+                           case 'I':
+                               $bg = 'text-blue-500';
+                               break;
+                           case 'S':
+                               $bg = 'text-yellow-500';
+                               break;
+                           case 'A':
+                               $bg = 'text-red-500';
+                               break;
+                           case 'UTS':
+                               $bg = 'text-red-500';
+                               break;
+                           case 'UAS':
+                               $bg = 'text-red-500';
+                               break;
+                           default:
+                               $bg = 'text-gra-500';
+                               break;
+                       };
+                   @endphp
+                       <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold {{ $bg }}" title="{{$tanggal .' '. $dosen}}">{{ $status }}</td>
+               @endfor
+               <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['kehadiran']}}</td>
            </tr>
            @endforeach
        </tbody>
        @endif
    </table>
+ </div>
+ <div class="mt-6">
+   <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-5">Keterangan:</h2>
+        <p class="mt-2 dark:text-white"><span class="text-green-500 font-bold p-1">H  = Hadir</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-blue-500 font-bold py-1 px-2">I  = Izin</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-yellow-500 font-bold py-1 px-2">S  = Sakit</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-red-500 font-bold p-1">A  = Alpha</span></p>
+        <p class="mt-2 dark:text-white"><span class="text-gray-500 font-bold p-1">-  = Tidak terselenggara perkuliahan</span></p>
  </div>
 </div>
 </div>

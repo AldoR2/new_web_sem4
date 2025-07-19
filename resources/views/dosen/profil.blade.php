@@ -73,7 +73,7 @@
                   <div class="flex flex-col md:flex-row">
                       <div class="flex flex-col w-full mb-4 mr-0 md:mr-4">
                           <label class="mb-1 font-semibold text-gray-600 dark:text-gray-300">Program Studi:</label>
-                          <input type="text" disabled class="p-2 border-2 border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-sm" value="{{ $user->dosen->prodi->jenjang .' '. $user->dosen->prodi->nama_prodi }}">
+                          <input type="text" disabled class="p-2 border-2 border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-sm" value="{{ $user->dosen->prodi->nama_prodi }}">
                       </div>
                       <div class="flex flex-col w-full mb-4">
                           <label class="mb-1 font-semibold text-gray-600 dark:text-gray-300">Alamat:</label>

@@ -53,7 +53,7 @@
                             <option value="" hidden selected>Pilih Program Studi</option>
                             @foreach ($prodi as $p)
                                 <option value="{{ $p->id }}" {{ old('prodi_id', $jadwal->prodi_id ?? '') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->jenjang.' '.$p->nama_prodi }}
+                                    {{ $p->nama_prodi }}
                                 </option>
                             @endforeach
                         </select>

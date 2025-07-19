@@ -31,9 +31,7 @@ $(document).ready(function () {
                             item.jam.substr(0, 5),
                             item.durasi + " SKS",
                             `${item.matkul?.nama_matkul ?? ""}`,
-                            `${item.prodi?.jenjang ?? ""} ${
-                                item.prodi?.nama_prodi ?? ""
-                            }` || "-",
+                            `${item.prodi?.nama_prodi ?? ""}` || "-",
                             item.semester,
                             `${item.ruangan?.nama_ruangan ?? ""}`,
                         ]);

@@ -65,7 +65,7 @@
                                 <td class=" dark:border-gray-600 px-4 py-2">{{ substr($p->jam_awal,0,5) .' - '. substr($p->jam_akhir,0,5) }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->matkul->nama_matkul }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->pertemuan_ke }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->prodi->jenjang .' '.$p->pertemuan->prodi->nama_prodi }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->prodi->nama_prodi }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->semester }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{ $p->ruangan->nama_ruangan }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">

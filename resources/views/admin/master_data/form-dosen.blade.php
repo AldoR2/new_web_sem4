@@ -129,7 +129,7 @@
                             <option value="" hidden selected>Pilih Prodi</option>
                             @foreach ($prodi as $p)
                                 <option value="{{ $p->id }}" @if (old('prodi_id', $dosen->prodi_id ?? '') == $p->id) selected @endif>
-                                    {{ $p->jenjang.' '.$p->nama_prodi }}
+                                    {{ $p->nama_prodi }}
                                 </option>
                             @endforeach
                         </select>

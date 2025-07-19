@@ -64,7 +64,7 @@ class MahasiswaController extends Controller
             // 'totalPertemuan' => $rekapData['totalPertemuan'],
         ];
 
-        $pdf = Pdf::loadView('mahasiswa.jadwal-mahasiswa-pdf', $data)->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('mahasiswa.export.jadwal-pdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('Jadwal Mahasiswa.pdf');
     }
 
@@ -100,7 +100,7 @@ class MahasiswaController extends Controller
 
             public function view(): View
             {
-                return view('mahasiswa.jadwal-mahasiswa-excel', [
+                return view('mahasiswa.export.jadwal-excel', [
                     'nim' => $this->mahasiswa->nim,
                     'nama' => $this->mahasiswa->nama,
                     'prodi' => $this->mahasiswa->prodi->jenjang . ' ' . $this->mahasiswa->prodi->nama_prodi,
@@ -149,7 +149,7 @@ class MahasiswaController extends Controller
             'totalPertemuan' => $rekapData['totalPertemuan'],
         ];
 
-        $pdf = Pdf::loadView('rekap.export.rekap-mahasiswa-pdf', $data)->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('mahasiswa.export.rekap-pdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('Rekap Kehadiran Mahasiswa.pdf');
     }
 
@@ -176,7 +176,7 @@ class MahasiswaController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.rekap-mahasiswa-excel', [
+                return view('mahasiswa.export.rekap-excel', [
                     'nim' => $this->mahasiswa->nim,
                     'nama' => $this->mahasiswa->nama,
                     'prodi' => $this->mahasiswa->prodi->jenjang . ' ' . $this->mahasiswa->prodi->nama_prodi,

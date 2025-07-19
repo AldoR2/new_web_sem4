@@ -14,7 +14,7 @@
                     <select id="prodi" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600">
                         <option value="" hidden selected>Pilih Program Studi</option>
                         @foreach ($prodi as $p)
-                            <option value="{{ $p->id }}">{{ $p->jenjang .' '. $p->nama_prodi }}</option>
+                            <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -73,7 +73,7 @@
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$loop->iteration}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$m->nama_matkul}}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{$m->prodi->jenjang . ' ' .$m->prodi->nama_prodi ?? ''}}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{$m->prodi->nama_prodi ?? ''}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$m->durasi_matkul}} SKS</td>
                                 <td class=" dark:border-gray-600 px-4 py-2">{{$m->tahunAjaran->tahun_awal .'/'. $m->tahunAjaran->tahun_akhir .' '.$m->tahunAjaran->keterangan ?? ''}}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">{{$m->semester}}</td>

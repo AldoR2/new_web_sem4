@@ -32,9 +32,7 @@ $(document).ready(function () {
                             item.durasi + " SKS",
                             `${item.matkul?.nama_matkul ?? ""}`,
                             item.dosen?.nama ?? "",
-                            `${item.prodi?.jenjang ?? ""} ${
-                                item.prodi?.nama_prodi ?? ""
-                            }` || "-",
+                            `${item.prodi?.nama_prodi ?? ""}` || "-",
                             `${item.ruangan?.nama_ruangan ?? ""}`,
                         ]);
                     });

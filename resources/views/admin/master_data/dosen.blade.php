@@ -86,7 +86,7 @@
                                     <td class="dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-gray-200">{{$d->nama}}</td>
                                     <td class="dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-gray-200">{{$d->email}}</td>
                                     <td class="dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-gray-200">{{$d->no_telp}}</td>
-                                    <td class="dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-gray-200">{{$d->prodi->jenjang .' '. $d->prodi->nama_prodi}}</td>
+                                    <td class="dark:border-gray-700 px-4 py-2 text-gray-800 dark:text-gray-200">{{$d->prodi->nama_prodi}}</td>
                                     <td class="dark:border-gray-700 px-4 py-2 text-center">
                                         <div class="flex justify-center gap-2">
                                             <button @click="openView = true; $nextTick(() => loadDosenDetail({{ $d->id }}))" class="cursor-pointer px-2 py-1 bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white rounded-md dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500">

@@ -8,7 +8,7 @@
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-900 rounded-sm shadow-xl border dark:border-gray-700">
             <div class="flex flex-col xl:flex-row mb-5">
                 <div class="flex flex-col w-full mb-4 xl">
-                    <label class="mb-1 font-semibold text-gray-700 dark:text-gray-200">Pilih Tahun Ajaran:</label>
+                    <label class="mb-1 font-semibold text-gray-700 dark:text-gray-200">Filter By Tahun Ajaran:</label>
                     <select id="tahun-ajaran" name="tahun_ajaran"
                         class="bg-white dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded px-3 py-2">
                         <option value="" hidden selected>Pilih Tahun Ajaran</option>

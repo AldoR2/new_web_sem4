@@ -16,7 +16,7 @@
                <option value="" hidden selected>Pilih Program Studi</option>
                @foreach ($prodi as $p)
                    <option value="{{ $p->id }}">
-                       {{ $p->jenjang .' '. $p->nama_prodi }}
+                       {{ $p->nama_prodi }}
                    </option>
                @endforeach
            </select>
@@ -41,7 +41,7 @@
                <option value="" hidden selected>Pilih Program Studi</option>
                @foreach ($prodi as $p)
                    <option value="{{ $p->id }}">
-                       {{ $p->jenjang .' '. $p->nama_prodi }}
+                       {{ $p->nama_prodi }}
                    </option>
                @endforeach
            </select>

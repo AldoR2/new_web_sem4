@@ -100,7 +100,7 @@
         <div class="w-full space-y-3">
                 <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">Nama:</span><span class="text-right">{{$biodata->nama}}</span></div>
                 <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">NIM:</span><span class="text-right">{{$biodata->nim}}</span></div>
-                <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">Program Studi:</span><span class="text-right">{{$biodata->prodi->jenjang .' '. $biodata->prodi->nama_prodi}}</span></div>
+                <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">Program Studi:</span><span class="text-right">{{$biodata->prodi->nama_prodi}}</span></div>
                 <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">Semester:</span><span class="text-right">{{$biodata->semester}}</span></div>
                 <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">Email:</span><span class="text-right">{{$biodata->email}}</span></div>
                 <div class="flex justify-between"><span class="font-medium text-gray-500 dark:text-gray-400">No. Telepon:</span><span class="text-right">{{$biodata->no_telp}}</span></div>

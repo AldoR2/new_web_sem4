@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\RekapPresensi;
+namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dosen;
@@ -32,7 +32,7 @@ class RekapMatkulController extends Controller
         $prodiTerpilih = $request->prodi ? Prodi::find($request->prodi) : null;
         $matkulTerpilih = $request->matkul ? Matkul::find($request->matkul) : null;
         $semesterTerpilih = $request->input('semester') ?? null;
-        return view('rekap.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
+        return view('dosen.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
     }
 
     public function exportPdf(Request $request, RekapMatkulService $service)
@@ -53,7 +53,7 @@ class RekapMatkulController extends Controller
                 // $data['totalPertemuan'] = $hasil['totalPertemuan'];
             }
 
-            $pdf = Pdf::loadView('rekap.export.matkul-pdf', $data)->setPaper('a4', 'landscape');
+            $pdf = Pdf::loadView('dosen.export.rekap-matkul-pdf', $data)->setPaper('a4', 'landscape');
             return $pdf->download('Rekap Kehadiran Per Mata Kuliah.pdf');
 
         } catch (\Exception $e) {
@@ -86,7 +86,7 @@ class RekapMatkulController extends Controller
 
             public function view(): View
             {
-                return view('rekap.export.matkul-excel', [
+                return view('dosen.export.rekap-matkul-excel', [
                     'prodi' => Prodi::find($this->prodiId)?->nama_prodi ?? '-',
                     'semester' => $this->semester,
                     'matkul' => Matkul::find($this->matkulId)?->nama_matkul ?? '-',
@@ -117,7 +117,7 @@ class RekapMatkulController extends Controller
             // $data['totalPertemuan'] = $hasil['totalPertemuan'];
         }
 
-        return view('rekap.rekap-matkul', $data);
+        return view('dosen.rekap-matkul', $data);
     }
 
     public function getMatkulDosen(Request $request)

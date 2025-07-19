@@ -49,7 +49,7 @@ class JadwalController extends Controller
             // 'totalPertemuan' => $rekapData['totalPertemuan'],
         ];
 
-        $pdf = Pdf::loadView('dosen.jadwal-dosen-pdf', $data)->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('dosen.export.jadwal-pdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('Jadwal Dosen.pdf');
     }
 
@@ -82,7 +82,7 @@ class JadwalController extends Controller
 
             public function view(): View
             {
-                return view('dosen.jadwal-dosen-excel', [
+                return view('dosen.export.jadwal-excel', [
                     'nip' => $this->dosen->nip,
                     'nama' => $this->dosen->nama,
                     'prodi' => $this->dosen->prodi->jenjang . ' ' . $this->dosen->prodi->nama_prodi,
