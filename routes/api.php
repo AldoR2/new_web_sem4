@@ -1,10 +1,10 @@
 <?php
-use App\Http\Controllers\Api\activity\AcademicCalendarController;
-use App\Http\Controllers\Api\activity\AllScheduleController;
-use App\Http\Controllers\Api\activity\PresenceContentController;
+use App\Http\Controllers\Api\Activity\AcademicCalendarController;
+use App\Http\Controllers\Api\Activity\AllScheduleController;
+use App\Http\Controllers\Api\Activity\PresenceContentController;
 use App\Http\Controllers\Api\Activity\SummaryController;
-use App\Http\Controllers\Api\activity\TransactionController;
-use App\Http\Controllers\Api\activity\UploadProfileController;
+use App\Http\Controllers\Api\Activity\TransactionController;
+use App\Http\Controllers\Api\Activity\UploadProfileController;
 use App\Http\Controllers\Api\Activity\ViewProfileController;
 use App\Http\Controllers\Api\ActivityLecturer\AddPresenceController;
 use App\Http\Controllers\Api\ActivityLecturer\AttendanceLecturerController;
