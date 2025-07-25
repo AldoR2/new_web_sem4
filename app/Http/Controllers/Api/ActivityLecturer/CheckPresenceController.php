@@ -55,13 +55,13 @@ class CheckPresenceController extends Controller
             'dosen_id' => 'required|integer|exists:dosens,id',
         ]);
 
-        $dosen = \App\Models\Dosen::with('user')->findOrFail($request->dosen_id);
+        $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
         $userId = $dosen->user_id;
 
         $now = now()->timezone('Asia/Jakarta');
         $oneHourAgo = $now->copy()->subHour();
 
-        $hasRecent = \App\Models\Notification::where('user_id', $userId)
+        $hasRecent = Notification::where('user_id', $userId)
             ->whereBetween('created_at', [$oneHourAgo, $now])
             ->exists();
 
@@ -77,13 +77,13 @@ class CheckPresenceController extends Controller
             'mahasiswa_id' => 'required|integer|exists:mahasiswas,id',
         ]);
 
-        $mahasiswa = \App\Models\Mahasiswa::with('user')->findOrFail($request->mahasiswa_id);
+        $mahasiswa = Mahasiswa::with('user')->findOrFail($request->mahasiswa_id);
         $userId = $mahasiswa->user_id;
 
         $now = now()->timezone('Asia/Jakarta');
         $oneHourAgo = $now->copy()->subHour();
 
-        $hasRecent = \App\Models\Notification::where('user_id', $userId)
+        $hasRecent = Notification::where('user_id', $userId)
             ->whereBetween('created_at', [$oneHourAgo, $now])
             ->exists();
 

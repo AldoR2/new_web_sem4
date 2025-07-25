@@ -18,7 +18,8 @@ class AttendanceStudentController extends Controller
 
         $rekap = DB::table('detail_presensis')
             ->join('presensis', 'presensis.id', '=', 'detail_presensis.presensi_id')
-            ->join('matkuls', 'presensis.matkul_id', '=', 'matkuls.id')
+            ->join('pertemuans', 'pertemuans.id', '=', 'presensis.pertemuan_id')
+            ->join('matkuls', 'pertemuans.matkul_id', '=', 'matkuls.id')
             ->join('mahasiswas', function ($join) {
                 $join->on('mahasiswas.id', '=', 'detail_presensis.mahasiswa_id')
                     ->on('mahasiswas.semester', '=', 'matkuls.semester');
