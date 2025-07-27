@@ -7,6 +7,7 @@ use App\Models\Dosen;
 use App\Models\FcmToken;
 use App\Models\Mahasiswa;
 use App\Models\Notification;
+use App\Models\Pertemuan;
 use App\Models\Presensi;
 use App\Services\FcmV1Service;
 use Carbon\Carbon;
@@ -204,9 +205,54 @@ class CheckPresenceController extends Controller
             'semester' => 'required|integer',
             'status' => 'required|in:aktif,libur,uts,uas',
             'pertemuan_ke' => 'required|integer',
+            'matkul_id' => 'required|integer',
         ]);
 
         if ($request->status == "aktif") {
+            $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
+                ->where('matkul_id', $request->matkul_id)
+                ->where('prodi_id', $request->prodi_id)
+                ->where('semester', $request->semester)
+                ->first();
+
+            if ($pertemuan) {
+                if ($pertemuan->status !== $request->status) {
+                    // Ambil data dosen & user
+                    $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
+                    $user = $dosen->user;
+
+                    $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
+                    $tanggal = $waktu->translatedFormat('d F Y');
+                    $jam = $waktu->format('H.i');
+
+                    $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke .
+                        " sudah ada dengan status berbeda: \"" . $pertemuan->status . "\". ";
+
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'title' => 'Presensi Gagal Ditambahkan!',
+                        'message' => $message,
+                        'type' => 'presensiGagal',
+                        'nama_user' => $dosen->nama,
+                        'tanggal' => $tanggal,
+                        'jam' => $jam,
+                        'mata_kuliah' => $matkul?->nama_matkul ?? '-',
+                    ]);
+
+                    $fcmService = new FcmV1Service();
+
+                    // Kirim notifikasi ke dosen
+                    $dosenUserId = $dosen->user_id;
+                    $dosenTokens = FcmToken::where('user_id', $dosenUserId)->pluck('token');
+
+                    return response()->json([
+                        'status' => 'invalid status',
+                        'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbedaaaa: ' . $pertemuan->status . '.'
+                    ], 409);
+                }
+
+            }
+
             $conflict = Presensi::where('tgl_presensi', $request->tgl_presensi)
                 ->where(function ($query) use ($request) {
                     $query->where(function ($q) use ($request) {
@@ -273,21 +319,6 @@ class CheckPresenceController extends Controller
                     ]
                 ], 409);
             } else {
-                $duplicatePertemuan = Presensi::whereHas('pertemuan', function ($query) use ($request) {
-                    $query->where('pertemuan_ke', $request->pertemuan_ke)
-                        ->where('matkul_id', $request->matkul_id)
-                        ->where('prodi_id', $request->prodi_id)
-                        ->where('semester', $request->semester);
-                })
-                    ->first();
-
-                if ($duplicatePertemuan) {
-                    return response()->json([
-                        'status' => 'duplicate',
-                        'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' untuk matkul ini sudah pernah dibuat sebelumnya.',
-                    ], 409);
-                }
-
                 return response()->json([
                     'status' => 'no_conflict',
                     'message' => 'Tidak terjadi konflik data',
@@ -295,15 +326,13 @@ class CheckPresenceController extends Controller
             }
 
         } else {
-            $duplicatePertemuan = Presensi::whereHas('pertemuan', function ($query) use ($request) {
-                $query->where('pertemuan_ke', $request->pertemuan_ke)
-                    ->where('matkul_id', $request->matkul_id)
-                    ->where('prodi_id', $request->prodi_id)
-                    ->where('semester', $request->semester);
-            })
+            $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
+                ->where('matkul_id', $request->matkul_id)
+                ->where('prodi_id', $request->prodi_id)
+                ->where('semester', $request->semester)
                 ->first();
 
-            if ($duplicatePertemuan) {
+            if ($pertemuan && $pertemuan->status !== $request->status) {
                 // Ambil data dosen & user
                 $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
                 $user = $dosen->user;
@@ -312,7 +341,7 @@ class CheckPresenceController extends Controller
                 $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
                 $tanggal = $waktu->translatedFormat('d F Y');
                 $jam = $waktu->format('H.i');
-                $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke . " untuk matkul ini sudah pernah dibuat sebelumnya.";
+                $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke . " untuk matkul ini sudah pernah dibuat sebelumnya dengan status yang berbeda.";
 
                 Notification::create([
                     'user_id' => $user->id,
@@ -340,8 +369,8 @@ class CheckPresenceController extends Controller
                 }
 
                 return response()->json([
-                    'status' => 'duplicate',
-                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' untuk matkul ini sudah pernah dibuat sebelumnya.',
+                    'status' => 'invalid status',
+                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbeda: ' . $pertemuan->status . '.'
                 ], 409);
             }
 
@@ -350,6 +379,5 @@ class CheckPresenceController extends Controller
                 'message' => 'Tidak terjadi konflik data',
             ], 200);
         }
-
     }
 }

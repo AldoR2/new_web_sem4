@@ -45,22 +45,53 @@ class AddPresenceController extends Controller
 
             DB::begintransaction();
 
-            // $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
-            // ->where('matkul_id', $request->matkul_id)
-            // ->where('prodi_id', $request->prodi_id)
-            // ->where('semester', $request->semester)
-            // ->where('matkul_id', $request->matkul_id)
-            // ->where('matkul_id', $request->matkul_id)
+            $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
+                ->where('matkul_id', $request->matkul_id)
+                ->where('prodi_id', $request->prodi_id)
+                ->where('semester', $request->semester)
+                ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
+                ->first();
 
-            $pertemuan = Pertemuan::create([
-                'pertemuan_ke' => $request->pertemuan_ke,
-                'status' => $request->status,
-                'matkul_id' => $request->matkul_id,
-                'prodi_id' => $request->prodi_id,
-                'semester' => $request->semester,
-                'tahun_ajaran_id' => $request->tahun_ajaran_id,
-            ]);
+            if ($pertemuan) {
+                if ($pertemuan->status != $request->status) {
 
+                    // Ambil data dosen & user
+                    $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
+                    $user = $dosen->user;
+                    $matkul = Matkul::find($request->matkul_id);
+
+                    $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
+                    $tanggal = $waktu->translatedFormat('d F Y');
+                    $jam = $waktu->format('H.i');
+
+                    // Simpan notifikasi
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'title' => 'Presensi Gagal Ditambahkan!',
+                        'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbeda: ' . $pertemuan->status . '.',
+                        'type' => 'presensiGagal',
+                        'nama_user' => $dosen->nama,
+                        'tanggal' => $tanggal,
+                        'jam' => $jam,
+                        'mata_kuliah' => $matkul?->nama_matkul ?? '-',
+                    ]);
+
+                    return response()->json([
+                        'status' => 'invalid status',
+                        'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbeda: ' . $pertemuan->status . '.'
+                    ], 409);
+                }
+
+            } else {
+                $pertemuan = Pertemuan::create([
+                    'pertemuan_ke' => $request->pertemuan_ke,
+                    'status' => $request->status,
+                    'matkul_id' => $request->matkul_id,
+                    'prodi_id' => $request->prodi_id,
+                    'semester' => $request->semester,
+                    'tahun_ajaran_id' => $request->tahun_ajaran_id,
+                ]);
+            }
 
             if ($request->status == "aktif") {
                 // 1. Simpan data presensi utama
