@@ -41,7 +41,8 @@ class TransactionController extends Controller
 
         // Ambil relasi ke Presensi dan Matkul
         $presensi = $detail->presensi;
-        $matkul = $presensi->matkul;
+        $pertemuan = $presensi->pertemuan;
+        $matkul = $pertemuan->matkul;
 
         return response()->json([
             'status' => 'success',

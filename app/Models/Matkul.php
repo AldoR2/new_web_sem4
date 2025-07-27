@@ -25,9 +25,9 @@ class Matkul extends Model
         return $this->belongsTo(Prodi::class, 'prodi_id', 'id');
     }
 
-    public function presensi()
+    public function pertemuan()
     {
-        return $this->hasMany(Presensi::class);
+        return $this->hasMany(Pertemuan::class);
     }
 
     public function tahunAjaran()

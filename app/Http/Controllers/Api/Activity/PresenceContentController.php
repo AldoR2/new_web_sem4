@@ -21,7 +21,7 @@ class PresenceContentController extends Controller
     public function store(Request $request)
     {
         // Validasi input
-        $validated = $request->validate([
+        $request->validate([
             'mahasiswa_id' => 'required|exists:mahasiswas,id',
             'presensi_id' => 'required|exists:presensis,id',
             'status' => 'required|in:1,2,3,4', // sesuaikan range status valid
@@ -56,7 +56,7 @@ class PresenceContentController extends Controller
         // Ambil data mahasiswa & user
         $mahasiswa = Mahasiswa::with('user')->findOrFail($request->mahasiswa_id);
         $user = $mahasiswa->user;
-        $matkul = Matkul::whereHas('presensi', function ($q) use ($request) {
+        $matkul = Matkul::whereHas('pertemuan.presensi', function ($q) use ($request) {
             $q->where('id', $request->presensi_id);
         })->first();
 

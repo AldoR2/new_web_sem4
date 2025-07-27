@@ -29,9 +29,9 @@ class DetailPresenceLecturerController extends Controller
             'status' => 'success',
             'message' => 'Data header detail presensi berhasil ditampilkan',
             'data' => [
-                'nama_matkul' => $presensi->matkul->nama_matkul,
+                'nama_matkul' => $presensi->pertemuan->matkul->nama_matkul,
                 'durasi_presensi' => Carbon::parse($presensi->jam_awal)->format('H:i') . ' - ' . Carbon::parse($presensi->jam_akhir)->format('H:i'),
-                'nama_prodi' => $presensi->prodi->nama_prodi,
+                'nama_prodi' => $presensi->pertemuan->prodi->nama_prodi,
             ]
         ]);
     }

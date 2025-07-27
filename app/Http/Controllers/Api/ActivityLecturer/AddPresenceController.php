@@ -28,15 +28,30 @@ class AddPresenceController extends Controller
                 'tgl_presensi' => 'required|date',
                 'pertemuan_ke' => 'required|int',
                 'status' => 'required|in:aktif,libur,uts,uas',
-                // 'jam_awal' => 'required',
-                // 'jam_akhir' => 'required',
                 'dosen_id' => 'required|integer',
                 'prodi_id' => 'required|integer',
                 'semester' => 'required|integer',
                 'matkul_id' => 'required|integer',
                 'tahun_ajaran_id' => 'required|integer',
-                'link_zoom' => 'string',
             ]);
+
+            if ($request->status == "aktif") {
+                $request->validate([
+                    'jam_awal' => 'required',
+                    'jam_akhir' => 'required',
+                    'link_zoom' => 'required|string',
+                ]);
+            }
+
+            DB::begintransaction();
+
+            // $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
+            // ->where('matkul_id', $request->matkul_id)
+            // ->where('prodi_id', $request->prodi_id)
+            // ->where('semester', $request->semester)
+            // ->where('matkul_id', $request->matkul_id)
+            // ->where('matkul_id', $request->matkul_id)
+
             $pertemuan = Pertemuan::create([
                 'pertemuan_ke' => $request->pertemuan_ke,
                 'status' => $request->status,
@@ -46,7 +61,7 @@ class AddPresenceController extends Controller
                 'tahun_ajaran_id' => $request->tahun_ajaran_id,
             ]);
 
-            
+
             if ($request->status == "aktif") {
                 // 1. Simpan data presensi utama
                 $presensi = Presensi::create([
@@ -58,12 +73,12 @@ class AddPresenceController extends Controller
                     'dosen_id' => $request->dosen_id,
                     'link_zoom' => $request->link_zoom,
                 ]);
-                
+
                 // 2. Ambil mahasiswa berdasarkan prodi dan semester
                 $mahasiswas = Mahasiswa::where('prodi_id', $request->prodi_id)
-                ->where('semester', $request->semester)
-                ->get();
-                
+                    ->where('semester', $request->semester)
+                    ->get();
+
                 // 3. Simpan ke detail presensi
                 foreach ($mahasiswas as $mahasiswa) {
                     DetailPresensi::create([
@@ -71,16 +86,19 @@ class AddPresenceController extends Controller
                         'mahasiswa_id' => $mahasiswa->id,
                     ]);
                 }
-                
+
             } else {
                 $presensi = Presensi::create([
                     'presensi_id' => $request->presensi_id,
                     'pertemuan_id' => $pertemuan->id,
                     'tgl_presensi' => $request->tgl_presensi,
                     'dosen_id' => $request->dosen_id,
+                    'jam_awal' => null,
+                    'jam_akhir' => null,
+                    'link_zoom' => null,
                 ]);
             }
-            
+
             // Ambil data dosen & user
             $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
             $user = $dosen->user;
@@ -121,6 +139,7 @@ class AddPresenceController extends Controller
 
             }
 
+            DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Data presensi berhasil diunggah dan notifikasi telah dikirim.'
@@ -181,4 +200,25 @@ class AddPresenceController extends Controller
             ]);
         }
     }
+
+    // public function showDisabledPertemuans(Request $request)
+    // {
+    //     $request->validate([
+    //         'prodi_id' => 'required|integer',
+    //         'semester' => 'required|integer',
+    //         'matkul' => 'required|integer'
+    //     ]);
+
+    //     $pertemuan = Pertemuan::where('prodi_id', $request->prodi_id)
+    //         ->where('semester', $request->semester)
+    //         ->where('matkul_id', $request->matkul)
+    //         ->select('id as id_pertemuan', 'pertemuan_ke')
+    //         ->get();
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Data pertemuan berhasil ditampilkan',
+    //         'data' => $pertemuan
+    //     ]);
+    // }
 }

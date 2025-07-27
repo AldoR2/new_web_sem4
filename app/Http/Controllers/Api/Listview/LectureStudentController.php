@@ -18,7 +18,7 @@ class LectureStudentController extends Controller
                 ], 400);
             }
 
-            $data = DetailPresensi::with(['presensi.matkul', 'presensi.dosen'])
+            $data = DetailPresensi::with(['presensi.pertemuan','presensi.pertemuan.matkul','presensi.dosen'])
                 ->whereHas('mahasiswa', function ($q) use ($nim) {
                     $q->where('nim', $nim);
                 })
@@ -30,8 +30,8 @@ class LectureStudentController extends Controller
                 ->map(function ($item) {
                     return [
                         'presensis_id' => $item->presensi->id,
-                        'nama_matkul' => $item->presensi->matkul->nama_matkul,
-                        'semester' => $item->mahasiswa->semester,
+                        'nama_matkul' => $item->presensi->pertemuan->matkul->nama_matkul,
+                        'semester' => $item->presensi->pertemuan->semester,
                         'nama_dosen' => $item->presensi->dosen->nama,
                         'durasi_presensi' => date('H:i', strtotime($item->presensi->jam_awal)) . ' - ' . date('H:i', strtotime($item->presensi->jam_akhir)),
                         'link_zoom' => $item->presensi->link_zoom,
@@ -54,7 +54,6 @@ class LectureStudentController extends Controller
             ]);
         }
     }
-
      public function lectureContent(Request $request)
     {
         $presensiId = $request->query('presensis_id');
@@ -65,7 +64,7 @@ class LectureStudentController extends Controller
             ], 400);
         }
 
-        $detail = DetailPresensi::with(['presensi.matkul', 'presensi.dosen'])
+        $detail = DetailPresensi::with(['presensi.pertemuan', 'presensi.pertemuan.matkul', 'presensi.dosen'])
             ->where('presensi_id', $presensiId)
             ->whereHas('presensi', function ($q) {
                 $q->whereDate('tgl_presensi', now())->whereNotNull('link_zoom');
@@ -85,8 +84,8 @@ class LectureStudentController extends Controller
             'message' => 'Data presensi online berhasil diambil',
             'data' => [
                 'presensis_id'    => $detail->presensi->id,
-                'nama_matkul'     => $detail->presensi->matkul->nama_matkul,
-                'semester'        => $detail->presensi->matkul->semester,
+                'nama_matkul'     => $detail->presensi->pertemuan->matkul->nama_matkul,
+                'semester'        => $detail->presensi->pertemuan->matkul->semester,
                 'nama_dosen'      => $detail->presensi->dosen->nama,
                 'durasi_presensi' => date('H:i', strtotime($detail->presensi->jam_awal)) . ' - ' . date('H:i', strtotime($detail->presensi->jam_akhir)),
                 'link_zoom'       => $detail->presensi->link_zoom,

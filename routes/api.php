@@ -60,6 +60,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('presence/majors', [AddPresenceController::class, 'showMajors']);
         Route::get('presence/matkuls', [AddPresenceController::class, 'showMatkuls']);
         Route::get('presence/tahunAjarans', [AddPresenceController::class, 'showTahunAjarans']);
+        // Route::get('presence/disabledPertemuans', [AddPresenceController::class, 'showDisabledPertemuans']);
     });
     Route::prefix('activity')->group(function () {
         Route::get('viewProfile', [ViewProfileController::class, 'show']);

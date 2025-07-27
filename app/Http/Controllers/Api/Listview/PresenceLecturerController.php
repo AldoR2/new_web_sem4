@@ -21,7 +21,7 @@ class PresenceLecturerController extends Controller
             ], 404);
         }
 
-        $data = Presensi::with(['matkul:id,nama_matkul,durasi_matkul,kode_matkul'])
+        $data = Presensi::with(['pertemuan.matkul:id,nama_matkul,durasi_matkul,kode_matkul'])
             ->whereDate('tgl_presensi', now())
             ->where('dosen_id', $dosenId)
             ->whereNotNull('link_zoom')
@@ -29,13 +29,13 @@ class PresenceLecturerController extends Controller
             ->get()
             ->map(function ($item) {
                 return [
-                    'semester' => $item->semester,
+                    'semester' => $item->pertemuan->semester,
                     'presensis_id' => $item->id,
                     'jam_awal' => Carbon::parse($item->jam_awal)->format('H:i'),
                     'jam_akhir' => Carbon::parse($item->jam_akhir)->format('H:i'),
-                    'nama_matkul' => $item->matkul->nama_matkul,
-                    'kode_matkul' => $item->matkul->kode_matkul,
-                    'durasi_matkul' => $item->matkul->durasi_matkul,
+                    'nama_matkul' => $item->pertemuan->matkul->nama_matkul,
+                    'kode_matkul' => $item->pertemuan->matkul->kode_matkul,
+                    'durasi_matkul' => $item->pertemuan->matkul->durasi_matkul,
                 ];
             });
 
@@ -45,7 +45,6 @@ class PresenceLecturerController extends Controller
             'data' => $data
         ]);
     }
-
     public function updatePresence(Request $request)
     {
         $request->validate([
@@ -61,7 +60,7 @@ class PresenceLecturerController extends Controller
         if ($currentTime >= $presensi->jam_awal) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tidak dapat mengubah waktu presensi ketika presensi sedang/sudah berjalan'
+                'message' => 'Tidak dapat mengubah waktu presensi ketika presensi sedang / sudah berjalan'
             ], 422);
         }
 
@@ -82,7 +81,6 @@ class PresenceLecturerController extends Controller
             'message' => 'Waktu Presensi berhasil diperbarui'
         ]);
     }
-
     public function deletePresence(Request $request)
     {
         $request->validate([

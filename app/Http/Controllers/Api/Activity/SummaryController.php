@@ -49,6 +49,7 @@ class SummaryController extends Controller
                 $query->where('mahasiswa_id', $mahasiswaId)
                     ->where('status', 0); // Tambahkan filter status = 0
             })
+            ->whereNotNull('link_zoom')
             ->count();
 
         // 8. Link Zoom yang tersedia hari ini

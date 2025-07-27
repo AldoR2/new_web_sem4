@@ -22,7 +22,8 @@ class PresenceController extends Controller
 
         // Query data presensi hari ini, mahasiswa tersebut, belum presensi (status = 0), tidak punya ruangan, tapi ada link Zoom
         $presensiList = Presensi::with([
-            'matkul:id,nama_matkul,durasi_matkul,kode_matkul',
+            'pertemuan:id,matkul_id,prodi_id,semester',
+            'pertemuan.matkul:id,nama_matkul,durasi_matkul,kode_matkul',
             'ruangan:id,nama_ruangan',
             'dosen:id,nama',
             'detailPresensi.mahasiswa:id,nim,semester'
@@ -58,9 +59,9 @@ class PresenceController extends Controller
                 'semester' => $detail?->mahasiswa?->semester,
                 'presensi_id' => $presensi->presensi_id,
                 'durasi_presensi' => Carbon::parse($presensi->jam_awal)->format('H:i') . ' - ' . Carbon::parse($presensi->jam_akhir)->format('H:i'),
-                'nama_matkul' => $presensi->matkul->nama_matkul ?? null,
-                'durasi_matkul' => $presensi->matkul->durasi_matkul ?? null,
-                'kode_matkul' => $presensi->matkul->kode_matkul ?? null,
+                'nama_matkul' => $presensi->pertemuan->matkul->nama_matkul ?? null,
+                'durasi_matkul' => $presensi->pertemuan->matkul->durasi_matkul ?? null,
+                'kode_matkul' => $presensi->pertemuan->matkul->kode_matkul ?? null,
                 'nama_ruangan' => $presensi->ruangan->nama_ruangan ?? null,
                 'link_zoom' => $presensi->link_zoom,
                 'nama_dosen' => $presensi->dosen->nama ?? null,
