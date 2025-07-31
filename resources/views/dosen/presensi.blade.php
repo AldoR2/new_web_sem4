@@ -44,7 +44,7 @@
             </div>
 
             <div class="overflow-x-auto w-[270px] sm:w-150 md:w-full mt-3 pb-3">
-                <table id="data-presensi" class="text-sm w-full display pt-2 dark:text-white">
+                <table id="data-presensi" class="text-sm w-full display pt-1 dark:text-white nowrap">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 sticky top-0 z-10">
                         <tr class="!text-center">
                             <th class="dark:border-gray-600 px-4 py-2">Tanggal</th>
@@ -61,13 +61,13 @@
                     <tbody>
                         @foreach ($presensi as $p)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->tgl_presensi }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ substr($p->jam_awal,0,5) .' - '. substr($p->jam_akhir,0,5) }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->matkul->nama_matkul }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->pertemuan_ke }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->prodi->nama_prodi }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->semester }}</td>
-                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->ruangan->nama_ruangan }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->tgl_presensi ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ substr($p->jam_awal,0,5) .' - '. substr($p->jam_akhir,0,5) ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->matkul->nama_matkul ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->pertemuan_ke ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->pertemuan->prodi->nama_prodi ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2 text-center">{{ $p->pertemuan->semester ?? '-' }}</td>
+                                <td class=" dark:border-gray-600 px-4 py-2">{{ $p->ruangan->nama_ruangan ?? '-' }}</td>
                                 <td class=" dark:border-gray-600 px-4 py-2 text-center">
                                     @switch($p->pertemuan->status)
                                         @case('aktif')

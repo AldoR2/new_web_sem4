@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('presensis', function (Blueprint $table) {
             $table->id();
             $table->string('presensi_id', '30');
-            $table->foreignId('pertemuan_id')->constrained('pertemuans');
+            $table->foreignId('pertemuan_id')->constrained('pertemuans')->onDelete('cascade');
             $table->date('tgl_presensi');
             $table->time('jam_awal')->nullable();
             $table->time('jam_akhir')->nullable();
             $table->foreignId('dosen_id')->constrained('dosens');
-            $table->foreignId('ruangan_id')->constrained('ruangans')->nullable();
+            $table->foreignId('ruangan_id')->nullable()->constrained('ruangans');
             $table->string('link_zoom', '255')->nullable();
             $table->timestamps();
         });

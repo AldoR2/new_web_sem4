@@ -12,6 +12,7 @@ class Pertemuan extends Model
 
         protected $fillable = [
         'pertemuan_ke',
+        'jenis',
         'prodi_id',
         'semester',
         'matkul_id',

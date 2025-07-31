@@ -6,7 +6,7 @@
         <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="mb-5 justify-start flex">
                 <a href="{{route('admin.presensi.index')}}">
-                    <button class="px-5 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer"><i class="bi bi-arrow-left-circle-fill"></i></button>
+                    <button class="px-5 py-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer"><i class="bi bi-arrow-return-left"></i></button>
                 </a>
             </div>
 
@@ -23,6 +23,7 @@
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Semester</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Ruangan</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pertemuan Ke</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Jenis Perkuliahan</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Status</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Link Zoom</th>
@@ -39,6 +40,7 @@
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->semester ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->ruangan->nama_ruangan ?? '-'}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$presensi->pertemuan->pertemuan_ke ?? '-'}}</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{strtoupper($presensi->pertemuan->jenis ?? '-')}}</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">
                             @switch($presensi->pertemuan->status)
                                 @case('aktif')
@@ -79,7 +81,7 @@
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody class="">
                         @foreach ($detail as $dp)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$loop->iteration}}</td>

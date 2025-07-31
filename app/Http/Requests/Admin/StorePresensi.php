@@ -25,16 +25,32 @@ class StorePresensi extends FormRequest
     {
 
         $id = $id ??  $this->route('presensi');
+        $status = $this->input('status'); // ambil status yang dipilih user
 
         $rules = [
             'tgl_presensi' => 'required',
-            'jam_awal' => 'required',
-            'jam_akhir' => 'required|after:jam_awal',
+            // 'jam_awal' => 'required',
+            // 'jam_akhir' => 'required|after:jam_awal',
             'prodi_id' => 'required',
             'semester' => 'required',
             'matkul_id' => 'required',
-            'ruangan_id' => 'required',
+            // 'ruangan_id' => 'required',
         ];
+
+        if ($status !== 'libur') {
+            $rules['ruangan_id']   = 'required';
+            // $rules['jenis']   = 'required|in:teori,praktik';
+            // $rules['tgl_presensi'] = 'required';
+            $rules['jam_awal']     = 'required';
+            $rules['jam_akhir']    = 'required|after:jam_awal';
+        }
+        if ($status === 'aktif') {
+            // $rules['ruangan_id']   = 'required';
+            $rules['jenis']   = 'required|in:teori,praktik';
+            // $rules['tgl_presensi'] = 'required';
+            // $rules['jam_awal']     = 'required';
+            // $rules['jam_akhir']    = 'required|after:jam_awal';
+        }
 
         // Hanya validasi dosen_id jika role-nya admin
         if (auth()->user()->role === 'admin') {
@@ -61,18 +77,24 @@ class StorePresensi extends FormRequest
             'matkul_id.required' => 'Silahkah pilih Mata Kuliah',
 
             'ruangan_id.required' => 'Silahkah pilih ruangan',
+
+            'jenis.required' => 'Silahkah pilih Jenis Perkuliahan',
         ];
     }
 
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $jam_awal = strtotime($this->input('jam_awal'));
-            $jam_akhir = strtotime($this->input('jam_akhir'));
+            if ($this->input('status') === 'aktif'){
+                $jam_awal = strtotime($this->input('jam_awal'));
+                $jam_akhir = strtotime($this->input('jam_akhir'));
 
-            $durasi = $jam_akhir - $jam_awal;
-            if ($durasi < 30 * 60) {
-                $validator->errors()->add('jam_awal', 'Durasi Perkuliahan harus minimal 30 menit.');
+                if ($jam_awal && $jam_akhir) {
+                    $durasi = $jam_akhir - $jam_awal;
+                    if ($durasi < 30 * 60) {
+                        $validator->errors()->add('jam_awal', 'Durasi Perkuliahan harus minimal 30 menit.');
+                    }
+                }
             }
         });
     }
