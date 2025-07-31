@@ -28,7 +28,8 @@ class GetLessonController extends Controller
         try {
             // Query untuk mengambil data jadwal hari ini menggunakan relasi model Anda
             $jadwalPresensi = Presensi::with([
-                'matkul:id,nama_matkul,kode_matkul,durasi_matkul',
+                'pertemuan:id,matkul_id,prodi_id,semester',
+                'pertemuan.matkul:id,nama_matkul,kode_matkul,durasi_matkul',
                 'dosen:id,nama',
                 'ruangan:id,nama_ruangan',
                 'detailPresensi' => function ($query) use ($mahasiswaId) {
@@ -38,6 +39,9 @@ class GetLessonController extends Controller
                 ->whereDate('tgl_presensi', Carbon::today())
                 ->whereHas('detailPresensi', function ($query) use ($mahasiswaId) {
                     $query->where('mahasiswa_id', $mahasiswaId);
+                })
+                ->whereHas('pertemuan', function ($query) {
+                    $query->where('status', 'aktif');
                 })
                 ->orderByRaw("STR_TO_DATE(CONCAT(DATE(tgl_presensi), ' ', jam_awal), '%Y-%m-%d %H:%i:%s')")
                 ->get();
@@ -61,9 +65,9 @@ class GetLessonController extends Controller
 
                 return [
                     'presensis_id' => $presensi->id,
-                    'nama_matkul' => $presensi->matkul->nama_matkul ?? null,
-                    'durasi_matkul' => $presensi->matkul->durasi_matkul ?? null,
-                    'kode_matkul' => $presensi->matkul->kode_matkul ?? null,
+                    'nama_matkul' => $presensi->pertemuan?->matkul?->nama_matkul ?? null,
+                    'durasi_matkul' => $presensi->pertemuan?->matkul?->durasi_matkul ?? null,
+                    'kode_matkul' => $presensi->pertemuan?->matkul?->kode_matkul ?? null,
                     'nama_ruangan' => $presensi->ruangan->nama_ruangan ?? null,
                     'durasi_presensi' => $durasiPresensi,
                     'presensi_id' => $presensi->presensi_id,
@@ -95,7 +99,7 @@ class GetLessonController extends Controller
         ]);
 
         $jadwalHariIni = Presensi::with([
-            'matkul.prodi',
+            'pertemuan.matkul.prodi',
             'ruangan',
             'dosen',
         ])
@@ -107,9 +111,9 @@ class GetLessonController extends Controller
                 return [
                     'presensis_id' => $presensi->id,
                     'presensi_id' => $presensi->presensi_id,
-                    'nama_matkul' => $presensi->matkul->nama_matkul,
-                    'kode_matkul' => $presensi->matkul->kode_matkul,
-                    'durasi_matkul' => $presensi->matkul->durasi_matkul,
+                    'nama_matkul' => $presensi->pertemuan->matkul->nama_matkul,
+                    'kode_matkul' => $presensi->pertemuan->matkul->kode_matkul,
+                    'durasi_matkul' => $presensi->pertemuan->matkul->durasi_matkul,
                     'nama_ruangan' => optional($presensi->ruangan)->nama_ruangan,
                     'durasi_presensi' => date('H:i', strtotime($presensi->jam_awal)) . ' - ' . date('H:i', strtotime($presensi->jam_akhir)),
                     'link_zoom' => $presensi->link_zoom,

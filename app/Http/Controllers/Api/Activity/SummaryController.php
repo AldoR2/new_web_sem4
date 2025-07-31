@@ -25,7 +25,11 @@ class SummaryController extends Controller
         // 3. Hitung total presensi unik per matkul
         $presensiIds = DetailPresensi::where('mahasiswa_id', $mahasiswaId)->pluck('presensi_id');
         $matkulUnik = Presensi::whereIn('id', $presensiIds)
-            ->distinct('matkul_id')
+            ->whereHas('pertemuan')
+            ->with('pertemuan')
+            ->get()
+            ->pluck('pertemuan.matkul_id')
+            ->unique()
             ->count('matkul_id');
 
         // 4. Hitung jumlah jadwal sesuai prodi dan semester dari mahasiswa, pada tahun ajaran aktif
@@ -45,6 +49,7 @@ class SummaryController extends Controller
                 $query->where('mahasiswa_id', $mahasiswaId)
                     ->where('status', 0); // Tambahkan filter status = 0
             })
+            ->whereNotNull('link_zoom')
             ->count();
 
         // 8. Link Zoom yang tersedia hari ini

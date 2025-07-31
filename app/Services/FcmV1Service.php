@@ -14,7 +14,7 @@ class FcmV1Service
     {
         // 🔐 Ambil akses token dari service account
         $client = new Google_Client();
-        $client->setAuthConfig(storage_path('app/firebase/stipres-flutter-firebase-adminsdk-fbsvc-d88710b246.json'));
+        $client->setAuthConfig(storage_path('app/firebase/stipres-flutter-firebase-adminsdk-fbsvc-a6ee09de92.json'));
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
 
         if ($client->isAccessTokenExpired()) {

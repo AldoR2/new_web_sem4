@@ -11,7 +11,11 @@ class NotificationController extends Controller
 {
     public function getByMahasiswa($mahasiswaId)
     {
-        $mahasiswa = Mahasiswa::with('user.notifications')->findOrFail($mahasiswaId);
+        $mahasiswa = Mahasiswa::with([
+            'user.notifications' => function ($query) {
+                $query->latest();
+            }
+        ])->findOrFail($mahasiswaId);
 
         $notifications = $mahasiswa->user->notifications->map(function ($notif) {
             return [
@@ -35,7 +39,11 @@ class NotificationController extends Controller
 
     public function getByDosen($dosenId)
     {
-        $dosen = Dosen::with('user.notifications')->findOrFail($dosenId);
+        $dosen = Dosen::with([
+            'user.notifications' => function ($query) {
+                $query->latest();
+            }
+        ])->findOrFail($dosenId);
 
         $notifications = $dosen->user->notifications->map(function ($notif) {
             return [
