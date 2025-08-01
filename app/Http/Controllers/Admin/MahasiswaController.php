@@ -161,7 +161,7 @@ class MahasiswaController extends Controller
 
                 $mahasiswa->update([
                     'nim' => $request->nim,
-                    'rfid' => $request->rfid,
+                    'rfid' => $request->filled('rfid') ? $request->rfid : null,
                     'nama' => $request->nama,
                     'jenis_kelamin' => $request->jenis_kelamin,
                     'agama' => $request->agama,

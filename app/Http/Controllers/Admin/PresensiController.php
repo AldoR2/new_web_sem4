@@ -268,6 +268,18 @@ class PresensiController extends Controller
                 $statusLama = $presensi->pertemuan->getOriginal('status');
                 $statusBaru = $request->status;
 
+                if ($statusLama === 'aktif' && $presensi->jam_awal) {
+
+                    $now = now();
+                    $presensiStart = Carbon::parse($presensi->tgl_presensi . ' ' . $presensi->jam_awal);
+
+                    if ($now->gte($presensiStart)) {
+                        return back()->withInput()->withErrors([
+                            'tgl_presensi' => 'Perkuliahan tidak dapat diedit karena perkuliahan sedang berlangsung atau sudah selesai.'
+                        ]);
+                    }
+                }
+
                 $conflictPertemuan = Pertemuan::where('prodi_id', $request['prodi_id'])
                 ->where('semester', $request['semester'])
                 ->where('matkul_id', $request['matkul_id'])
@@ -290,18 +302,6 @@ class PresensiController extends Controller
                     if ($conflictUjian) {
                         return back()->withInput()->withErrors([
                             'status' => 'Perkuliahan untuk ' . strtoupper($request->status) . ' sudah ada.'
-                        ]);
-                    }
-                }
-
-                if ($statusLama === 'aktif' && $presensi->jam_awal) {
-
-                    $now = now();
-                    $presensiStart = Carbon::parse($presensi->tgl_presensi . ' ' . $presensi->jam_awal);
-
-                    if ($now->gte($presensiStart)) {
-                        return back()->withInput()->withErrors([
-                            'tgl_presensi' => 'Perkuliahan tidak dapat diedit karena perkuliahan sedang berlangsung atau sudah selesai.'
                         ]);
                     }
                 }
