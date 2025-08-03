@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Listview;
 
 use App\Http\Controllers\Controller;
 use App\Models\DetailPresensi;
+use App\Models\Pertemuan;
 use App\Models\Presensi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -88,10 +89,12 @@ class PresenceLecturerController extends Controller
         ]);
 
         $presensiId = $request->presensis_id;
+        $presensi = Presensi::findOrFail($presensiId);
 
         // Hapus relasi detail presensi dulu
         DetailPresensi::where('presensi_id', $presensiId)->delete();
-        Presensi::destroy($presensiId);
+        $presensi->delete();
+        Pertemuan::where('id', $presensi->pertemuan_id)->delete();
 
         return response()->json([
             'status' => 'success',
