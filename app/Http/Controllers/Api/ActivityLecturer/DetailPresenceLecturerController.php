@@ -68,22 +68,35 @@ class DetailPresenceLecturerController extends Controller
     public function showDetailStudent(Request $request)
     {
         $nim = $request->query('nim');
+        $presensiId = $request->query('presensis_id');
 
-        if (!$nim) {
+        if (!$nim || !$presensiId) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'NIM tidak boleh kosong'
+                'message' => 'NIM dan presensis_id tidak boleh kosong'
             ], 400);
         }
 
-        $detail = DetailPresensi::whereHas('mahasiswa', function ($query) use ($nim) {
-            $query->where('nim', $nim);
-        })->with('mahasiswa')->first();
+        // 1. Cari mahasiswa berdasarkan NIM
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+
+        if (!$mahasiswa) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Mahasiswa dengan NIM tersebut tidak ditemukan',
+                'data' => null
+            ], 404);
+        }
+
+        // 2. Cari data detail presensi berdasarkan mahasiswa_id dan presensi_id
+        $detail = DetailPresensi::where('mahasiswa_id', $mahasiswa->id)
+            ->where('presensi_id', $presensiId)
+            ->first();
 
         if (!$detail) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tidak ada data detail mahasiswa yang ditampilkan',
+                'message' => 'Tidak ada data detail presensi untuk mahasiswa ini pada presensi tersebut',
                 'data' => null
             ], 200);
         }
@@ -92,7 +105,7 @@ class DetailPresenceLecturerController extends Controller
             'status' => 'success',
             'message' => 'Data detail mahasiswa berhasil ditampilkan',
             'data' => [
-                'status' => $detail->status,
+                'status' => (int) $detail->status,
                 'waktu_presensi' => $detail->waktu_presensi,
                 'alasan' => $detail->alasan,
                 'bukti' => $detail->bukti,

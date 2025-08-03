@@ -106,6 +106,10 @@ class GetLessonController extends Controller
             ->whereDate('tgl_presensi', now()->toDateString())
             ->where('dosen_id', $request->dosen_id)
             ->orderByRaw("STR_TO_DATE(jam_awal, '%H:%i:%s') ASC")
+            ->where(function ($query) {
+                $query->whereNotNull('ruangan_id')
+                    ->orWhereNotNull('link_zoom');
+            })
             ->get()
             ->map(function ($presensi) {
                 return [

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Dosen;
 use App\Models\FcmToken;
 use App\Models\Mahasiswa;
+use App\Models\Matkul;
 use App\Models\Notification;
 use App\Models\Pertemuan;
 use App\Models\Presensi;
@@ -152,7 +153,7 @@ class CheckPresenceController extends Controller
 
             $message = "Presensi Anda gagal ditambahkan karena bentrok dengan jadwal lain pada " .
                 Carbon::parse($conflict->jam_awal)->format('H:i') . " - " .
-                Carbon::parse($conflict->jam_akhir)->format('H:i') . " di tanggal $tgl_presensi.";
+                Carbon::parse($conflict->jam_akhir)->format('H:i') . " pada tanggal $tgl_presensi.";
 
             Notification::create([
                 'user_id' => $user->id,
@@ -198,14 +199,13 @@ class CheckPresenceController extends Controller
     {
         $request->validate([
             'dosen_id' => 'required',
-            // 'jam_awal' => 'required',
-            // 'jam_akhir' => 'required',
             'tgl_presensi' => 'required|date',
             'prodi_id' => 'required|integer',
             'semester' => 'required|integer',
             'status' => 'required|in:aktif,libur,uts,uas',
             'pertemuan_ke' => 'required|integer',
             'matkul_id' => 'required|integer',
+            'tahun_ajaran_id' => 'required|integer',
         ]);
 
         if ($request->status == "aktif") {
@@ -213,44 +213,44 @@ class CheckPresenceController extends Controller
                 ->where('matkul_id', $request->matkul_id)
                 ->where('prodi_id', $request->prodi_id)
                 ->where('semester', $request->semester)
+                ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
                 ->first();
 
             if ($pertemuan) {
-                if ($pertemuan->status !== $request->status) {
-                    // Ambil data dosen & user
-                    $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
-                    $user = $dosen->user;
 
-                    $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
-                    $tanggal = $waktu->translatedFormat('d F Y');
-                    $jam = $waktu->format('H.i');
+                // Ambil data dosen & user
+                $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
+                $user = $dosen->user;
+                $matkul = Matkul::find($request->matkul_id);
 
-                    $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke .
-                        " sudah ada dengan status berbeda: \"" . $pertemuan->status . "\". ";
+                $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
+                $tanggal = $waktu->translatedFormat('d F Y');
+                $jam = $waktu->format('H.i');
 
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'title' => 'Presensi Gagal Ditambahkan!',
-                        'message' => $message,
-                        'type' => 'presensiGagal',
-                        'nama_user' => $dosen->nama,
-                        'tanggal' => $tanggal,
-                        'jam' => $jam,
-                        'mata_kuliah' => $matkul?->nama_matkul ?? '-',
-                    ]);
+                $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke .
+                    " sudah ada atau tersedia.";
 
-                    $fcmService = new FcmV1Service();
+                Notification::create([
+                    'user_id' => $user->id,
+                    'title' => 'Presensi Gagal Ditambahkan!',
+                    'message' => $message,
+                    'type' => 'presensiGagal',
+                    'nama_user' => $dosen->nama,
+                    'tanggal' => $tanggal,
+                    'jam' => $jam,
+                    'mata_kuliah' => $matkul?->nama_matkul ?? '-',
+                ]);
 
-                    // Kirim notifikasi ke dosen
-                    $dosenUserId = $dosen->user_id;
-                    $dosenTokens = FcmToken::where('user_id', $dosenUserId)->pluck('token');
+                $fcmService = new FcmV1Service();
 
-                    return response()->json([
-                        'status' => 'invalid status',
-                        'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbedaaaa: ' . $pertemuan->status . '.'
-                    ], 409);
-                }
+                // Kirim notifikasi ke dosen
+                $dosenUserId = $dosen->user_id;
+                $dosenTokens = FcmToken::where('user_id', $dosenUserId)->pluck('token');
 
+                return response()->json([
+                    'status' => 'invalid status',
+                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada atau tersedia.'
+                ], 409);
             }
 
             $conflict = Presensi::where('tgl_presensi', $request->tgl_presensi)
@@ -265,7 +265,8 @@ class CheckPresenceController extends Controller
                 })
                 ->whereHas('pertemuan', function ($query) use ($request) {
                     $query->where('prodi_id', $request->prodi_id)
-                        ->where('semester', $request->semester);
+                        ->where('semester', $request->semester)
+                        ->where('tahun_ajaran_id', $request->tahun_ajaran_id);
                 })
                 ->first();
 
@@ -283,7 +284,7 @@ class CheckPresenceController extends Controller
 
                 $message = "Presensi Anda gagal ditambahkan karena bentrok dengan jadwal lain pada " .
                     Carbon::parse($conflict->jam_awal)->format('H:i') . " - " .
-                    Carbon::parse($conflict->jam_akhir)->format('H:i') . " di tanggal $tgl_presensi.";
+                    Carbon::parse($conflict->jam_akhir)->format('H:i') . " pada tanggal $tgl_presensi.";
 
                 Notification::create([
                     'user_id' => $user->id,
@@ -330,9 +331,10 @@ class CheckPresenceController extends Controller
                 ->where('matkul_id', $request->matkul_id)
                 ->where('prodi_id', $request->prodi_id)
                 ->where('semester', $request->semester)
+                ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
                 ->first();
 
-            if ($pertemuan && $pertemuan->status !== $request->status) {
+            if ($pertemuan) {
                 // Ambil data dosen & user
                 $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
                 $user = $dosen->user;
@@ -341,7 +343,7 @@ class CheckPresenceController extends Controller
                 $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
                 $tanggal = $waktu->translatedFormat('d F Y');
                 $jam = $waktu->format('H.i');
-                $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke . " untuk matkul ini sudah pernah dibuat sebelumnya dengan status yang berbeda.";
+                $message = "Presensi Anda gagal ditambahkan karena pertemuan ke-" . $request->pertemuan_ke . " untuk matkul ini sudah ada atau tersedia.";
 
                 Notification::create([
                     'user_id' => $user->id,
@@ -370,7 +372,7 @@ class CheckPresenceController extends Controller
 
                 return response()->json([
                     'status' => 'invalid status',
-                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada dengan status berbeda: ' . $pertemuan->status . '.'
+                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada atau tersedia.'
                 ], 409);
             }
 
