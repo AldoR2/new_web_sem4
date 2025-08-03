@@ -56,14 +56,14 @@ class StoreMasterMahasiswa extends FormRequest
 
             'nama.required' => 'Nama tidak boleh kosong',
             'nama.max' => 'Nama tidak boleh melebihi 100 karakter',
-            'nama.regex' =>'Nama hanya boleh mengandung huruf',
+            'nama.regex' =>'Nama hanya boleh huruf',
 
             'jenis_kelamin.required' => 'Jenis Kelamin harus dipilih',
             'agama.required' => 'Agama harus dipilih',
 
             'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong',
             'tempat_lahir.max' => 'Tempat Lahir maksimal 100 karakter',
-            'tempat_lahir.regex' =>'Tempat Lahir hanya boleh mengandung huruf',
+            'tempat_lahir.regex' =>'Tempat Lahir hanya boleh huruf',
 
             'tgl_lahir.required' => 'Tanggal Lahir wajib diisi',
             'tgl_lahir.before' => 'Tanggal Lahir harus sebelum hari ini',

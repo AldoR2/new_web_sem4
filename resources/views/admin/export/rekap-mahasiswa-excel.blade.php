@@ -25,7 +25,7 @@
                     <th class="border border-gray-300 px-4 py-2">No</th>
                     <th class="border border-gray-300 px-4 py-2">Nim</th>
                     <th class="border border-gray-300 px-4 py-2">Nama</th>
-                    @for ($i = 1; $i <= 16; $i++)
+                    @for ($i = 1; $i <= $totalPertemuan; $i++)
                         <th class="border border-gray-300 px-4 py-2 text-center">{{ $i }}</th>
                     @endfor
                     <th class="border border-gray-300 px-4 py-2">%Kehadiran</th>

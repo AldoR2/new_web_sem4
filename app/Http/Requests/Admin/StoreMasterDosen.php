@@ -48,26 +48,26 @@ class StoreMasterDosen extends FormRequest
         return [
             'nip.required' => 'NIP tidak boleh kosong',
             'nip.max' => 'NIP tidak boleh melebihi 18 Karakter',
-            'nip.regex' =>'NIP hanya boleh mengandung angka',
+            'nip.regex' =>'NIP hanya boleh angka',
             'nip.unique' => 'NIP sudah terdaftar',
 
             'nama.required' => 'Nama tidak boleh kosong',
             'nama.max' => 'Nama maksimal 100 karakter',
-            'nama.regex' =>'Nama hanya boleh mengandung huruf',
+            'nama.regex' =>'Nama hanya boleh huruf',
 
             'jenis_kelamin.required' => 'Jenis Kelamin harus dipilih',
             'agama.required' => 'Agama harus dipilih',
 
             'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong',
             'tempat_lahir.max' => 'Tempat Lahir tidak boleh melebihi 100 karakter',
-            'tempat_lahir.regex' =>'Nama hanya boleh mengandung huruf',
+            'tempat_lahir.regex' =>'Nama hanya boleh huruf',
 
             'tgl_lahir.required' => 'Tanggal Lahir wajib diisi',
             'tgl_lahir.before' => 'Tanggal Lahir harus sebelum hari ini',
 
             'no_telp.required' => 'Nomor Telepon wajib diisi',
             'no_telp.max' => 'Nomor Telepon maksimal 20 karakter',
-            'no_telp.regex' => 'Nomor Telepon hanya boleh berisi angka',
+            'no_telp.regex' => 'Nomor Telepon hanya boleh angka',
 
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Format email tidak valid',

@@ -36,6 +36,7 @@ class AdminController extends Controller
     public function store(StoreMasterAdmin $request)
     {
         $request->merge([
+            'nip' => trim($request->nip),
             'nama' => ucwords(trim($request->nama)),
             'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
             'email' => strtolower(trim($request->email)),
@@ -61,6 +62,7 @@ class AdminController extends Controller
 
                 Admin::create([
                     'user_id' => $user->id,
+                    'nip' => $request->nip,
                     'nama' => $request->nama,
                     'jenis_kelamin' => $request->jenis_kelamin,
                     'agama' => $request->agama,
@@ -145,6 +147,7 @@ class AdminController extends Controller
             }
 
             $admin->update([
+                'nip' => $request->nip,
                 'nama' => $request->nama,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'agama' => $request->agama,

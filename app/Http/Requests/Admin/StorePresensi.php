@@ -39,17 +39,11 @@ class StorePresensi extends FormRequest
 
         if ($status !== 'libur') {
             $rules['ruangan_id']   = 'required';
-            // $rules['jenis']   = 'required|in:teori,praktik';
-            // $rules['tgl_presensi'] = 'required';
             $rules['jam_awal']     = 'required';
             $rules['jam_akhir']    = 'required|after:jam_awal';
         }
         if ($status === 'aktif') {
-            // $rules['ruangan_id']   = 'required';
             $rules['jenis']   = 'required|in:teori,praktik';
-            // $rules['tgl_presensi'] = 'required';
-            // $rules['jam_awal']     = 'required';
-            // $rules['jam_akhir']    = 'required|after:jam_awal';
         }
 
         // Hanya validasi dosen_id jika role-nya admin

@@ -65,6 +65,7 @@
                             <tr>
                             <th class=" dark:border-gray-500 px-4 py-2">No</th>
                             <th class=" dark:border-gray-500 px-4 py-2">Foto</th>
+                            <th class=" dark:border-gray-500 px-4 py-2">NIP</th>
                             <th class=" dark:border-gray-500 px-4 py-2">Nama Lengkap</th>
                             <th class=" dark:border-gray-500 px-4 py-2">Jenis Kelamin</th>
                             <th class=" dark:border-gray-500 px-4 py-2">Email</th>
@@ -82,6 +83,7 @@
                                             <img src="{{ $a->foto ? asset('storage/' . $a->foto) : asset('images/profil-kosong.png') }}" alt="Photo">
                                         </div>
                                     </td>
+                                    <td class=" dark:border-gray-500 px-4 py-2">{{$a->nip}}</td>
                                     <td class=" dark:border-gray-500 px-4 py-2">{{$a->nama}}</td>
                                     <td class=" dark:border-gray-500 px-4 py-2">{{ $a->jenis_kelamin === 'L' ? 'Laki-laki' : ($a->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</td>
                                     <td class=" dark:border-gray-500 px-4 py-2">{{$a->email}}</td>
@@ -132,30 +134,30 @@
                                 <input type="text" id="nama" readonly class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
                             <div class="flex flex-col items-start w-full mb-4 md:w-1/2">
+                                <label for="nip" class="mb-1 font-semibold dark:text-gray-200">NIP:</label>
+                                <input type="text" id="nip" readonly class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row">
+                            <div class="flex flex-col items-start w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                                 <label for="jenis_kelamin" class="mb-1 font-semibold dark:text-gray-200">Jenis Kelamin:</label>
                                 <input type="text" readonly id="jenis_kelamin" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row">
-                            <div class="flex flex-col items-start w-full mb-4 md:w-1/2 mr-0 md:mr-8">
+                            <div class="flex flex-col items-start w-full mb-4 md:w-1/2">
                                 <label for="agama" class="mb-1 font-semibold dark:text-gray-200">Agama:</label>
                                 <input type="text" id="agama" readonly class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
-                            <div class="flex flex-col items-start w-full mb-4 md:w-1/2">
-                                <label for="tempat_lahir" class="mb-1 font-semibold dark:text-gray-200">Tempat Lahir:</label>
-                                <input type="text" readonly id="tempat_lahir" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
-                            </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row">
                             <div class="flex flex-col items-start w-full mb-4 md:w-1/2 mr-0 md:mr-8">
-                                <label for="tgl_lahir" class="mb-1 font-semibold dark:text-gray-200">Tanggal Lahir:</label>
-                                <input type="date" readonly id="tgl_lahir" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
+                                <label for="tempat_lahir" class="mb-1 font-semibold dark:text-gray-200">Tempat Lahir:</label>
+                                <input type="text" readonly id="tempat_lahir" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
                             <div class="flex flex-col items-start w-full mb-4 md:w-1/2">
-                                <label for="email" class="mb-1 font-semibold dark:text-gray-200">Email:</label>
-                                <input type="text" readonly id="email" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm" autocomplete="email">
+                                <label for="tgl_lahir" class="mb-1 font-semibold dark:text-gray-200">Tanggal Lahir:</label>
+                                <input type="date" readonly id="tgl_lahir" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
                         </div>
 
@@ -164,7 +166,10 @@
                                 <label for="no_telp" class="mb-1 font-semibold dark:text-gray-200">Nomor Telepon:</label>
                                 <input type="text" readonly id="no_telp" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm">
                             </div>
-                            <div class="w-full md:w-1/2 mb-4"></div>
+                            <div class="flex flex-col items-start w-full mb-4 md:w-1/2">
+                                <label for="email" class="mb-1 font-semibold dark:text-gray-200">Email:</label>
+                                <input type="text" readonly id="email" class="bg-gray-100 dark:bg-gray-700 dark:text-white w-full p-2 border-2 border-gray-300 dark:border-gray-600 rounded-sm" autocomplete="email">
+                            </div>
                         </div>
 
                         <h1 class="font-bold text-gray-800 dark:text-white text-lg my-2 text-center xl:text-left mt-3">Alamat</h1>

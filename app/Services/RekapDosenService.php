@@ -10,8 +10,6 @@ class RekapDosenService
 
     public function getRekap($dosenId, $tahunAjaranId)
 {
-    $defaultPertemuan = 16;
-
         $pertemuans = Pertemuan::with([
         'presensi' => function ($q) use ($dosenId) {
             $q->where('dosen_id', $dosenId);
@@ -26,7 +24,9 @@ class RekapDosenService
     ->get();
 
     $rekap = [];
-    $maxPertemuan = $pertemuans->count();
+    $defaultPertemuan = 16;
+    $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+    $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
 
     foreach ($pertemuans->groupBy('matkul_id') as $grouped) {
         $first = $grouped->first();
@@ -47,14 +47,16 @@ class RekapDosenService
                     $hadir[$p->pertemuan_ke] = 'UAS';
                     break;
                 case 'aktif':
-                default:
                     $hadir[$p->pertemuan_ke] = 'M'; // Dosen hadir
+                    break;
+                default:
+                    $hadir[$p->pertemuan_ke] = '-'; // Dosen hadir
                     break;
             }
         }
 
         $tanggal_pertemuan = [];
-        for ($i = 1; $i <= $defaultPertemuan; $i++) {
+        for ($i = 1; $i <= $totalPertemuan; $i++) {
             $tanggal_pertemuan[] = $hadir[$i] ?? '-';
         }
 
@@ -62,12 +64,15 @@ class RekapDosenService
             return strtolower($p->status) === 'aktif';
         })->count();
 
+        $persentaseAktif = $totalPertemuan > 0 ? round(($totalAktif / $totalPertemuan) * 100, 2) . '%' : '0%';
+
         $rekap[] = [
             'kode_matkul' => $first->matkul->kode_matkul,
             'nama_matkul' => $first->matkul->nama_matkul,
             'nama_prodi' => $first->prodi->nama_prodi,
             'semester' => $first->semester,
             'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
+            // 'total_pertemuan' => $persentaseAktif,
             'total_pertemuan' => $totalAktif,
             'status_pertemuan' => $tanggal_pertemuan,
         ];
@@ -75,7 +80,7 @@ class RekapDosenService
 
     return [
         'rekap' => $rekap,
-        'totalPertemuan' => $defaultPertemuan, $maxPertemuan
+        'totalPertemuan' => $totalPertemuan
     ];
 }
 
@@ -155,7 +160,9 @@ class RekapDosenService
         ->get();
 
         $rekap = [];
-        $maxPertemuan = $pertemuans->count();
+        // $maxPertemuan = $pertemuans->count();
+        $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+        $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
 
 
         foreach ($pertemuans->groupBy('matkul_id') as $matkulId => $grouped) {
@@ -184,7 +191,7 @@ class RekapDosenService
             }
 
             $tanggal_pertemuan = [];
-            for ($i = 1; $i <= $defaultPertemuan; $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 $tanggal_pertemuan[] = $hadir[$i] ?? '-';
             }
 
@@ -205,13 +212,12 @@ class RekapDosenService
 
         return [
             'rekap' => $rekap,
-            'totalPertemuan' => $defaultPertemuan, $maxPertemuan
+            'totalPertemuan' => $totalPertemuan
         ];
     }
 
     public function getFilterRekapDosen($dosenId, $prodiId, $tahunAjaranId)
     {
-        $defaultPertemuan = 16;
         $pertemuans = Pertemuan::with([
             'presensi' => function ($q) use ($dosenId) {
                 $q->where('dosen_id', $dosenId);
@@ -234,7 +240,9 @@ class RekapDosenService
         //     ->get();
 
         $rekap = [];
-        $maxPertemuan = $pertemuans->count();
+        $defaultPertemuan = 16;
+        $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+        $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
 
         foreach ($pertemuans->groupBy('matkul_id') as $matkulId => $grouped) {
             $first = $grouped->first();
@@ -262,7 +270,7 @@ class RekapDosenService
             }
 
             $tanggal_pertemuan = [];
-            for ($i = 1; $i <= $defaultPertemuan; $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 $tanggal_pertemuan[] = $hadir[$i] ?? '-';
             }
 
@@ -283,7 +291,7 @@ class RekapDosenService
 
         return [
             'rekap' => $rekap,
-            'totalPertemuan' => $defaultPertemuan, $maxPertemuan
+            'totalPertemuan' => $totalPertemuan
         ];
     }
 }

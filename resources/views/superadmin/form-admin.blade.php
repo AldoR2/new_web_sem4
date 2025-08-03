@@ -48,10 +48,10 @@
                     </div>
 
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
-                        <label for="no_telp" class="mb-1 font-semibold">Nomor Telepon:</label>
-                        <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="no_telp" id="no_telp" value="{{old('no_telp', $admin->no_telp ?? '')}}" data-validate="admin" required autocomplete="tel" placeholder="contoh: 08xxxx">
-                        <span class="text-red-600 text-sm" id="no_telp_error">
-                            @error('no_telp'){{ $message }}@enderror
+                        <label for="nip" class="mb-1 font-semibold">NIP:</label>
+                        <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="nip" id="nip" value="{{old('nip', $admin->nip ?? '')}}" data-validate="admin" required placeholder="contoh: 199707xxxxxxxx">
+                        <span class="text-red-600 text-sm" id="nip_error">
+                            @error('nip'){{ $message }}@enderror
                         </span>
                     </div>
                 </div>
@@ -113,12 +113,24 @@
                     </div>
 
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
-                    @if (isset($admin))
-                        <label for="new_password" class="mb-1 font-semibold">Password Baru:</label>
-                        <input type="hidden" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="old_password" id="old_password" value="{{($admin->password ?? '')}}">
-                        <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password">
-                    @endif
+                        <label for="no_telp" class="mb-1 font-semibold">Nomor Telepon:</label>
+                        <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="no_telp" id="no_telp" value="{{old('no_telp', $admin->no_telp ?? '')}}" data-validate="admin" required autocomplete="tel" placeholder="contoh: 08xxxx">
+                        <span class="text-red-600 text-sm" id="no_telp_error">
+                            @error('no_telp'){{ $message }}@enderror
+                        </span>
                     </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row">
+                    <div class="flex flex-col w-full mb-4 md:w-1/2">
+                        @if (isset($admin))
+                            <label for="new_password" class="mb-1 font-semibold">Password Baru:</label>
+                            <input type="hidden" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="old_password" id="old_password" value="{{($admin->password ?? '')}}">
+                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password">
+                        @endif
+                    </div>
+
+                    <div class="flex flex-col w-full mb-4 md:w-1/2"></div>
                 </div>
 
                 <h1 class="font-bold text-gray-800 text-2xl my-2 text-center xl:text-left dark:text-white">Alamat</h1>

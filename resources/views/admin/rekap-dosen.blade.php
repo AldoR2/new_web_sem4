@@ -1,6 +1,6 @@
 <x-layout>
     @vite(['resources/js/pages/admin/rekap-dosen.js'])
-<div class="h-full dark:bg-gray-700 dark:text-gray-100">
+<div class="h-full dark:bg-gray-700 dark:text-white">
 <x-slot:title>{{ $title }}</x-slot:title>
 <p class="text-lg">Lihat Rekap Presensi Dosen</p>
 
@@ -86,25 +86,26 @@
                @for ($i = 1; $i <= $totalPertemuan; $i++)
                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">{{ $i }}</th>
                @endfor
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Hadir</th>
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">%Mengajar</th>
            </tr>
        </thead>
        <tbody class="text-center dark:text-white">
            @if (count($rekap))
                @foreach ($rekap as $index => $item)
-               <tr class="hover:bg-gray-50 dark:hover:bg-gray-600">
+               <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$loop->iteration }}</td>
                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{ $item['nama_prodi'] }}</td>
                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{ $item['semester'] }}</td>
                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{ $item['nama_matkul'] }}</td>
                    @for ($i = 0; $i < $totalPertemuan; $i++)
                        @php
-                           $status = $item['status_pertemuan'][$i] ?? null;
+                           $status = $item['status_pertemuan'][$i] ?? '-';
                            $bg = match($status) {
                                 'M' => 'text-green-500',
                                 '-' => 'text-gray-500',
                                 'UTS' => 'text-red-500',
-                                'UAS' => 'text-red-500'
+                                'UAS' => 'text-red-500',
+                                default => 'text-gray-400', // fallback kalau null / tidak sesuai
                            };
                        @endphp
                        <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 font-semibold {{ $bg }}" title="{{ $item['nama_dosen'] }}">{{ $status }}</td>

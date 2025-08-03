@@ -20,6 +20,7 @@ window.loadAdminDetail = function (id) {
             } else {
                 $("#foto").attr("src", "/images/profil-kosong.png");
             }
+            $("#nip").val(res.nip);
             $("#nama").val(res.nama);
             $("#jenis_kelamin").val(
                 res.jenis_kelamin === "L" ? "Laki-laki" : "Perempuan"
