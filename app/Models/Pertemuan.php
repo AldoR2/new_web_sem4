@@ -10,7 +10,7 @@ class Pertemuan extends Model
 {
     use HasFactory, Notifiable;
 
-        protected $fillable = [
+    protected $fillable = [
         'pertemuan_ke',
         'jenis',
         'prodi_id',
@@ -18,6 +18,14 @@ class Pertemuan extends Model
         'matkul_id',
         'tahun_ajaran_id',
         'status',
+    ];
+
+    protected $casts = [
+        'pertemuan_ke' => 'integer',
+        'prodi_id' => 'integer',
+        'semester' => 'integer',
+        'matkul_id' => 'integer',
+        'tahun_ajaran_id' => 'integer',
     ];
 
     public function presensi()

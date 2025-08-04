@@ -10,7 +10,7 @@ class Presensi extends Model
 {
     use HasFactory, Notifiable;
 
-        protected $fillable = [
+    protected $fillable = [
         'presensi_id',
         'pertemuan_id',
         'tgl_presensi',
@@ -19,6 +19,12 @@ class Presensi extends Model
         'dosen_id',
         'ruangan_id',
         'link_zoom'
+    ];
+
+    protected $casts = [
+        'pertemuan_id' => 'integer',
+        'dosen_id' => 'integer',
+        'ruangan_id' => 'integer',
     ];
 
     public function detailPresensi()

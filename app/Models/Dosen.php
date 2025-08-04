@@ -29,6 +29,12 @@ class Dosen extends Model
         'kelurahan_id',
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+        'prodi_id' => 'integer',
+        'semester' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

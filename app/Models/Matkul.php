@@ -20,6 +20,12 @@ class Matkul extends Model
         'prodi_id',
     ];
 
+    protected $casts = [
+        'tahun_ajaran_id' => 'integer',
+        'semester' => 'integer',
+        'prodi_id' => 'integer',
+    ];
+
     public function prodi()
     {
         return $this->belongsTo(Prodi::class, 'prodi_id', 'id');

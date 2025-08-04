@@ -17,6 +17,11 @@ class TahunAjaran extends Model
         'status',
     ];
 
+    protected $casts = [
+        'status' => 'integer',
+    ];
+
+
     protected $attributes = [
         'status' => 0
     ];

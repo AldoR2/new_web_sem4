@@ -15,9 +15,14 @@ class DetailJadwal extends Model
         'mahasiswa_id'
     ];
 
-        public $timestamps = false;
+    protected $casts = [
+        'jadwal_id' => 'integer',
+        'mahasiswa_id' => 'integer',
+    ];
 
-        public function mahasiswa()
+    public $timestamps = false;
+
+    public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'mahasiswa_id', 'id');
     }
