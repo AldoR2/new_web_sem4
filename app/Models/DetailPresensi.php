@@ -19,15 +19,21 @@ class DetailPresensi extends Model
         'bukti'
     ];
 
-        public $timestamps = false;
+    protected $casts = [
+        'presensi_id' => 'integer',
+        'mahasiswa_id' => 'integer',
+        'status' => 'integer',
+    ];
+
+    public $timestamps = false;
 
 
-        public function mahasiswa()
+    public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'mahasiswa_id', 'id');
     }
 
-        public function presensi()
+    public function presensi()
     {
         return $this->belongsTo(Presensi::class, 'presensi_id', 'id');
     }

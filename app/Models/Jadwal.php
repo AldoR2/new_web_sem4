@@ -22,7 +22,17 @@ class Jadwal extends Model
         'semester'
     ];
 
-        public function detailJadwal()
+    protected $casts = [
+        'dosen_id' => 'integer',
+        'prodi_id' => 'integer',
+        'matkul_id' => 'integer',
+        'ruangan_id' => 'integer',
+        'tahun_ajaran_id' => 'integer',
+        'semester' => 'integer',
+    ];
+
+
+    public function detailJadwal()
     {
         return $this->hasMany(DetailJadwal::class, 'jadwal_id', 'id');
     }

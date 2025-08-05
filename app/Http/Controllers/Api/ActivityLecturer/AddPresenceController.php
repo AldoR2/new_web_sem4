@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\ActivityLecturer;
 use App\Models\Dosen;
 use App\Models\FcmToken;
 use App\Models\Notification;
+use App\Models\Pertemuan;
 use App\Services\FcmV1Service;
 use App\Http\Controllers\Controller;
 use App\Models\DetailPresensi;
@@ -25,40 +26,114 @@ class AddPresenceController extends Controller
             $request->validate([
                 'presensi_id' => 'required|string',
                 'tgl_presensi' => 'required|date',
-                'jam_awal' => 'required',
-                'jam_akhir' => 'required',
+                'pertemuan_ke' => 'required|int',
+                'status' => 'required|in:aktif,libur,uts,uas',
                 'dosen_id' => 'required|integer',
                 'prodi_id' => 'required|integer',
                 'semester' => 'required|integer',
                 'matkul_id' => 'required|integer',
                 'tahun_ajaran_id' => 'required|integer',
-                'link_zoom' => 'required|string',
             ]);
 
-            // 1. Simpan data presensi utama
-            $presensi = Presensi::create([
-                'presensi_id' => $request->presensi_id,
-                'tgl_presensi' => $request->tgl_presensi,
-                'jam_awal' => $request->jam_awal,
-                'jam_akhir' => $request->jam_akhir,
-                'dosen_id' => $request->dosen_id,
-                'prodi_id' => $request->prodi_id,
-                'semester' => $request->semester,
-                'matkul_id' => $request->matkul_id,
-                'tahun_ajaran_id' => $request->tahun_ajaran_id,
-                'link_zoom' => $request->link_zoom,
-            ]);
+            if ($request->status == "aktif") {
+                $request->validate([
+                    'jenis_pertemuan' => 'required|in:teori,praktik',
+                    'jam_awal' => 'required',
+                    'jam_akhir' => 'required',
+                    'link_zoom' => 'required|string',
+                ]);
+            }
 
-            // 2. Ambil mahasiswa berdasarkan prodi dan semester
-            $mahasiswas = Mahasiswa::where('prodi_id', $request->prodi_id)
+            DB::begintransaction();
+
+            $pertemuan = Pertemuan::where('pertemuan_ke', $request->pertemuan_ke)
+                ->where('matkul_id', $request->matkul_id)
+                ->where('prodi_id', $request->prodi_id)
                 ->where('semester', $request->semester)
-                ->get();
+                ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
+                ->first();
 
-            // 3. Simpan ke detail presensi
-            foreach ($mahasiswas as $mahasiswa) {
-                DetailPresensi::create([
-                    'presensi_id' => $presensi->id,
-                    'mahasiswa_id' => $mahasiswa->id,
+            if ($pertemuan) {
+                // Ambil data dosen & user
+                $dosen = Dosen::with('user')->findOrFail($request->dosen_id);
+                $user = $dosen->user;
+                $matkul = Matkul::find($request->matkul_id);
+
+                $waktu = Carbon::now()->locale('id')->timezone('Asia/Jakarta');
+                $tanggal = $waktu->translatedFormat('d F Y');
+                $jam = $waktu->format('H.i');
+
+                // Simpan notifikasi
+                Notification::create([
+                    'user_id' => $user->id,
+                    'title' => 'Presensi Gagal Ditambahkan!',
+                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada atau digunakan sebelumnya.',
+                    'type' => 'presensiGagal',
+                    'nama_user' => $dosen->nama,
+                    'tanggal' => $tanggal,
+                    'jam' => $jam,
+                    'mata_kuliah' => $matkul?->nama_matkul ?? '-',
+                ]);
+
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Pertemuan ke-' . $request->pertemuan_ke . ' sudah ada atau digunakan sebelumnya.',
+                ], 409);
+            } else if ($request->status == "aktif") {
+                $pertemuan = Pertemuan::create([
+                    'pertemuan_ke' => $request->pertemuan_ke,
+                    'status' => $request->status,
+                    'jenis' => $request->jenis_pertemuan,
+                    'matkul_id' => $request->matkul_id,
+                    'prodi_id' => $request->prodi_id,
+                    'semester' => $request->semester,
+                    'tahun_ajaran_id' => $request->tahun_ajaran_id,
+                ]);
+            } else {
+                $pertemuan = Pertemuan::create([
+                    'pertemuan_ke' => $request->pertemuan_ke,
+                    'status' => $request->status,
+                    'matkul_id' => $request->matkul_id,
+                    'prodi_id' => $request->prodi_id,
+                    'semester' => $request->semester,
+                    'tahun_ajaran_id' => $request->tahun_ajaran_id,
+                ]);
+            }
+
+            if ($request->status == "aktif") {
+                // 1. Simpan data presensi utama
+                $presensi = Presensi::create([
+                    'presensi_id' => $request->presensi_id,
+                    'pertemuan_id' => $pertemuan->id,
+                    'tgl_presensi' => $request->tgl_presensi,
+                    'jam_awal' => $request->jam_awal,
+                    'jam_akhir' => $request->jam_akhir,
+                    'dosen_id' => $request->dosen_id,
+                    'link_zoom' => $request->link_zoom,
+                ]);
+
+                // 2. Ambil mahasiswa berdasarkan prodi dan semester
+                $mahasiswas = Mahasiswa::where('prodi_id', $request->prodi_id)
+                    ->where('semester', $request->semester)
+                    ->get();
+
+                // 3. Simpan ke detail presensi
+                foreach ($mahasiswas as $mahasiswa) {
+                    DetailPresensi::create([
+                        'presensi_id' => $presensi->id,
+                        'mahasiswa_id' => $mahasiswa->id,
+                    ]);
+                }
+
+            } else {
+                $presensi = Presensi::create([
+                    'presensi_id' => $request->presensi_id,
+                    'pertemuan_id' => $pertemuan->id,
+                    'tgl_presensi' => $request->tgl_presensi,
+                    'dosen_id' => $request->dosen_id,
+                    'jam_awal' => null,
+                    'jam_akhir' => null,
+                    'link_zoom' => null,
                 ]);
             }
 
@@ -83,21 +158,24 @@ class AddPresenceController extends Controller
                 'mata_kuliah' => $matkul?->nama_matkul ?? '-',
             ]);
 
-            // 4. Kirim notifikasi ke mahasiswa
-            $fcmService = new FcmV1Service();
+            if ($request->status == "aktif") {
+                // 4. Kirim notifikasi ke mahasiswa
+                $fcmService = new FcmV1Service();
 
-            // Kirim notifikasi ke dosen
-            $dosenUserId = $dosen->user_id;
-            $dosenTokens = FcmToken::where('user_id', $dosenUserId)->pluck('token');
+                // Kirim notifikasi ke dosen
+                $dosenUserId = $dosen->user_id;
+                $dosenTokens = FcmToken::where('user_id', $dosenUserId)->pluck('token');
 
-            foreach ($dosenTokens as $token) {
-                $fcmService->send(
-                    $token,
-                    'Presensi Telah Ditambahkan',
-                    'Presensi untuk kelas online sudah berhasil ditambahkan.'
-                );
+                foreach ($dosenTokens as $token) {
+                    $fcmService->send(
+                        $token,
+                        'Presensi Telah Ditambahkan',
+                        'Presensi untuk kelas online sudah berhasil ditambahkan.'
+                    );
+                }
             }
 
+            DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Data presensi berhasil diunggah dan notifikasi telah dikirim.'
@@ -157,5 +235,28 @@ class AddPresenceController extends Controller
                 'message' => 'Tidak ada tahun ajaran aktif yang ditampilkan'
             ]);
         }
+    }
+
+    public function showDisabledPertemuans(Request $request)
+    {
+        $request->validate([
+            'prodi_id' => 'required|integer',
+            'semester' => 'required|integer',
+            'matkul_id' => 'required|integer',
+            'tahun_ajaran_id' => 'required|integer'
+        ]);
+
+        $pertemuan = Pertemuan::where('prodi_id', $request->prodi_id)
+            ->where('semester', $request->semester)
+            ->where('matkul_id', $request->matkul_id)
+            ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
+            ->select('id as id_pertemuan', 'pertemuan_ke')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data pertemuan berhasil ditampilkannn',
+            'data' => $pertemuan
+        ]);
     }
 }

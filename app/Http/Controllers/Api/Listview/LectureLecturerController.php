@@ -13,7 +13,7 @@ class LectureLecturerController extends Controller
     {
         $dosenId = $request->query('dosen_id');
 
-        $presensis = Presensi::with('matkul')
+        $presensis = Presensi::with('pertemuan.matkul')
             ->whereDate('tgl_presensi', now()->toDateString())
             ->where('dosen_id', $dosenId)
             ->whereNotNull('link_zoom')
@@ -29,12 +29,12 @@ class LectureLecturerController extends Controller
         $data = $presensis->map(function ($item) {
             return [
                 'presensis_id' => $item->id,
-                'nama_matkul' => optional($item->matkul)->nama_matkul,
+                'nama_matkul' => optional($item->pertemuan->matkul)->nama_matkul,
                 'durasi_presensi' => Carbon::parse($item->jam_awal)->format('H:i') . ' - ' . Carbon::parse($item->jam_akhir)->format('H:i'),
                 'link_zoom' => $item->link_zoom,
                 'nama_dosen' => '', // bisa ambil dari relasi dosen jika dibutuhkan
                 'tgl_presensi' => Carbon::parse($item->tgl_presensi)->format('d-m-Y'),
-                'semester' => $item->semester
+                'semester' => $item->pertemuan->semester
             ];
         });
 
@@ -49,7 +49,7 @@ class LectureLecturerController extends Controller
     {
         $presensisId = $request->query('presensis_id');
 
-        $presensi = Presensi::with('matkul')
+        $presensi = Presensi::with('pertemuan.matkul')
             ->whereDate('tgl_presensi', now()->toDateString())
             ->where('id', $presensisId)
             ->whereNotNull('link_zoom')
@@ -68,8 +68,8 @@ class LectureLecturerController extends Controller
             'message' => 'Data presensi online berhasil diambil',
             'data' => [
                 'presensis_id' => $presensi->id,
-                'nama_matkul' => optional($presensi->matkul)->nama_matkul,
-                'semester' => $presensi->semester,
+                'nama_matkul' => optional($presensi->pertemuan->matkul)->nama_matkul,
+                'semester' => $presensi->pertemuan->semester,
                 'nama_dosen' => '', // bisa relasi
                 'durasi_presensi' => Carbon::parse($presensi->jam_awal)->format('H:i') . ' - ' . Carbon::parse($presensi->jam_akhir)->format('H:i'),
                 'link_zoom' => $presensi->link_zoom,

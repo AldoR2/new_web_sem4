@@ -12,6 +12,7 @@ class Admin extends Model
     use HasFactory, Notifiable;
     protected $fillable = [
         'user_id',
+        'nip',
         'nama',
         'jenis_kelamin',
         'agama',

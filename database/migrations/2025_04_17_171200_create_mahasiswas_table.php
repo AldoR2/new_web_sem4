@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('nim','15')->unique();
+            $table->string('nim','9')->unique();
             $table->string('rfid','30')->unique()->nullable();
             $table->string('nama','100');
             $table->char('jenis_kelamin','1');
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('foto','100')->nullable();
             $table->timestamps();
-            
+
         });
     }
 

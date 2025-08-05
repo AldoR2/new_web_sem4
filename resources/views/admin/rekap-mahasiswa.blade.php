@@ -135,7 +135,7 @@
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">%Kehadiran</th>
            </tr>
        </thead>
-       <tbody class="text-center">
+       <tbody class="text-center dark:text-white">
            @if (count($rekap))
                @foreach ($rekap as $index => $item)
            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">

@@ -33,7 +33,7 @@ const mahasiswaPages = getJsFilesFrom("resources/js/pages/mahasiswa");
 const superAdminPages = getJsFilesFrom("resources/js/pages/superadmin");
 
 export default defineConfig({
-    base: "/gol_c2/",
+    base: "",
     plugins: [
         laravel({
             input: [

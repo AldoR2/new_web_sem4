@@ -102,30 +102,23 @@
                         </span>
                     </div>
 
-                    <div class="flex flex-col w-full mb-4 md:w-1/2 ">
-                        <label for="ruangan" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Ruangan:</label>
-                        <select id="ruangan" name="ruangan_id" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-2 border-gray-400 rounded-sm" required>
-                            <option value="" hidden selected>Pilih Ruangan</option>
-                            @foreach ($ruangan as $r)
-                                <option value="{{ $r->id }}" {{ old('ruangan_id',$presensi->ruangan_id ?? '') == $r->id ? 'selected' : '' }}>
-                                    {{ $r->nama_ruangan }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <span class="text-red-600 text-sm" id="ruangan_id_error">@error('ruangan_id'){{ $message }}@enderror</span>
+                    <div class="flex flex-col w-full mb-4 md:w-1/2">
+                        <label for="tgl_presensi" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Tanggal:</label>
+                        <input type="date" id="tgl_presensi" name="tgl_presensi" value="{{ old('tgl_presensi', $presensi->tgl_presensi ?? '') }}"
+                            class="p-2 border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required>
+                        <span class="text-red-600 text-sm" id="tgl_presensi_error">@error('tgl_presensi'){{ $message }}@enderror</span>
                     </div>
                 </div>
 
+            <div x-data="{ status: '{{ old('status', $presensi->pertemuan->status ?? '') }}', jenis: '{{old('jenis', $presensi->pertemuan->jenis ?? '')}}' }" x-init="$watch('status', value=>{if(value !== 'aktif') jenis = '';})">
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                         <label for="pertemuan" class="mb-1 font-semibold dark:text-white">Pertemuan Ke :</label>
                         <select id="pertemuan" name="pertemuan_ke" class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" required>
                             <option value="" hidden selected>Pilih Pertemuan</option>
-                                @for($i = 1; $i <= 16; $i++)
+                                @for($i = 1; $i <= 50; $i++)
                                     <option value="{{ $i }}" @if (old('pertemuan_ke', $presensi->pertemuan->pertemuan_ke ?? '') == $i) selected @endif>
                                         {{$i}}
-                                        @if ($i == 8) — Rekomendasi UTS @endif
-                                        @if ($i == 16) — Rekomendasi UAS @endif
                                     </option>
                                 @endfor
                         </select>
@@ -136,7 +129,7 @@
 
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
                         <label for="status" class="mb-1 font-semibold dark:text-white">Status Pertemuan:</label>
-                        <select id="status" name="status" required class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
+                        <select id="status" name="status" x-model="status" required class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
                             <option value="" hidden selected>Pilih Status</option>
                             <option value="aktif" {{old('status', $presensi->pertemuan->status ?? '') == 'aktif' ? 'selected' : ''}}>Aktif</option>
                             <option value="libur" {{old('status', $presensi->pertemuan->status ?? '') == 'libur' ? 'selected' : ''}}>Libur</option>
@@ -150,25 +143,50 @@
                 </div>
 
                 <div class="flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full mb-4 md:w-1/3 mr-0 md:mr-4">
-                        <label for="tgl_presensi" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Tanggal:</label>
-                        <input type="date" id="tgl_presensi" name="tgl_presensi" value="{{ old('tgl_presensi', $presensi->tgl_presensi ?? '') }}"
-                            class="p-2 border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required @if (isset($presensi)) readonly @endif>
-                        <span class="text-red-600 text-sm" id="tgl_presensi_error">@error('tgl_presensi'){{ $message }}@enderror</span>
+                    <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
+                        {{-- <div x-show="status === 'aktif'" x-transition x-cloak> --}}
+
+                            <label for="jenis" class="mb-1 font-semibold dark:text-white">Jenis Perkuliahan:</label>
+                            <select id="jenis" name="jenis" x-model="jenis" class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" x-bind:disabled="status && status !== 'aktif'">
+                                <option value="" hidden selected>Pilih Jenis Perkuliahan</option>
+                                <option value="teori" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'teori' ? 'selected' : ''}}>Teori</option>
+                                <option value="praktik" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'praktik' ? 'selected' : ''}}>Praktik</option>
+                            </select>
+                            @error('jenis')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                    <div class="flex flex-col w-full mb-4 md:w-1/2">
+                        <div x-show="status && status !== 'libur'" x-transition x-cloak>
+                            <label for="ruangan" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Ruangan:</label>
+                            <select id="ruangan" name="ruangan_id" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-2 border-gray-400 rounded-sm" required>
+                                <option value="" hidden selected>Pilih Ruangan</option>
+                                @foreach ($ruangan as $r)
+                                    <option value="{{ $r->id }}" {{ old('ruangan_id',$presensi->ruangan_id ?? '') == $r->id ? 'selected' : '' }}>
+                                        {{ $r->nama_ruangan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="text-red-600 text-sm" id="ruangan_id_error">@error('ruangan_id'){{ $message }}@enderror</span>
+                        </div>
+                    </div>
                     </div>
 
-                    <div class="flex flex-col w-full mb-4 md:w-1/3 mr-0 md:mr-4">
-                        <label for="jam_awal" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Jam Mulai:</label>
-                        <input type="time" id="jam_awal" name="jam_awal" value="{{ old('jam_awal', $presensi->jam_awal ?? '') }}"
-                            class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required>
-                        <span class="text-red-600 text-sm" id="jam_awal_error">@error('jam_awal'){{ $message }}@enderror</span>
-                    </div>
+                    <div class="flex flex-col md:flex-row" x-show="status && status !== 'libur'" x-transition x-cloak>
+                        <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
+                            <label for="jam_awal" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Jam Mulai:</label>
+                            <input type="time" id="jam_awal" name="jam_awal" value="{{ old('jam_awal', $presensi->jam_awal ?? '') }}"
+                                class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required>
+                            <span class="text-red-600 text-sm" id="jam_awal_error">@error('jam_awal'){{ $message }}@enderror</span>
+                        </div>
 
-                    <div class="flex flex-col w-full mb-4 md:w-1/3">
-                        <label for="jam_akhir" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Jam Selesai:</label>
-                        <input type="time" id="jam_akhir" name="jam_akhir" value="{{ old('jam_akhir', $presensi->jam_akhir ?? '') }}"
-                            class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required>
-                        <span class="text-red-600 text-sm" id="jam_akhir_error">@error('jam_akhir'){{ $message }}@enderror</span>
+                        <div class="flex flex-col w-full mb-4 md:w-1/2">
+                            <label for="jam_akhir" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Jam Selesai:</label>
+                            <input type="time" id="jam_akhir" name="jam_akhir" value="{{ old('jam_akhir', $presensi->jam_akhir ?? '') }}"
+                                class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-sm" required>
+                            <span class="text-red-600 text-sm" id="jam_akhir_error">@error('jam_akhir'){{ $message }}@enderror</span>
+                        </div>
                     </div>
                 </div>
 

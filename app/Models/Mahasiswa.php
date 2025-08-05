@@ -35,6 +35,13 @@ class Mahasiswa extends Model
         'kelurahan_id',
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+        'prodi_id' => 'integer',
+        'tahun_ajaran_id' => 'integer',
+        'semester' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

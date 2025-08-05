@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\activity;
+namespace App\Http\Controllers\Api\Activity;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dosen;
