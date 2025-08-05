@@ -6,7 +6,7 @@
         <p class="text-gray-800 dark:text-gray-200">Lihat Rekap Presensi Mahasiswa </p>
 
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-900 rounded-sm shadow-xl border dark:border-gray-700">
-            <div class="flex flex-col xl:flex-row mb-5">
+            <div class="flex flex-col xl:flex-row">
                 <div class="flex flex-col w-full mb-4 xl">
                     <label class="mb-1 font-semibold text-gray-700 dark:text-gray-200">Filter By Tahun Ajaran:</label>
                     <select id="tahun-ajaran" name="tahun_ajaran"
@@ -20,6 +20,9 @@
                     </select>
                 </div>
             </div>
+        </div>
+
+        <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-900 rounded-sm shadow-xl border dark:border-gray-700">
 
             <div class="mt-2 mb-5 flex gap-4">
                 <a href="{{route('mahasiswa.export.mahasiswa.excel')}}">

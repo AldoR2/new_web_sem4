@@ -1,6 +1,6 @@
 <x-layout>
     @vite(['resources/js/pages/dosen/chart-dosen.js'])
-    <div class="dark:text-white dark:bg-gray-700">
+    <div class="dark:text-white dark:bg-darkCard">
         <x-slot:title>{{ $title }}</x-slot:title>
         <p class="mb-4">Hari ini:
         <span class="text-md text-gray-800 dark:text-gray-200">
@@ -11,7 +11,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <div class="flex flex-col justify-between rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 max-h-60 bg-white dark:bg-gray-800">
 
-                <div class="bg-gradient-to-br from-sky-500 via-cyan-500 to-teal-400 text-white rounded-2xl p-6 py-12 mb-6 flex items-center gap-4 shadow-md">
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-2xl p-6 py-12 mb-6 flex items-center gap-4 shadow-md">
                     <div>
                         <h2 class="text-2xl font-bold">
                         Selamat datang, <br>

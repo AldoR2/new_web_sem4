@@ -1,75 +1,79 @@
 <x-layout>
     @vite(['resources/js/pages/admin/rekap-mahasiswa.js'])
-<div class="h-full dark:bg-gray-700">
+<div class="h-full dark:bg-darkCard">
 <x-slot:title>{{ $title }}</x-slot:title>
 <p class="dark:text-white">Lihat Rekap Presensi Mahasiswa </p>
+
 <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
-   <form action="{{route(Auth::user()->role . '.rekap-mahasiswa.filter')}}" method="post">
-       @csrf
+    <form action="{{route(Auth::user()->role . '.rekap-mahasiswa.filter')}}" method="post">
+        @csrf
+ 
+    <div class="flex flex-col xl:flex-row">
+        @if (Auth::user()->role === 'admin')
+        <!-- Program Studi -->
+        <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
+            <label for="prodi" class="mb-1 font-semibold dark:text-white">Pilih Program Studi:</label>
+            <select id="prodi" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
+                <option value="" hidden selected>Pilih Program Studi</option>
+                @foreach ($prodi as $p)
+                    <option value="{{ $p->id }}">
+                        {{ $p->nama_prodi }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+ 
+        <!-- Semester -->
+        <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
+            <label for="semester" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
+            <select id="semester" name="semester" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
+                <option value="" hidden selected>Pilih Semester</option>
+                @for ($i = 1; $i <= 8; $i++)
+                <option value="{{$i}}"> Semester {{$i}} </option>
+                @endfor
+            </select>
+        </div>
+        @endif
+ 
+    @if (Auth::user()->role === 'dosen')
+        <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
+            <label for="prodi-dosen" class="mb-1 font-semibold dark:text-white">Pilih Program Studi:</label>
+            <select id="prodi-dosen" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
+                <option value="" hidden selected>Pilih Program Studi</option>
+                @foreach ($prodi as $p)
+                    <option value="{{ $p->id }}">
+                        {{ $p->nama_prodi }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+ 
+        <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
+            <label for="semester-dosen" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
+            <select id="semester-dosen" name="semester" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
+                <option value="" hidden selected>Pilih Semester</option>
+                @for ($i = 1; $i <= 8; $i++)
+                <option value="{{$i}}"> Semester {{$i}} </option>
+                @endfor
+            </select>
+        </div>
+    @endif
+ 
+        <div class="flex flex-col w-full mb-4 xl:w-1/3">
+            <label for="matkul" class="mb-1 font-semibold dark:text-white">Pilih Mata Kuliah:</label>
+            <select id="matkul" name="matkul" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
+            </select>
+        </div>
+    </div>
+ 
+    <div class="w-full flex justify-end mt-3">
+        <a href="{{route(Auth::user()->role .'.rekap-mahasiswa.index')}}" class="px-5 py-2 mr-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer">Reset</a>
+        <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-md font-semibold cursor-pointer">Cari</button>
+    </div>
+ </form>
+</div>    
 
-   <div class="flex flex-col xl:flex-row">
-       @if (Auth::user()->role === 'admin')
-       <!-- Program Studi -->
-       <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
-           <label for="prodi" class="mb-1 font-semibold dark:text-white">Pilih Program Studi:</label>
-           <select id="prodi" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
-               <option value="" hidden selected>Pilih Program Studi</option>
-               @foreach ($prodi as $p)
-                   <option value="{{ $p->id }}">
-                       {{ $p->nama_prodi }}
-                   </option>
-               @endforeach
-           </select>
-       </div>
-
-       <!-- Semester -->
-       <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
-           <label for="semester" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
-           <select id="semester" name="semester" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
-               <option value="" hidden selected>Pilih Semester</option>
-               @for ($i = 1; $i <= 8; $i++)
-               <option value="{{$i}}"> Semester {{$i}} </option>
-               @endfor
-           </select>
-       </div>
-       @endif
-
-   @if (Auth::user()->role === 'dosen')
-       <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
-           <label for="prodi-dosen" class="mb-1 font-semibold dark:text-white">Pilih Program Studi:</label>
-           <select id="prodi-dosen" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
-               <option value="" hidden selected>Pilih Program Studi</option>
-               @foreach ($prodi as $p)
-                   <option value="{{ $p->id }}">
-                       {{ $p->nama_prodi }}
-                   </option>
-               @endforeach
-           </select>
-       </div>
-
-       <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
-           <label for="semester-dosen" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
-           <select id="semester-dosen" name="semester" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
-               <option value="" hidden selected>Pilih Semester</option>
-               @for ($i = 1; $i <= 8; $i++)
-               <option value="{{$i}}"> Semester {{$i}} </option>
-               @endfor
-           </select>
-       </div>
-   @endif
-
-       <div class="flex flex-col w-full mb-4 xl:w-1/3">
-           <label for="matkul" class="mb-1 font-semibold dark:text-white">Pilih Mata Kuliah:</label>
-           <select id="matkul" name="matkul" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
-           </select>
-       </div>
-   </div>
-
-   <div class="w-full flex justify-end mb-6">
-       <a href="{{route(Auth::user()->role .'.rekap-mahasiswa.index')}}" class="px-5 py-2 mr-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer">Reset</a>
-       <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-md font-semibold cursor-pointer">Cari</button>
-   </div>
-</form>
+<div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
 
 @if ($prodiTerpilih && $matkulTerpilih && $semesterTerpilih)
  <div class="mt-4 flex gap-4">
