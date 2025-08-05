@@ -336,6 +336,14 @@ class="fixed z-50 w-64 bg-customblue h-full overflow-y-auto top-16 left-0 p-4 ea
           </div>
         </a>
       </li>
+      <li>
+        <a href="{{route('dosen.jadwal')}}">
+          <div class="p-2.5 mt-3 flex items-center rounded-md px-4 hover:bg-blue-400 active:bg-blue-500 dark:hover:bg-gray-700 dark:active:bg-gray-500 cursor-pointer duration-300 text-white">
+            <i class="bi bi-check-square-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-semibold">Jadwal</span>
+          </div>
+        </a>
+      </li>
 
       <hr class="my-2 text-gray-600">
       <li x-data="{open: false}">

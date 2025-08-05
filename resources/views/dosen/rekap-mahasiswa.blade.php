@@ -73,7 +73,7 @@
  </form>
 </div>
 
-<div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
+<div class="w-full h-max max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
 @if ($prodiTerpilih && $matkulTerpilih && $semesterTerpilih)
  <div class="mt-4 flex gap-4">
 
