@@ -131,6 +131,28 @@
       color: #e5e7eb;
     }
 
+    /* Header hari (Min, Sen, Sel, Rab, Kam, Jum, Sab) - INI YANG DIPERLUKAN */
+    html.dark .fc .fc-col-header-cell-cushion {
+      color: #9ca3af !important; /* gray-400 */
+    }
+
+    /* Background header cell untuk dark mode */
+    html.dark .fc .fc-col-header-cell {
+      background-color: #374151 !important; /* gray-700 */
+      border-color: #4b5563 !important; /* gray-600 */
+    }
+
+    /* Border dan grid untuk dark mode */
+    html.dark .fc .fc-scrollgrid {
+      border-color: #4b5563 !important;
+    }
+
+    html.dark .fc .fc-scrollgrid td,
+    html.dark .fc .fc-scrollgrid th {
+      border-color: #4b5563 !important;
+    }
+
+    /* Button styling untuk dark mode */
     html.dark .fc .fc-button {
       background-color: #374151 !important;
       border-color: #4b5563 !important;
@@ -141,10 +163,25 @@
       background-color: #4b5563 !important;
     }
 
+    html.dark .fc .fc-button:disabled {
+      background-color: #1f2937 !important;
+      border-color: #374151 !important;
+      color: #6b7280 !important;
+    }
+
+    /* Active button */
+    html.dark .fc .fc-button-active {
+      background-color: #2563eb !important;
+      border-color: #2563eb !important;
+      color: white !important;
+    }
+
+    /* Nomor tanggal */
     html.dark .fc .fc-daygrid-day-number {
       color: #d1d5db !important;
     }
 
+    /* Event styling */
     html.dark .fc-event {
       background-color: #2563eb !important;
       border: none !important;
@@ -154,8 +191,43 @@
       color: white !important;
     }
 
+    /* Title bulan/tahun */
     html.dark .fc-toolbar-title {
       color: white !important;
+    }
+
+    /* Hari ini highlight */
+    html.dark .fc .fc-day-today {
+      background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+
+    html.dark .fc .fc-day-today .fc-daygrid-day-number {
+      color: #3b82f6 !important;
+      font-weight: bold;
+    }
+
+    /* Hover effect pada tanggal */
+    html.dark .fc .fc-daygrid-day:hover {
+      background-color: rgba(75, 85, 99, 0.3) !important;
+    }
+
+    /* List view untuk dark mode */
+    html.dark .fc .fc-list-event:hover td {
+      background-color: #374151 !important;
+    }
+
+    html.dark .fc .fc-list-day-cushion {
+      background-color: #4b5563 !important;
+      color: #e5e7eb !important;
+    }
+
+    /* Time grid untuk dark mode */
+    html.dark .fc .fc-timegrid-slot {
+      border-color: #4b5563 !important;
+    }
+
+    html.dark .fc .fc-timegrid-slot-label-cushion {
+      color: #9ca3af !important;
     }
   </style>
 </x-layout>
