@@ -26,7 +26,7 @@ class StoreMasterDosen extends FormRequest
 
         $id = $id ??  $this->route('master_dosen');
 
-        return [
+        $rules = [
             'nip' => ['required', 'max:20','regex:/^[0-9]+$/', Rule::unique('dosens', 'nip')->ignore($id),],
             'nama' => 'required|max:100|regex:/^[A-Za-z\s]+$/',
             'jenis_kelamin' => 'required',
@@ -42,6 +42,12 @@ class StoreMasterDosen extends FormRequest
             'kecamatan_id' => 'required',
             'kelurahan_id' => 'required',
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules['new_password'] = 'nullable|min:8';
+        }
+
+        return $rules;
     }
 
     public function messages(){
@@ -87,6 +93,8 @@ class StoreMasterDosen extends FormRequest
             'kota_id.required' => 'Kota wajib dipilih',
             'kecamatan_id.required' => 'Kecamatan wajib dipilih',
             'kelurahan_id.required' => 'Kelurahan wajib dipilih',
+
+            'new_password.min' => 'Password baru harus minimal 8 karakter'
         ];
     }
 }

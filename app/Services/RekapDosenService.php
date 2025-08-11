@@ -204,7 +204,7 @@ class RekapDosenService
                 'nama_matkul' => $first->matkul->nama_matkul,
                 'nama_prodi' => $first->prodi->nama_prodi,
                 'semester' => $first->semester,
-                'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
+                'nama_dosen' => $first->presensi?->dosen->nama ?? '-',
                 'total_pertemuan' => $totalAktif,
                 'status_pertemuan' => $tanggal_pertemuan,
             ];
@@ -283,7 +283,7 @@ class RekapDosenService
                 'nama_matkul' => $first->matkul->nama_matkul,
                 'nama_prodi' => $first->prodi->nama_prodi,
                 'semester' => $first->semester,
-                'nama_dosen' => optional($first->presensi->first())->dosen->nama ?? '-',
+                'nama_dosen' => $first->presensi?->dosen->nama ?? '-',
                 'total_pertemuan' => $totalAktif,
                 'status_pertemuan' => $tanggal_pertemuan,
             ];

@@ -142,7 +142,10 @@
                         @if (isset($dosen))
                             <label for="new_password" class="mb-1 font-semibold">Password Baru:</label>
                             <input type="hidden" name="old_password" id="old_password" value="{{$dosen->password ?? ''}}">
-                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="password">
+                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" data-validate="dosen">
+                            <span class="text-red-600 text-sm" id="new_password_error">
+                                @error('new_password'){{ $message }}@enderror
+                            </span>
                         @endif
                     </div>
                 </div>

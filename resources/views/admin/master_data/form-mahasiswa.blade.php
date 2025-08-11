@@ -5,16 +5,6 @@
     <p class="dark:text-white">Silahkan tambahkan data Mahasiswa</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 dark:text-white rounded-sm shadow-xl">
 
-                        @if ($errors->any())
-                <div class="alert alert-danger text-red-600 dark:text-red-400">
-                    <ul>
-                        @foreach ($errors->all() as $err)
-                            <li>{{ $err }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <form action="{{ isset($mahasiswa) ? route('admin.master-mahasiswa.update', $mahasiswa->id) : route('admin.master-mahasiswa.store') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 @if (isset($mahasiswa))
@@ -145,10 +135,10 @@
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
                         <label for="new_password" class="mb-1 font-semibold">Password:</label>
                         <input type="hidden" name="old_password" id="old_password" value="{{$mahasiswa->password ?? ''}}">
-                        <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" placeholder="Masukkan Password Baru">
-                        {{-- @error('password')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror --}}
+                        <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" data-validate="mahasiswa" placeholder="Masukkan Password Baru">
+                        <span class="text-red-600 text-sm" id="new_password_error">
+                            @error('new_password'){{ $message }}@enderror
+                        </span>
                     </div>
                 </div>
                 @endif

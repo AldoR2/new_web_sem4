@@ -170,7 +170,7 @@ class RekapMatkulService
 
     public function getRekapMatkul($prodiId, $semester, $matkulId)
     {
-        $pertemuans = Pertemuan::with(['presensi.detailPresensi.mahasiswa','presensi', 'matkul', 'prodi', 'tahun'])
+        $pertemuans = Pertemuan::with(['presensi.detailPresensi.mahasiswa','presensi.dosen', 'matkul', 'prodi', 'tahun'])
             ->where('prodi_id', $prodiId)
             ->where('semester', $semester)
             ->where('matkul_id', $matkulId)
@@ -178,43 +178,37 @@ class RekapMatkulService
             ->get();
 
         $rekap = [];
-        $maxPertemuan = $pertemuans->count();
+        $defaultPertemuan = 16;
+        $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+        $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
         $totalMahasiswa = Mahasiswa::where('prodi_id', $prodiId)->where('semester', $semester)->count();
 
         // $status_pertemuan = $this->getStatusPertemuan($grouped, $defaultPertemuan);
 
 
          // Lengkapi pertemuan jika belum 16
-        $defaultPertemuan = 16;
-        for ($i = 1; $i <= $defaultPertemuan; $i++) {
+        for ($i = 1; $i <= $totalPertemuan; $i++) {
             // Cari pertemuan ke-i
             $pertemuan = $pertemuans->firstWhere('pertemuan_ke', $i);
+            $presensi = $pertemuan?->presensi;
 
-            $metode = $pertemuan && $pertemuan->presensi->isNotEmpty() ? $pertemuan->presensi->map(function ($q){
-                return $q->link_zoom ? 'Daring' : 'Luring';
-            })->unique()->values()->toArray() : ['-'];
+            // $metode = $pertemuan && $pertemuan->presensi->isNotEmpty() ? $pertemuan->presensi->map(function ($q){
+            //     return $q->link_zoom ? 'Daring' : 'Luring';
+            // });
 
             $rekap[] = [
                 'pertemuan_ke' => $i,
-                'tanggal' => $pertemuan && $pertemuan->presensi
-                ? $pertemuan->presensi->pluck('tgl_presensi')->unique()->values()->toArray()
-                : ['-'],
+                'tanggal' => $presensi?->tgl_presensi ?? '-',
                 'totalMahasiswa' => $totalMahasiswa,
-                'metode' => $metode,
+                'metode' => $presensi ? ($presensi->link_zoom ? 'Daring' : 'Luring') : '-' ,
                 // 'tanggal' => $pertemuan->presensi->pluck('tgl_presensi')->unique()->values()->toArray() ?? '-',
                 // 'tanggal' => $pertemuan->tanggal ?? '-',
                 // 'dosen' => optional($pertemuan->presensi->first()->dosen ?? null)->nama ?? '-', // ambil dosen pertama yg mengisi presensi
 
-                'dosen' => $pertemuan && $pertemuan->presensi->isNotEmpty()
-                ? optional($pertemuan->presensi->first()?->dosen)->nama ?? '-'
-                : '-',
+                'dosen' => $presensi?->dosen?->nama ?? '-',
 
-                'jumlah_hadir' => $pertemuan && $pertemuan->presensi->isNotEmpty()
-                    ? $pertemuan->presensi
-                        ->flatMap(fn($p) => $p->detailPresensi)
-                        ->where('status', 1)
-                        ->unique('mahasiswa_id')
-                        ->count()
+                'jumlah_hadir' => $presensi?->detailPresensi
+                    ? $presensi->detailPresensi->where('status', 1)->unique('mahasiswa_id')->count()
                     : 0,
             ];
         }
@@ -222,9 +216,9 @@ class RekapMatkulService
         $firstPertemuan = $pertemuans->first();
 
         return [
-            'matkul' => optional($firstPertemuan?->matkul)->nama_matkul ?? '-',
-            'tahun_ajaran' => optional($firstPertemuan?->tahun)->tahun ?? '-',
-            'rekap' => $rekap,
+            'matkul'        => $firstPertemuan?->matkul?->nama_matkul ?? '-',
+            'tahun_ajaran'  => $firstPertemuan?->tahun?->tahun ?? '-',
+            'rekap'         => $rekap,
         ];
 
         // return [
@@ -252,7 +246,9 @@ class RekapMatkulService
             ->get();
 
             $rekap = [];
-            $maxPertemuan = $pertemuans->count();
+            $defaultPertemuan = 16;
+            $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+            $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
             $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
@@ -324,9 +320,8 @@ class RekapMatkulService
             }
 
             $total = array_sum($statusCount);
-            $defaultPertemuan = 16;
 
-            for ($i = 1; $i <= max($defaultPertemuan, $maxPertemuan); $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 if (!isset($pertemuan[$i])) {
                     $jenis = $statusPertemuanMap[$i] ?? null;
                     if ($jenis === 'uts') {
@@ -370,7 +365,7 @@ class RekapMatkulService
 
         return [
             'rekap' => $rekap,
-            'totalPertemuan' => max(16, $maxPertemuan),
+            'totalPertemuan' => $totalPertemuan,
         ];
     }
 
@@ -405,7 +400,9 @@ class RekapMatkulService
         //     ->get();
 
         $rekap = [];
-        $maxPertemuan = $pertemuans->count();
+        $defaultPertemuan = 16;
+        $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
+        $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
         $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
@@ -480,9 +477,8 @@ class RekapMatkulService
             }
 
             $total = array_sum($statusCount);
-            $defaultPertemuan = 16;
 
-            for ($i = 1; $i <= max($defaultPertemuan, $maxPertemuan); $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 if (!isset($pertemuan[$i])) {
                     $jenis = $statusPertemuanMap[$i] ?? null;
                     if ($jenis === 'uts') {
@@ -526,7 +522,7 @@ class RekapMatkulService
 
         return [
             'rekap' => array_values($rekap),
-            'totalPertemuan' => max(16, $maxPertemuan),
+            'totalPertemuan' => $totalPertemuan,
         ];
     }
 }

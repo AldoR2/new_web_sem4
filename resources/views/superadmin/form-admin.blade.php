@@ -126,10 +126,12 @@
                         @if (isset($admin))
                             <label for="new_password" class="mb-1 font-semibold">Password Baru:</label>
                             <input type="hidden" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="old_password" id="old_password" value="{{($admin->password ?? '')}}">
-                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password">
+                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" data-validate="admin">
+                            <span class="text-red-600 text-sm" id="new_password_error">
+                                @error('new_password'){{ $message }}@enderror
+                            </span>
                         @endif
                     </div>
-
                     <div class="flex flex-col w-full mb-4 md:w-1/2"></div>
                 </div>
 

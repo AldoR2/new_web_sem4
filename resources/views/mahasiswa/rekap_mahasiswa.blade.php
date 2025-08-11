@@ -44,7 +44,7 @@
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">No</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Kode Mata Kuliah</th>
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Mata Kuliah</th>
-                            @for ($i = 1; $i <= 16; $i++)
+                            @for ($i = 1; $i <= $totalPertemuan; $i++)
                                 <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-center">{{ $i }}</th>
                             @endfor
                             <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">%Kehadiran</th>
