@@ -30,13 +30,23 @@ class PresensiController extends Controller
         return view('admin.presensi', compact('presensi','title'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $title = 'Tambah Data Perkuliahan';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
-        $matkul = Matkul::all();
+        $matkul = collect();
+        // $matkul = Matkul::all();
         $dosen = Dosen::all();
+
+            if ($request->has(['prodi_id', 'semester'])) {
+        $tahunAjaranAktif = TahunAjaran::where('status', true)->first();
+        $matkul = Matkul::where('tahun_ajaran_id', $tahunAjaranAktif->id)
+                        ->where('prodi_id', $request->prodi_id)
+                        ->where('semester', $request->semester)
+                        ->get();
+    }
+
         return view('admin.form-presensi', compact('title','prodi','ruangan','matkul','dosen'));
     }
 
