@@ -213,6 +213,14 @@ class AddPresenceController extends Controller
             ->select('id as id_matkul', 'kode_matkul', 'nama_matkul')
             ->get();
 
+        $matkuls = $matkuls->map(function ($item) {
+            return [
+                'id_matkul' => (int) $item->id_matkul,
+                'kode_matkul' => $item->kode_matkul,
+                'nama_matkul' => $item->nama_matkul,
+            ];
+        });
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data matkul berhasil ditampilkan',
@@ -252,6 +260,13 @@ class AddPresenceController extends Controller
             ->where('tahun_ajaran_id', $request->tahun_ajaran_id)
             ->select('id as id_pertemuan', 'pertemuan_ke')
             ->get();
+
+        $pertemuan = $pertemuan->map(function ($item) {
+            return [
+                'id_pertemuan' => (int) $item->id_pertemuan,
+                'pertemuan_ke' => $item->pertemuan_ke,
+            ];
+        });
 
         return response()->json([
             'status' => 'success',

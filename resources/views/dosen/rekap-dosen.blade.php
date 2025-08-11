@@ -1,26 +1,30 @@
 <x-layout>
          @vite(['resources/js/pages/dosen/rekap-dosen.js'])
-  <div class="h-full dark:text-white">
+  <div class="h-full dark:text-white dark:bg-darkCard">
     <x-slot:title>{{ $title }}</x-slot:title>
     <p>Lihat Rekap Presensi Dosen </p>
-    <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
+
+    <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
         <form action="{{route('admin.rekap-dosen.filter')}}" method="POST">
             @csrf
-      <div class="flex flex-col md:flex-row">
-            <div class="flex flex-col w-full mb-4 mr-0">
-                <label for="tahun-ajaran" class="mb-1 font-semibold">Pilih Tahun Ajaran:</label>
-                <select id="tahun-ajaran" name="tahun_ajaran" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 cursor-pointer" >
-                    <option value="" hidden selected>Pilih Tahun Ajaran</option>
-                        @foreach ($tahun as $t)
-                            <option value="{{ $t->id }}">
-                                {{ $t->tahun_awal .'/'. $t->tahun_akhir .' '. $t->keterangan}}
-                            </option>
-                        @endforeach
-                </select>
+            <div class="flex flex-col md:flex-row">
+                <div class="flex flex-col w-full mb-4 mr-0">
+                    <label for="tahun-ajaran" class="mb-1 font-semibold">Pilih Tahun Ajaran:</label>
+                    <select id="tahun-ajaran" name="tahun_ajaran" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 cursor-pointer" >
+                        <option value="" hidden selected>Pilih Tahun Ajaran</option>
+                            @foreach ($tahun as $t)
+                                <option value="{{ $t->id }}">
+                                    {{ $t->tahun_awal .'/'. $t->tahun_akhir .' '. $t->keterangan}}
+                                </option>
+                            @endforeach
+                    </select>
+                </div>
             </div>
-        </div>
 
         </form>
+    </div>
+
+    <div class="w-full h-max max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
 
       <div class="mt-2 mb-5 flex gap-4">
         <a href="{{route('dosen.export.dosen.excel')}}">

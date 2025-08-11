@@ -42,6 +42,17 @@ class AttendanceStudentController extends Controller
             ], 404);
         }
 
+        $rekap = $rekap->map(function ($item) {
+            return [
+                'mahasiswa_id' => (int) $item->mahasiswa_id,
+                'nim' => $item->nim,
+                'nama_matkul' => $item->nama_matkul,
+                'kode_matkul' =>  $item->kode_matkul,
+                'status' => (int) $item->status,
+                'semester' => (int) $item->semester,
+            ];
+        });
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data Rekap semester sekarang ditemukan',
