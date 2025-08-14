@@ -1,7 +1,7 @@
 <x-layout>
     @vite(['resources/js/pages/dosen/data-presensi.js'])
 
-    <div class="h-full dark:bg-gray-700 dark:text-white">
+    <div class="h-full dark:bg-darkCard dark:text-white">
         <x-slot:title>{{ $title }}</x-slot:title>
 
         <p class="text-gray-800 dark:text-gray-200">Data Presensi Hari ini</p>

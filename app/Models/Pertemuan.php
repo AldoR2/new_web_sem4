@@ -30,7 +30,7 @@ class Pertemuan extends Model
 
     public function presensi()
     {
-        return $this->hasMany(Presensi::class, 'pertemuan_id', 'id');
+        return $this->hasOne(Presensi::class, 'pertemuan_id', 'id');
     }
 
     public function prodi()

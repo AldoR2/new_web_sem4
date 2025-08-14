@@ -1,6 +1,6 @@
 <x-layout>
   @vite(['resources/js/pages/mahasiswa/data-jadwal.js'])
-    <div class="h-full dark:bg-gray-700 dark:text-white transition">
+    <div class="h-full dark:bg-darkCard dark:text-white transition">
         <x-slot:title>{{ $title }}</x-slot:title>
 
         <p class="text-gray-800 dark:text-gray-200">Lihat Jadwal Perkuliahan</p>

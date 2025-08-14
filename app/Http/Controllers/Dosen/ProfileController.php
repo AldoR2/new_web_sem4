@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
-        $title = "Profil";
+        $title = "Profil Administrator";
         $user = $request->user()->load(['dosen.provinsi', 'dosen.kota', 'dosen.kecamatan', 'dosen.kelurahan']);
 
         return view('dosen.profil', compact('title', 'user'));

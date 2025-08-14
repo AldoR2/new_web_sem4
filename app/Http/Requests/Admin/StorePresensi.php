@@ -33,8 +33,13 @@ class StorePresensi extends FormRequest
             // 'jam_akhir' => 'required|after:jam_awal',
             'prodi_id' => 'required',
             'semester' => 'required',
-            'matkul_id' => 'required',
-            // 'ruangan_id' => 'required',
+            'matkul_id' => [
+                'required',
+                Rule::exists('matkuls', 'id')->where(function ($query) {
+                    $query->where('prodi_id', $this->input('prodi_id'))
+                        ->where('semester', $this->input('semester'));
+                }),
+            ],
         ];
 
         if ($status !== 'libur') {
@@ -69,6 +74,7 @@ class StorePresensi extends FormRequest
             'semester.required' => 'Silahkah pilih semester',
 
             'matkul_id.required' => 'Silahkah pilih Mata Kuliah',
+            'matkul_id.exists' => 'Mata kuliah tidak valid untuk prodi dan semester yang dipilih.',
 
             'ruangan_id.required' => 'Silahkah pilih ruangan',
 

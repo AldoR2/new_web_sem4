@@ -187,7 +187,9 @@ class RekapMahasiswaService
 
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
-            return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
+            $presensi = $pertemuan->presensi;
+            if (!$presensi) return collect();
+            // return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
                 return $presensi->detailPresensi->map(function($detail) use ($presensi,$pertemuan){
                     return [
                         'nim' => $detail->mahasiswa->nim,
@@ -203,8 +205,26 @@ class RekapMahasiswaService
                         'status' => $detail->status,
                     ];
                 });
-            });
         })->groupBy('nim');
+        // $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
+        //     return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
+        //         return $presensi->detailPresensi->map(function($detail) use ($presensi,$pertemuan){
+        //             return [
+        //                 'nim' => $detail->mahasiswa->nim,
+        //                 'nama_mahasiswa' => $detail->mahasiswa->nama ?? '-',
+        //                 'semester' => $detail->mahasiswa->semester ?? '-',
+        //                 'nama_prodi' => $pertemuan->prodi->nama_prodi ?? '-',
+        //                 'kode_matkul' => $pertemuan->matkul->kode_matkul ?? '-',
+        //                 'nama_matkul' => $pertemuan->matkul->nama_matkul ?? '-',
+        //                 'nama_dosen' => $presensi->dosen->nama ?? '-',
+        //                 'tgl_presensi' => $presensi->tgl_presensi,
+        //                 'pertemuan_ke' => $pertemuan->pertemuan_ke,
+        //                 'status_pertemuan' => $pertemuan->status,
+        //                 'status' => $detail->status,
+        //             ];
+        //         });
+        //     });
+        // })->groupBy('nim');
 
         foreach ($groupMahasiswa as $nim => $records) {
                 // if ($nim === '00000000') continue; // abaikan entri dummy
@@ -222,10 +242,14 @@ class RekapMahasiswaService
                 $dosenPengajar[$ke] = $record['nama_dosen'];
 
                 $jenis = strtolower($record['status_pertemuan']); // pastikan kolom ini ada
+                // $jenis = strtolower($statusPertemuanMap[$ke] ?? 'aktif');
+
                     // $jenis = $statusPertemuanMap[$ke] ?? 'aktif';
 
 
                 // $jenis = strtolower($pertemuans->firstWhere('pertemuan_ke', $ke)->status ?? 'aktif'); // pastikan kolom ini ada
+
+                // dump($ke, $jenis, $record['status']);
 
 
                 switch ($jenis) {
@@ -257,18 +281,25 @@ class RekapMahasiswaService
 
          // Lengkapi pertemuan jika belum 16
 
-            for ($i = 1; $i <= max($defaultPertemuan, $maxPertemuan); $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 if (!isset($pertemuan[$i])) {
                     $jenis = $statusPertemuanMap[$i] ?? null;
-                    if ($jenis === 'uts') {
-                        $pertemuan[$i] = 'UTS';
-                    } elseif ($jenis === 'uas') {
-                        $pertemuan[$i] = 'UAS';
-                    } elseif ($jenis === 'libur') {
-                        $pertemuan[$i] = '-';
-                    } else {
-                        $pertemuan[$i] = '-';
-                    }
+
+                    $pertemuan[$i] = match($jenis) {
+                        'uts'   => 'UTS',
+                        'uas'   => 'UAS',
+                        'libur' => '-',
+                        default => '-'
+                    };
+                    // if ($jenis === 'uts') {
+                    //     $pertemuan[$i] = 'UTS';
+                    // } elseif ($jenis === 'uas') {
+                    //     $pertemuan[$i] = 'UAS';
+                    // } elseif ($jenis === 'libur') {
+                    //     $pertemuan[$i] = '-';
+                    // } else {
+                    //     $pertemuan[$i] = '-';
+                    // }
                 }
             }
 
@@ -279,6 +310,8 @@ class RekapMahasiswaService
         // }
 
         $total = array_sum($statusCount);
+        // $total = $statusCount['hadir'] + $statusCount['izin'] + $statusCount['sakit'] + $statusCount['alpha'];
+
 
             $rekap[$nim] = [
                 'nim' => $nim,
@@ -333,7 +366,9 @@ class RekapMahasiswaService
             $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
-            return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
+            $presensi = $pertemuan->presensi;
+            if (!$presensi) return collect();
+            // return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
                 return $presensi->detailPresensi->map(function($detail) use ($presensi,$pertemuan){
                     return [
                         'nim' => $detail->mahasiswa->nim,
@@ -350,7 +385,6 @@ class RekapMahasiswaService
                         'status' => $detail->status,
                     ];
                 });
-            });
         })->groupBy('matkul_id');
 
         foreach ($groupMahasiswa as $matkul => $records) {
@@ -373,6 +407,27 @@ class RekapMahasiswaService
                 // $jenis = strtolower($pertemuans->firstWhere('pertemuan_ke', $ke)->status ?? 'aktif'); // pastikan kolom ini ada
 
 
+                // switch ($jenis) {
+                //     case 'libur':
+                //         $pertemuan[$ke] = '-';
+                //         break;
+                //     case 'uts':
+                //     case 'uas':
+                //     case 'aktif':
+                //     default:
+
+                //     switch ($record['status']) {
+                //         case 1:
+                //             $pertemuan[$ke] = 'H'; $statusCount['hadir']++; break;
+                //         case 2:
+                //             $pertemuan[$ke] = 'I'; $statusCount['izin']++; break;
+                //         case 3:
+                //             $pertemuan[$ke] = 'S'; $statusCount['sakit']++; break;
+                //         default:
+                //             $pertemuan[$ke] = 'A'; $statusCount['alpha']++; break;
+                //     }
+                //     break;
+                // }
                 switch ($jenis) {
                     case 'libur':
                         $pertemuan[$ke] = '-';
@@ -402,7 +457,7 @@ class RekapMahasiswaService
 
             $total = array_sum($statusCount);
 
-            for ($i = 1; $i <= max($defaultPertemuan, $maxPertemuan); $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 if (!isset($pertemuan[$i])) {
                     $jenis = $statusPertemuanMap[$i] ?? null;
                     if ($jenis === 'uts') {
@@ -438,9 +493,6 @@ class RekapMahasiswaService
                 'sakit' => $statusCount['sakit'],
                 'alpha' => $statusCount['alpha'],
                 'kehadiran' => $total > 0 ? round(($statusCount['hadir'] / $total) * 100) . '%' : '0%',
-                'izin_persentase' => $total > 0 ? round(($statusCount['izin'] / $total) * 100) . '%' : '0%',
-                'sakit_persentase' => $total > 0 ? round(($statusCount['sakit'] / $total) * 100) . '%' : '0%',
-                'alpha_persentase' => $total > 0 ? round(($statusCount['alpha'] / $total) * 100) . '%' : '0%',
             ];
         }
 
@@ -487,7 +539,9 @@ class RekapMahasiswaService
         $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
-            return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
+            // return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
+            $presensi = $pertemuan->presensi;
+            if (!$presensi) return collect();
                 return $presensi->detailPresensi->map(function($detail) use ($presensi,$pertemuan){
         // $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
         //     return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
@@ -507,7 +561,6 @@ class RekapMahasiswaService
                         'status' => $detail->status,
                     ];
                 });
-            });
         })->groupBy('matkul_id');
 
        foreach ($groupMahasiswa as $matkul => $records) {
@@ -558,9 +611,8 @@ class RekapMahasiswaService
             }
 
             $total = array_sum($statusCount);
-            $defaultPertemuan = 16;
 
-            for ($i = 1; $i <= max($defaultPertemuan, $maxPertemuan); $i++) {
+            for ($i = 1; $i <= $totalPertemuan; $i++) {
                 if (!isset($pertemuan[$i])) {
                     $jenis = $statusPertemuanMap[$i] ?? null;
                     if ($jenis === 'uts') {
