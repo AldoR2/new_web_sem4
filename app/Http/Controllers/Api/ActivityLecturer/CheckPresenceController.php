@@ -202,7 +202,7 @@ class CheckPresenceController extends Controller
             'tgl_presensi' => 'required|date',
             'prodi_id' => 'required|integer',
             'semester' => 'required|integer',
-            'status' => 'required|in:aktif,libur,uts,uas',
+            'status' => 'required|in:aktif,libur',
             'pertemuan_ke' => 'required|integer',
             'matkul_id' => 'required|integer',
             'tahun_ajaran_id' => 'required|integer',
