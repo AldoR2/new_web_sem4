@@ -36,7 +36,7 @@
 
             <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 focus:outline-none">
                 <img src="{{ $profile?->foto ? asset('storage/' . $profile->foto) : asset('images/profil-kosong.png') }}"
-                    class="w-10 h-10 rounded-full object-cover border-2 border-white hover:border-gray-300" alt="User">
+                    class="w-10 h-10 rounded-full object-cover border-2 border-gray-400 hover:border-gray-300" alt="User">
                 <span class="text-gray-600 hidden md:inline dark:text-white">{{ Auth::user()->name }}</span>
                 <svg class="w-4 h-4 text-gray-600 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
