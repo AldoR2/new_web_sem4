@@ -39,7 +39,7 @@
     <style>[x-cloak] { display: none !important; }</style>
 
 </head>
-<body class="bg-gray-100 dark:bg-darkCard">
+<body class="bg-gray-200 dark:bg-darkCard">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div x-data="{isSideMenuOpen: false}" @resize.window="if (window.innerWidth >= 1280) isSideMenuOpen = false" class="flex h-screen">
@@ -50,7 +50,7 @@
             <div x-bind:class="isSideMenuOpen ? 'opacity-70 pointer-events-auto' : 'opacity-0 pointer-events-none'"
                 class="fixed inset-0 z-20 bg-gray-600 transition-opacity duration-300"></div>
 
-            <main class="relative mt-16 xl:mt-0 p-6 bg-gray-100 dark:bg-darkCard">
+            <main class="relative mt-16 xl:mt-0 p-6 bg-gray-200 dark:bg-darkCard">
                 <div>
                     <h1 class="font-bold text-gray-800 dark:text-white text-2xl">{{ $title }}</h1>
                     {{ $slot }}
