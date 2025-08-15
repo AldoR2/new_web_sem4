@@ -13,16 +13,11 @@
             : asset('images/halo.png');
     @endphp
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-
-    <!-- KOLOM KIRI -->
-    <div class=" flex flex-col gap-6">
-
-      <!-- Greetings -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="flex flex-col gap-6">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6 border border-gray-200 dark:border-gray-700">
         <div class="bg-gradient-to-r from-blue-600 to-indigo-700
          text-white rounded-2xl p-6 sm:p-10 py-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 shadow-md">
-          {{-- <img src="{{ $foto }}" alt="Halo Image" class="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-full border-4 border-white shadow-md"> --}}
           <div class="text-center sm:text-left">
             <h2 class="text-2xl sm:text-3xl font-bold leading-snug">
               Selamat datang, <br>
@@ -34,12 +29,10 @@
       </div>
 
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 flex flex-col">
-        <!-- Header -->
-            <div class="mb-3 p-4 rounded-t-xl border-b-2 border-gray-300 dark:border-gray-700 flex justify-between items-center flex-wrap gap-2">
-                <h1 class="text-gray-500 dark:text-gray-300 text-lg font-semibold">Jadwal Perkuliahan Hari ini</h1>
-            </div>
+        <div class="mb-3 p-4 rounded-t-xl border-b-2 border-gray-300 dark:border-gray-700 flex justify-between items-center flex-wrap gap-2">
+            <h1 class="text-gray-500 dark:text-gray-300 text-lg font-semibold">Jadwal Perkuliahan Hari ini</h1>
+        </div>
 
-        <!-- Tabel Scrollable -->
         <div class="px-3 pb-3 overflow-x-auto max-h-[300px] overflow-y-auto">
           <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-600 text-sm" id="data-mengajar">
             <thead class="sticky top-0 z-10 text-gray-700 dark:text-gray-100 bg-gray-100 dark:bg-gray-700">
@@ -67,10 +60,9 @@
           </table>
         </div>
       </div>
-
     </div>
 
-    <div class="lg:col-span-2 flex flex-col gap-6">
+    <div class="flex flex-col gap-6">
       <div x-data="{
           openModal: false,
           originalPhoto: '{{ isset($biodata) && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('images/profil-kosong.png') }}',
@@ -80,7 +72,6 @@
           }
       }" class="bg-white pb-20 dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
   
-          <!-- Header Section -->
           <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-xl px-6 py-4">
               <h2 class="text-xl font-bold text-white flex items-center">
                   <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,10 +81,8 @@
               </h2>
           </div>
   
-          <!-- Profile Section -->
           <div class="p-6">
               <div class="flex flex-col lg:flex-row gap-6">
-                  <!-- Photo Section -->
                   <div class="flex flex-col items-center lg:items-start">
                       <div class="relative group">
                           <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg ring-4 ring-blue-100 dark:ring-blue-900">
@@ -102,7 +91,6 @@
                                    class="w-full h-full object-cover">
                           </div>
   
-                          <!-- Edit Overlay -->
                           <div @click="openModal = true"
                                class="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-all duration-300">
                               <div class="text-center text-white">
@@ -124,10 +112,8 @@
                       </button>
                   </div>
   
-                  <!-- Information Section -->
                   <div class="flex-1">
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <!-- Personal Info -->
                           <div class="space-y-4">
                               <h3 class="text-lg font-semibold text-gray-800 dark:text-white border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                                   Informasi Pribadi
@@ -168,7 +154,6 @@
                               </div>
                           </div>
   
-                          <!-- Academic Info -->
                           <div class="space-y-4">
                               <h3 class="text-lg font-semibold text-gray-800 dark:text-white border-b-2 border-green-200 dark:border-green-800 pb-2">
                                   Informasi Akademik
@@ -194,7 +179,6 @@
                           </div>
                       </div>
   
-                      <!-- Contact Info - Full Width -->
                       <div class="mt-6 space-y-4">
                           <h3 class="text-lg font-semibold text-gray-800 dark:text-white border-b-2 border-purple-200 dark:border-purple-800 pb-2">
                               Informasi Kontak
@@ -232,7 +216,6 @@
               </div>
           </div>
   
-          <!-- Modal Upload Foto -->
           <div x-show="openModal" 
                x-cloak
                x-transition:enter="transition ease-out duration-300"
@@ -252,7 +235,6 @@
                    x-transition:leave-end="opacity-0 transform scale-95"
                    class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-96 max-w-full mx-4">
   
-                  <!-- Modal Header -->
                   <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-xl px-6 py-4">
                       <h3 class="text-lg font-bold text-white flex items-center">
                           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,7 +248,6 @@
                       @csrf
                       @method('put')
   
-                      <!-- Preview Foto -->
                       <div class="mb-6 text-center">
                           <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
                               <img :src="photoPreview || originalPhoto"
@@ -275,7 +256,6 @@
                           </div>
                       </div>
   
-                      <!-- File Format Info -->
                       <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                           <p class="text-sm text-blue-800 dark:text-blue-200 text-center">
                               <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +266,6 @@
                           </p>
                       </div>
   
-                      <!-- Upload Button -->
                       <div class="mb-6">
                           <label for="foto"
                                  class="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg shadow-md cursor-pointer transition-all duration-200 transform hover:scale-105">
@@ -316,7 +295,6 @@
                                  ">
                       </div>
   
-                      <!-- Action Buttons -->
                       <div class="flex gap-3">
                           <button type="button"
                                   @click="resetPreview(); openModal = false"
@@ -333,7 +311,7 @@
           </div>
       </div>
   </div>
-    </div>
+        </div>
     </div>
 </x-layout>
 

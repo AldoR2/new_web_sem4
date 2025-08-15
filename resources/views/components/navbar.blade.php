@@ -1,4 +1,4 @@
-<nav class="fixed z-50 xl:sticky top-0 w-full border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 py-3 px-4 ">
+<nav class="fixed z-50 xl:sticky top-0 w-full border-b border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 py-3 px-4 ">
     <div class="flex justify-between items-center" x-data="{ open: false, isDark: localStorage.getItem('theme') === 'dark' }"
          x-init="document.documentElement.classList.toggle('dark', isDark)">
         <div class="text-gray-600">
