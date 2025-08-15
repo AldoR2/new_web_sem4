@@ -1,5 +1,6 @@
 <x-layout>
     @vite(['resources/js/pages/admin/chart.js'])
+        <div class="dark:text-white dark:bg-darkCard">
     <x-slot:title>{{ $title }}</x-slot:title>
     <p class="mb-4 dark:text-white">Hari ini: <span class="text-md text-gray-800 dark:text-white">
         {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
@@ -111,7 +112,7 @@
     </div>
 
     <div class="flex flex-col md:flex-row gap-5">
-        <div class="w-[310px] md:w-3/4 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
+        <dv class="w-[310px] bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="mb-3 p-4 rounded-t-xl border-b-2 border-gray-300 dark:border-gray-600 flex justify-between items-center flex-wrap gap-2">
                 <h1 class="text-gray-500 dark:text-white text-lg font-semibold">Daftar Perkuliahan Hari Ini</h1>
             </div>
@@ -143,7 +144,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </dv>
 
         <div x-data="{ showAll: false }" class="w-[310px] md:w-1/4 bg-white dark:bg-gray-800 rounded-md shadow-xl">
             <div class="p-4 border-b-2 border-gray-300 dark:border-gray-600 flex justify-between items-center">
@@ -194,6 +195,7 @@
                 </div>
             @endif
         </div>
+    </div>
     </div>
 </x-layout>
 

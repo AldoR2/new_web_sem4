@@ -74,30 +74,53 @@
                                             <p class="text-sm text-gray-600 dark:text-gray-300">Presensi Masuk: {{$r->detailPresensi->first()->waktu_presensi ?? '-'}}</p>
                                         </div>
                                             @php
-                                                switch ($r->detailPresensi->first()->status){
+
+                                                $statusPertemuan = strtolower($r->pertemuan->status ?? '');
+                                                $statusPresensi = $r->detailPresensi->first()->status ?? '0';
+
+                                                $labelPresensi = '';
+                                                $color = '';
+
+                                                switch ($statusPresensi){
                                                     case '1':
-                                                        $bg = 'text-green-600 dark:text-green-400 font-semibold text-sm';
-                                                        $text = '✅ Hadir';
+                                                        $color = 'text-green-600 dark:text-green-400 font-semibold text-sm';
+                                                        $labelPresensi = '✅ Hadir';
                                                         break;
                                                     case '2':
-                                                        $bg = 'text-blue-600 dark:text-blue-400 font-semibold text-sm';
-                                                        $text = '📄 Izin';
+                                                        $color = 'text-blue-600 dark:text-blue-400 font-semibold text-sm';
+                                                        $labelPresensi = '📄 Izin';
                                                         break;
                                                     case '3':
-                                                        $bg = 'text-yellow-600 dark:text-yellow-400 font-semibold text-sm';
-                                                        $text = '🤒 Sakit';
+                                                        $color = 'text-yellow-600 dark:text-yellow-400 font-semibold text-sm';
+                                                        $labelPresensi = '🤒 Sakit';
                                                         break;
                                                     case '0':
-                                                        $bg = 'text-red-600 dark:text-red-400 font-semibold text-sm';
-                                                        $text = '❌ Alpha';
+                                                        $color = 'text-red-600 dark:text-red-400 font-semibold text-sm';
+                                                        $labelPresensi = '❌ Alpha';
                                                         break;
                                                     default :
-                                                        $bg = 'text-gray-600 dark:text-gray-400 font-semibold text-sm';
-                                                        $text = '⏳ Tidak Diketahui';
+                                                        $color = 'text-gray-600 dark:text-gray-400 font-semibold text-sm';
+                                                        $labelPresensi = '⏳ Tidak Diketahui';
 
                                                     }
+
+                                                $labelPertemuan = '';
+                                                switch ($statusPertemuan){
+                                                    case 'uts':
+                                                        $labelPertemuan = ' (UTS)';
+                                                        break;
+                                                    case 'uas':
+                                                        $labelPertemuan = ' (UAS)';
+                                                        break;
+                                                    case 'aktif':
+                                                    default:
+                                                        $labelPertemuan = '';
+                                                        break;
+                                                }
                                             @endphp
-                                        <div class="{{$bg}}">{{$text}}</div>
+                                        <div class="{{$color}}">
+                                            {{ $labelPresensi }}{!! $labelPertemuan !!}
+                                        </div>
                                     </div>
                                 </div>
                             {{-- @endforeach --}}

@@ -31,7 +31,7 @@
         <div class="flex flex-col md:flex-row gap-5">
         <div class="w-[310px] md:w-3/4 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="mb-3 p-4 rounded-t-xl border-b-2 border-gray-300 dark:border-gray-700 flex justify-between items-center flex-wrap gap-2">
-                <h1 class="text-gray-500 dark:text-gray-300 text-lg font-semibold">Daftar Mengajar Hari Ini</h1>
+                <h1 class="text-gray-500 dark:text-gray-300 text-lg font-semibold">Jadwal Mengajar Hari Ini</h1>
             </div>
 
             <div class="px-3 pb-3 overflow-x-auto max-h-[400px] overflow-y-auto">

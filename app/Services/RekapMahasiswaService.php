@@ -363,7 +363,7 @@ class RekapMahasiswaService
             $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
             $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
 
-            $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
+            // $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
             $presensi = $pertemuan->presensi;
@@ -394,6 +394,8 @@ class RekapMahasiswaService
             $dosenPengajar = [];
 
             $sorted = $records->sortBy('pertemuan_ke')->values();
+            $statusPertemuanMap = $pertemuans->where('matkul_id', $matkul)->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
+
 
             foreach ($sorted as $record) {
                 $ke = $record['pertemuan_ke'];
@@ -536,7 +538,7 @@ class RekapMahasiswaService
         $defaultPertemuan = 16;
         $maxPertemuan = $pertemuans->max('pertemuan_ke') ?? 0;
         $totalPertemuan = max($defaultPertemuan, $maxPertemuan);
-        $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
+        // $statusPertemuanMap = $pertemuans->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
         $groupMahasiswa = $pertemuans->flatMap(function($pertemuan){
             // return $pertemuan->presensi->flatMap(function ($presensi) use ($pertemuan) {
@@ -568,6 +570,7 @@ class RekapMahasiswaService
             $statusCount = ['hadir' => 0, 'izin' => 0, 'sakit' => 0, 'alpha' => 0];
             $tanggalPertemuan = [];
             $dosenPengajar = [];
+            $statusPertemuanMap = $pertemuans->where('matkul_id', $matkul)->pluck('status', 'pertemuan_ke')->map(fn($s) => strtolower($s));
 
             $sorted = $records->sortBy('pertemuan_ke')->values();
 

@@ -7,7 +7,7 @@
 <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
     <form action="{{route(Auth::user()->role . '.rekap-matkul.filter')}}" method="post">
         @csrf
- 
+
     <div class="flex flex-col xl:flex-row">
         @if (Auth::user()->role === 'admin')
         <!-- Program Studi -->
@@ -22,7 +22,7 @@
                 @endforeach
             </select>
         </div>
- 
+
         <!-- Semester -->
         <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
             <label for="semester" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
@@ -34,7 +34,7 @@
             </select>
         </div>
         @endif
- 
+
     @if (Auth::user()->role === 'dosen')
         <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
             <label for="prodi-dosen" class="mb-1 font-semibold dark:text-white">Pilih Program Studi:</label>
@@ -47,7 +47,7 @@
                 @endforeach
             </select>
         </div>
- 
+
         <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
             <label for="semester-dosen" class="mb-1 font-semibold dark:text-white">Pilih Semester:</label>
             <select id="semester-dosen" name="semester" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
@@ -58,14 +58,14 @@
             </select>
         </div>
     @endif
- 
+
         <div class="flex flex-col w-full mb-4 xl:w-1/3">
             <label for="matkul" class="mb-1 font-semibold dark:text-white">Pilih Mata Kuliah:</label>
             <select id="matkul" name="matkul" class="dark:bg-gray-700 dark:text-white dark:border-gray-600 border" required>
             </select>
         </div>
     </div>
- 
+
     <div class="w-full flex justify-end mt-3">
         <a href="{{route(Auth::user()->role .'.rekap-mahasiswa.index')}}" class="px-5 py-2 mr-2 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold rounded-md cursor-pointer">Reset</a>
         <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-md font-semibold cursor-pointer">Cari</button>
@@ -128,12 +128,12 @@
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Pertemuan Ke</th>
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tanggal</th>
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Dosen Pengajar</th>
-               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Hadir</th>
+               <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Mahasiswa Hadir</th>
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Mahasiswa</th>
                <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Metode</th>
            </tr>
        </thead>
-       <tbody class="text-center">
+       <tbody>
            @if (count($rekap))
                @foreach ($rekap as $index => $item)
            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">

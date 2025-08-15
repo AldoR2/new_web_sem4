@@ -44,7 +44,7 @@ class PresensiController extends Controller
             $q->where('mahasiswa_id', $mahasiswa->id);
         })
         ->whereHas('pertemuan', function ($q) {
-            $q->where('status','aktif');
+            $q->whereIn('status', ['aktif','uts','uas']);
         })
         ->whereDate('tgl_presensi', Carbon::today())
         ->whereTime('jam_awal', '<=', $now->format('H:i:s'))
@@ -62,9 +62,9 @@ class PresensiController extends Controller
         ->whereHas('detailPresensi', function ($q) use ($mahasiswa) {
             $q->where('mahasiswa_id', $mahasiswa->id);
         })
-        // ->whereHas('pertemuan', function ($p) {
-        //     $p->where('status','aktif');
-        // })
+        ->whereHas('pertemuan', function ($p) {
+            $p->whereIn('status',['aktif','uts','uas']);
+        })
         ->orderByDesc('tgl_presensi')
         ->get();
 
