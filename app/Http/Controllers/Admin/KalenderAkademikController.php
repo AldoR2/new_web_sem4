@@ -139,14 +139,13 @@ class KalenderAkademikController extends Controller
 
         $kalenders = KalenderAkademik::all();
 
-        // Prepare data event untuk FullCalendar
         $events = $kalenders->map(function($item) {
             return [
                 'title' => $item->judul,
                 'start' => $item->tanggal_mulai,
                 'end' => $item->tanggal_selesai ? Carbon::parse($item->tanggal_selesai)->addDay()->toDateString() : null,
                 'description' => $item->deskripsi,
-                'color' => $item->status == 0 ? '#ef4444' : '#2563eb', // 🔴 Merah utk libur, 🔵 biru utk kegiatan
+                'color' => $item->status == 0 ? '#ef4444' : '#2563eb', 
             ];
         })->values();
 

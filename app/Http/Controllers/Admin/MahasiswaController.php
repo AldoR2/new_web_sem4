@@ -151,7 +151,6 @@ class MahasiswaController extends Controller
                         Storage::disk('public')->delete($mahasiswa->foto);
                     }
 
-                    // Simpan foto baru
                     $filename = 'mahasiswa/profile_' . $request->nim . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs('profiles',$filename, 'public');
                     $mahasiswa->foto = $fotoPath;

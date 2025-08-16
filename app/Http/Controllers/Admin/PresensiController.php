@@ -35,7 +35,7 @@ class PresensiController extends Controller
         $title = 'Tambah Data Perkuliahan';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
-        $matkul = collect();
+        // $matkul = collect();
         // $matkul = Matkul::all();
         $dosen = Dosen::all();
 
@@ -47,7 +47,7 @@ class PresensiController extends Controller
                         ->get();
     }
 
-        return view('admin.form-presensi', compact('title','prodi','ruangan','matkul','dosen'));
+        return view('admin.form-presensi', compact('title','prodi','ruangan','dosen'));
     }
 
     public function store(StorePresensi $request)
