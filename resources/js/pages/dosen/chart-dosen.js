@@ -14,13 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
             toolbar: { show: false },
         },
         series: chartData,
-        //     {
-        //         name: "Jumlah Presensi",
-        //         data: [5, 4, 6, 3], // Minggu 1 - 4
-        //     },
-        // ],
         xaxis: {
             categories: categories,
+            labels: {
+                style: {
+                    colors: "#888", // warna putih agak abu untuk sumbu X
+                },
+            },
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: "#888", // warna putih agak abu untuk sumbu Y
+                },
+            },
         },
         colors: ["#1E88E5"],
         plotOptions: {
@@ -31,14 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         dataLabels: {
             enabled: true,
+            style: {
+                colors: ["#888"], // warna teks di atas batang
+            },
         },
     };
-
-    // const chart = new ApexCharts(
-    //     document.querySelector("#grafik-kehadiran"),
-    //     options
-    // );
-    // chart.render();
 
     const chartContainer = document.querySelector("#grafik-kehadiran");
 

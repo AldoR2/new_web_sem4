@@ -27,7 +27,7 @@ class AddPresenceController extends Controller
                 'presensi_id' => 'required|string',
                 'tgl_presensi' => 'required|date',
                 'pertemuan_ke' => 'required|int',
-                'status' => 'required|in:aktif,libur,uts,uas',
+                'status' => 'required|in:aktif,libur',
                 'dosen_id' => 'required|integer',
                 'prodi_id' => 'required|integer',
                 'semester' => 'required|integer',
@@ -244,7 +244,6 @@ class AddPresenceController extends Controller
             ]);
         }
     }
-
     public function showDisabledPertemuans(Request $request)
     {
         $request->validate([
