@@ -17,13 +17,13 @@ class DashboardController extends Controller
     public function index()
     {
         $data = [
-        'title' => 'Dashboard',
-        'mahasiswa' => Mahasiswa::count(),
-        'dosen' => Dosen::count(),
-        'matkul' => Matkul::count(),
-        'prodi' => Prodi::count(),
-        'dosenMengajar' => Presensi::with('pertemuan','dosen','ruangan')->whereDate('tgl_presensi', Carbon::today())->get(),
-        'mingguan' => [],
+            'title' => 'Dashboard',
+            'mahasiswa' => Mahasiswa::count(),
+            'dosen' => Dosen::count(),
+            'matkul' => Matkul::count(),
+            'prodi' => Prodi::count(),
+            'dosenMengajar' => Presensi::with('pertemuan','dosen','ruangan')->whereDate('tgl_presensi', Carbon::today())->get(),
+            'mingguan' => [],
         ];
 
         $statusMap = [

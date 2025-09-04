@@ -37,7 +37,6 @@ $(document).ready(function () {
 
                         for (let i = 0; i < data.totalPertemuan; i++) {
                             const status = item.status_pertemuan[i] ?? null;
-                            // const status = tanggal ? "M" : "-";
 
                             let bgClass = "text-gray-500";
                             switch (status) {
@@ -57,10 +56,6 @@ $(document).ready(function () {
                                     bgClass = "text-gray-500";
                                     break;
                             }
-                            // const bgClass =
-                            //     status === "M"
-                            //         ? "text-green-500"
-                            //         : "text-gray-500";
 
                             const cell = `<div class="font-semibold ${bgClass}" title="${
                                 item.nama_dosen ?? ""

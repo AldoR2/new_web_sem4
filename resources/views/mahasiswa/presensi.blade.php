@@ -1,12 +1,14 @@
 <x-layout>
-    @vite(['resources/js/pages/admin/data-presensi.js'])
+    {{-- @vite(['resources/js/pages/admin/data-presensi.js']) --}}
 
     <x-slot:title>Presensi Mahasiswa</x-slot:title>
 
     <div class="h-[680px]">
-        <p class=" text-gray-800 dark:text-gray-200 mb-4">Presensi Hari Ini : <span class="text-md text-gray-800 dark:text-white">
-            {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
-          </span></p>
+        <p class=" text-gray-800 dark:text-gray-200 mb-4">Presensi Hari Ini :
+            <span class="text-md text-gray-800 dark:text-white">
+                {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
+            </span>
+        </p>
 
         <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl h-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 h-full">
@@ -27,7 +29,7 @@
                                 </p>
                                 <p class="text-gray-600 dark:text-gray-400">Ruangan: {{ $presensi->ruangan->nama_ruangan ?? '-' }}</p>
                                 <p class="text-gray-600 dark:text-gray-400"> Jam Perkuliahan:
-                                    {{ $presensi->jam_awal . ' - ' . $presensi->jam_akhir }}
+                                    {{ $presensi->jam_awal . ' - ' . $presensi->jam_akhir ?? '-' }}
                                 </p>
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold">
                                     {{ $presensiTercatat }}
@@ -43,10 +45,6 @@
                                     <p class="text-gray-600 dark:text-gray-400"> Jam Perkuliahan:
                                         {{ $presensi->jam_awal . ' - ' . $presensi->jam_akhir }}
                                     </p>
-                                    {{-- <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                        Jadwal Anda saat ini: {{ $presensi->pertemuan->matkul->nama_matkul }}
-                                        ({{ $presensi->jam_awal }} - {{ $presensi->jam_akhir }})
-                                    </p> --}}
                                 </div>
                             @endif
                         @else
@@ -63,7 +61,6 @@
                     <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Riwayat Presensi</h2>
 
                     <div class="flex-1 space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                        {{-- @if ($riwayat) --}}
                             @forelse ($riwayat as $r )
                                 <div class="bg-gradient-to-r from-white to-gray-100 dark:from-gray-800 dark:to-gray-700 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 transition hover:shadow-xl">
                                     <div class="flex justify-between items-center">
@@ -74,7 +71,6 @@
                                             <p class="text-sm text-gray-600 dark:text-gray-300">Presensi Masuk: {{$r->detailPresensi->first()->waktu_presensi ?? '-'}}</p>
                                         </div>
                                             @php
-
                                                 $statusPertemuan = strtolower($r->pertemuan->status ?? '');
                                                 $statusPresensi = $r->detailPresensi->first()->status ?? '0';
 
@@ -123,14 +119,13 @@
                                         </div>
                                     </div>
                                 </div>
-                            {{-- @endforeach --}}
-                        @empty
-                            <div class="text-center text-gray-600 dark:text-gray-400 mt-10">
-                                <p class="text-8xl mb-2">📭</p>
-                                <p class="text-lg font-semibold">Belum Ada Riwayat Presensi</p>
-                                <p class="text-sm">Riwayat presensi akan muncul setelah jam perkuliahan selesai.</p>
-                            </div>
-                        @endforelse
+                            @empty
+                                <div class="text-center text-gray-600 dark:text-gray-400 mt-10">
+                                    <p class="text-8xl mb-2">📭</p>
+                                    <p class="text-lg font-semibold">Belum Ada Riwayat Presensi</p>
+                                    <p class="text-sm">Riwayat presensi akan muncul setelah jam perkuliahan selesai.</p>
+                                </div>
+                            @endforelse
                     </div>
                 </div>
             </div>

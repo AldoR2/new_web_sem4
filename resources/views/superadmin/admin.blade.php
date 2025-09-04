@@ -1,9 +1,8 @@
 <x-layout>
     @vite(['resources/js/pages/superadmin/data-admin.js'])
     <div class="relative dark:text-white">
-    <x-slot:title>{{ $title }}</x-slot:title>
-    <p class="dark:text-gray-300">Daftar Seluruh Admin</p>
-        {{-- <div x-data="{openImport: false, openView: false, file}" class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl"> --}}
+        <x-slot:title>{{ $title }}</x-slot:title>
+        <p class="dark:text-gray-300">Daftar Seluruh Admin</p>
         <div x-data="{ openImport: false, fileName: '', openView: false, resetFile() {
                     this.fileName = '';
                     const input = document.getElementById('file');
@@ -74,7 +73,7 @@
                             </tr>
                         </thead>
 
-                        <tbody class="dark:text-white">
+                        <tbody>
                             @foreach ($admin as $a)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                     <td class=" dark:border-gray-500 px-4 py-2">{{$loop->iteration}}</td>
@@ -127,7 +126,6 @@
                             <img id="foto" class="w-full h-full object-cover" alt="Photo">
                         </div>
 
-                        <!-- INPUT FIELDS -->
                         <div class="flex flex-col md:flex-row">
                             <div class="flex flex-col items-start w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                                 <label for="nama" class="mb-1 font-semibold dark:text-gray-200">Nama Lengkap:</label>

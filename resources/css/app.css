@@ -28,32 +28,32 @@
 }
 
 .select2-container--default .select2-selection--single::after {
-    content: "▾"; /* atau ganti dengan ↓ */
+    content: "▾";
     position: absolute;
     right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     font-size: 1rem;
-    color: #6b7280; /* gray-500 */
+    color: #6b7280;
     pointer-events: none;
 }
 
 .select2-container--default
     .select2-selection--single
     .select2-selection__rendered {
-    color: #1f2937; /* text-gray-800 */
+    color: #1f2937;
     line-height: 1.5rem;
     border: grey;
 }
 
 .dark .select2-container--default .select2-selection--single {
-    background-color: #4b5563 !important; /* bg-gray-600 */
-    color: #f9fafb !important; /* text-white */
+    background-color: #4b5563 !important;
+    color: #f9fafb !important;
     border-color: #4b5563 !important;
 }
 
 .dark .select2-container--default .select2-selection--single::after {
-    color: #d1d5db !important; /* gray-300 */
+    color: #d1d5db !important;
 }
 
 .dark .select2-container--default .select2-selection__rendered {
@@ -61,24 +61,24 @@
 }
 
 .dark .select2-dropdown {
-    background-color: #374151 !important; /* bg-gray-700 */
+    background-color: #374151 !important;
     color: #f9fafb !important;
 }
 
 .dark .select2-results__option--highlighted {
-    background-color: #6b7280 !important; /* bg-gray-500 */
+    background-color: #6b7280 !important;
 }
 
 .select2-search__field {
-    background-color: #ffffff !important; /* white */
-    color: #111827 !important; /* gray-900 */
-    border: 1px solid #d1d5db !important; /* gray-300 */
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
 }
 
 /* 🌚 Dark mode */
 
 .dataTables_filter input {
-    background-color: #f0f9ff; /* ganti dengan warna background yang kamu inginkan */
+    background-color: #f0f9ff;
     border: 1px solid #cbd5e1;
     padding: 6px 12px;
     border-radius: 6px;

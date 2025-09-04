@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 
@@ -19,33 +18,28 @@
     @endif
 
 </head>
-<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <body>
   <header class="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 backdrop-blur-md bg-opacity-80 transition-all duration-300" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-  
-        <!-- Logo -->
+
         <a href="#" class="flex items-center space-x-2">
           <img src="{{ asset('images/stipress.png') }}" class="h-8 w-auto" alt="Logo">
           <span class="text-xl font-bold text-gray-800 dark:text-white">STIPRES</span>
         </a>
-  
-        <!-- Desktop Menu -->
+
         <nav class="hidden lg:flex space-x-8 items-center">
           <a href="#home" class="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white transition font-medium">Home</a>
           <a href="#tentang" class="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white transition font-medium">Tentang</a>
           <a href="#fitur" class="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white transition font-medium">Fitur</a>
           <a href="#kontak" class="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white transition font-medium">Kontak</a>
         </nav>
-  
-        <!-- Desktop Login -->
+
         <div class="hidden lg:flex items-center">
           <a href="{{ route('login') }}" class="px-5 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow transition">Login</a>
         </div>
-  
-        <!-- Mobile Menu Button -->
+
         <div class="lg:hidden">
           <button id="menu-toggle" class="text-gray-700 dark:text-gray-300 focus:outline-none transition-all duration-300">
             <svg id="menu-icon" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -58,8 +52,7 @@
         </div>
       </div>
     </div>
-  
-    <!-- Mobile Menu -->
+
     <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-700 px-6 py-4 space-y-4 transition-all duration-300">
       <a href="#home" class="block text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white font-medium">Home</a>
       <a href="#tentang" class="block text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white font-medium">Tentang</a>
@@ -71,26 +64,24 @@
 
   <section id="home" class="bg-gray-50 dark:bg-gray-900 py-16 sm:py-20 md:py-24 lg:py-28" data-aos="fade-up">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-10">
-      
-      <!-- Konten Kiri -->
+
       <div class="w-full lg:w-1/2 text-center lg:text-left">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight" data-aos="fade-right">
           STIPRES - Aplikasi Presensi <br class="hidden sm:inline" />
           Stikes Panti Waluya
         </h1>
-        
+
         <p class="mt-6 text-gray-700 dark:text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0" data-aos="fade-right" data-aos-delay="200">
           Solusi presensi digital lengkap untuk kampus dan perusahaan Anda. Cepat, akurat, dan dapat diakses dari mana saja.
         </p>
-  
+
         <div class="mt-8 sm:mt-10" data-aos="fade-up" data-aos-delay="400">
           <a href="{{ route('login') }}" class="inline-block bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition">
             Get Started
           </a>
         </div>
       </div>
-  
-      <!-- Gambar Kanan -->
+
       <div class="w-full lg:w-1/2 flex justify-center" data-aos="zoom-in-left" data-aos-delay="500">
         <img
           src="{{ asset('images/mock-up2.png') }}"
@@ -100,7 +91,7 @@
       </div>
     </div>
   </section>
-  
+
 
   <section id="tentang" class="bg-white dark:bg-gray-800 py-20" data-aos="fade-up">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -113,8 +104,7 @@
       <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-12">
         Selain fitur presensi, Stipres juga menyediakan manajemen jadwal dan kalender akademik yang membantu mahasiswa dan dosen mengatur kegiatan perkuliahan, ujian, dan event kampus secara terorganisir dan praktis.
       </p>
-  
-      <!-- Swiper Slider -->
+
       <div class="swiper mySwiper max-w-3xl mx-auto rounded-lg shadow-lg">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
@@ -127,21 +117,19 @@
             <img src="{{ asset('images/Detail_Presensi.png') }}" alt="Stipres 3" class="w-full rounded-lg" />
           </div>
         </div>
-  
-        <!-- Navigation Buttons -->
+
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
-  
-        <!-- Pagination -->
+
         <div class="swiper-pagination"></div>
       </div>
-  
+
       <p class="mt-4 text-gray-600 dark:text-gray-400 text-sm italic">
         Tampilan aplikasi Stipres: Website untuk presensi offline dengan RFID dan aplikasi mobile untuk presensi via Zoom.
       </p>
     </div>
   </section>
-  
+
 
       <section id="fitur" class="bg-gray-50 dark:bg-gray-900 py-16 px-6" data-aos="fade-up">
         <div class="max-w-7xl mx-auto text-center mb-12">
@@ -339,11 +327,7 @@ button.addEventListener('click', () => {
   });
 </script>
 
-<script
-    async
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
-  ></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 
-  
 </body>
 </html>

@@ -8,7 +8,6 @@ use App\Models\Matkul;
 use App\Models\Presensi;
 use App\Models\Prodi;
 use App\Models\TahunAjaran;
-use App\Services\RekapMahasiswaService;
 use App\Services\RekapMatkulService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
@@ -26,13 +25,12 @@ class RekapMatkulController extends Controller
     {
         $title = 'Rekap Matkul';
         $prodi = Prodi::all();
-        $matkul = Matkul::all();
         $rekap = [];
         $totalPertemuan = 16;
         $prodiTerpilih = $request->prodi ? Prodi::find($request->prodi) : null;
         $matkulTerpilih = $request->matkul ? Matkul::find($request->matkul) : null;
         $semesterTerpilih = $request->input('semester') ?? null;
-        return view('admin.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
+        return view('admin.rekap-matkul', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','rekap','totalPertemuan'));
     }
 
     public function exportPdf(Request $request, RekapMatkulService $service)
@@ -43,14 +41,12 @@ class RekapMatkulController extends Controller
                 'matkul' => Matkul::findOrFail($request->matkul),
                 'semester' => $request->input('semester'),
                 'rekap' => [],
-                // 'totalPertemuan' => 16,
             ];
 
             if ($request->isMethod('post')) {
 
                 $hasil = $service->getRekapMatkul($request->prodi, $request->semester, $request->matkul);
                 $data['rekap'] = $hasil['rekap'];
-                // $data['totalPertemuan'] = $hasil['totalPertemuan'];
             }
 
             $pdf = Pdf::loadView('admin.export.rekap-matkul-pdf', $data)->setPaper('a4', 'landscape');
@@ -62,7 +58,6 @@ class RekapMatkulController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ]);
         }
-
     }
 
     public function exportExcel(Request $request, RekapMatkulService $service)
@@ -108,13 +103,11 @@ class RekapMatkulController extends Controller
         $data['semesterTerpilih'] = $request->input('semester');
         $data['tahun'] = TahunAjaran::all();
         $data['rekap'] = [];
-        // $data['totalPertemuan'] = 16;
 
         if ($request->isMethod('post')) {
 
             $hasil = $service->getRekapMatkul($request->prodi, $request->semester, $request->matkul);
             $data['rekap'] = $hasil['rekap'];
-            // $data['totalPertemuan'] = $hasil['totalPertemuan'];
         }
 
         return view('admin.rekap-matkul', $data);
@@ -127,7 +120,6 @@ class RekapMatkulController extends Controller
         $dosen = Auth::user()->dosen;
 
         $tahunAjaranAktif = TahunAjaran::where('status',  true)->first();
-        // $matkulId = Presensi::where('dosen_id',$dosen->id)->distinct()->pluck('matkul_id');
         $matkulId = Presensi::where('dosen_id', $dosen->id)->with('pertemuan')->get()->pluck('pertemuan.matkul_id')->unique()->values();
 
         $query = Matkul::query()->whereIn('id', $matkulId)->where('tahun_ajaran_id', $tahunAjaranAktif->id);

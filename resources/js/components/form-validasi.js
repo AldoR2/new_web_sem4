@@ -1,7 +1,8 @@
 $("[data-validate]").on("input", function () {
     const field = $(this).attr("name");
     const value = $(this).val();
-    const errorSelector = `#${field}_error`;
+    // const errorSelector = `#${field}_error`;
+    const errorSelector = `#${CSS.escape(field)}_error`;
     const entity = $(this).data("validate");
     const editId = $("#edit_id").val();
 

@@ -4,14 +4,12 @@
         <x-slot:title>{{ $title }}</x-slot:title>
         <p class="text-gray-900 dark:text-gray-200">Silahkan tambahkan data Admin</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl transition-colors duration-300">
-
-
             <form action="{{ isset($jadwal) ? route('admin.master-jadwal.update', $jadwal->id) : route('admin.master-jadwal.store') }}" method="POST" class="form-validasi">
-            @csrf
-            @if (isset($jadwal))
-                @method('PUT')
-                <input type="hidden" id="edit_id" value="{{ $jadwal->id }}">
-            @endif
+                @csrf
+                @if (isset($jadwal))
+                    @method('PUT')
+                    <input type="hidden" id="edit_id" value="{{ $jadwal->id }}">
+                @endif
 
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
@@ -121,7 +119,7 @@
                         </span>
                     </div>
                     <div class="flex flex-col w-full mb-4 md:w-1/3 mr-0 md:mr-4">
-                        <label for="durasi" class="mb-1 font-semibold text-gray-900 dark:text-gray-300">Durasi</label>
+                        <label for="durasi" class="mb-1 font-semibold text-gray-900 dark:text-gray-300">SKS</label>
                         <input type="number" id="durasi" name="durasi" value="{{old('durasi', $jadwal->durasi ?? '')}}" placeholder="Contoh : 2" required
                             class="p-2 w-full border-2 border-gray-400 rounded-sm bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400" data-validate="jadwal">
                         <span class="text-red-600 text-sm" id="durasi_error">

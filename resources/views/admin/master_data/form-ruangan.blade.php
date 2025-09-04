@@ -1,11 +1,10 @@
 <x-layout>
     <div class="h-full dark:text-white">
         @vite(['resources/js/components/form-validasi.js'])
-    <x-slot:title>{{ $title }}</x-slot:title>
-    <p class="text-gray-700 dark:text-gray-300">Silahkan tambahkan data Program Studi</p>
+        <x-slot:title>{{ $title }}</x-slot:title>
+        <p class="text-gray-700 dark:text-gray-300">Silahkan tambahkan data Program Studi</p>
 
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
-
             <form action="{{ isset($ruangan) ? route('admin.master-ruangan.update', $ruangan->id) : route('admin.master-ruangan.store') }}" method="POST">
                 @csrf
                 @if (isset($ruangan))

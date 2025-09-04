@@ -58,7 +58,7 @@ class MahasiswaController extends Controller
 
                 $fotoPath = null;
                 if ($request->hasFile('foto')) {
-                    $filename = 'mahasiswa/profile_' . $request->nim . '.' . $request->file('foto')->extension();
+                    $filename = 'mahasiswa/profile_' . $user->id . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs( 'profiles', $filename, 'public');
                 }
 
@@ -151,7 +151,7 @@ class MahasiswaController extends Controller
                         Storage::disk('public')->delete($mahasiswa->foto);
                     }
 
-                    $filename = 'mahasiswa/profile_' . $request->nim . '.' . $request->file('foto')->extension();
+                    $filename = 'mahasiswa/profile_' . $mahasiswa->id . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs('profiles',$filename, 'public');
                     $mahasiswa->foto = $fotoPath;
                 }

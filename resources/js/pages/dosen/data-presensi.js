@@ -53,7 +53,7 @@ $(document).ready(function () {
             ? new Date($("#end-date").val())
             : null;
         let date = new Date(data[0]);
-        let status = data[7]?.toLowerCase(); // Sesuaikan index kolom status pertemuan, misal index ke-3
+        let status = data[7]?.toLowerCase();
 
         if (statusFilter && status !== statusFilter) {
             return false;
@@ -144,7 +144,7 @@ $(document).ready(function () {
                         $("#matkul").html(
                             `<option value="${selectedId}" selected>${selectedText}</option>`
                         );
-                        return; // Stop agar tidak fetch dari API
+                        return;
                     }
                     mataKuliahSelect.empty();
 

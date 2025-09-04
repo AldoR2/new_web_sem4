@@ -3,15 +3,13 @@
     <div class="relative dark:text-white">
     <x-slot:title>{{ $title }}</x-slot:title>
     <p class="dark:text-gray-300">Daftar Seluruh Dosen</p>
-        {{-- <div x-data="{openImport: false}" class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl dark:shadow-gray-800"> --}}
-
-            <div x-data="{ openImport: false, fileName: '', resetFile() {
-                    this.fileName = '';
-                    const input = document.getElementById('file');
-                    if (input) input.value = '';
-                }
-            }"
-            class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
+        <div x-data="{ openImport: false, fileName: '', resetFile() {
+                this.fileName = '';
+                const input = document.getElementById('file');
+                if (input) input.value = '';
+            }
+        }"
+        class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
 
             <div class="mt-2 mb-5 flex gap-4">
                 <a href="{{route('admin.master-dosen.create')}}">
@@ -35,22 +33,23 @@
                         </div>
                         <form method="POST" action="{{ route('admin.master-dosen.import') }}" enctype="multipart/form-data">
                             @csrf
-                        <div class="flex flex-col items-center justify-center w-full h-50 border-4 border-gray-400 border-dashed mb-4">
-                            <i class="bi bi-upload text-gray-600 dark:text-gray-100 text-2xl"></i>
-                            <input type="file" id="file" name="file" accept=".xls,.xlsx" required class="hidden" @change="fileName = $event.target.files[0]?.name">
-                            <label for="file" class="text-blue-600 dark:text-blue-600 text-center text-sm md:text-md cursor-pointer" >Jatuhkan dokumen anda disini</label>
+                            <div class="flex flex-col items-center justify-center w-full h-50 border-4 border-gray-400 border-dashed mb-4">
+                                <i class="bi bi-upload text-gray-600 dark:text-gray-100 text-2xl"></i>
+                                <input type="file" id="file" name="file" accept=".xls,.xlsx" required class="hidden" @change="fileName = $event.target.files[0]?.name">
+                                <label for="file" class="text-blue-600 dark:text-blue-600 text-center text-sm md:text-md cursor-pointer" >Jatuhkan dokumen anda disini</label>
 
-                            <template x-if="fileName">
-                                <p id="file-name" class="text-sm text-blue-600 dark:text-blue-400 mt-1">📄 <span x-text="fileName"></span></p>
-                            </template>
+                                <template x-if="fileName">
+                                    <p id="file-name" class="text-sm text-blue-600 dark:text-blue-400 mt-1">📄 <span x-text="fileName"></span></p>
+                                </template>
 
-                            <p class="text-gray-400 dark:text-gray-300">Didukung: VSC, XLS, XML, JSON</p>
-                        </div>
+                                <p class="text-gray-400 dark:text-gray-300">Didukung: VSC, XLS, XML, JSON</p>
+                            </div>
 
-                        <div class="mb-4 flex justify-center">
-                            <button class="cursor-pointer px-8 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-sm font-semibold text-white">Impor</button>
-                        </div>
-                    </form>
+                            <div class="mb-4 flex justify-center">
+                                <button class="cursor-pointer px-8 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-sm font-semibold text-white">Impor</button>
+                            </div>
+
+                        </form>
                         <div class="flex flex-col items-center justify-center w-full h-20 border-4 border-gray-400 border-dashed mb-4">
                             <p class="text-gray-600 dark:text-gray-100">Unduh template file impor <a href="{{asset('storage/template/template-dosen.xlsx')}}" download class="text-blue-600">di sini</a></p>
                         </div>

@@ -77,7 +77,7 @@ $(document).ready(function () {
                         table.row.add(row);
                     });
 
-                    table.draw(); // Refresh tampilan
+                    table.draw();
                 })
                 .catch((error) => console.error("Gagal ambil data:", error));
         }

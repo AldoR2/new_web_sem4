@@ -4,11 +4,11 @@ const csrfToken = document
 
 $(document).ready(function () {
     const table = $("#data-matkul").DataTable({
-        searching: true, // Aktifkan pencarian
-        paging: true, // Aktifkan pagination
-        info: true, // Menampilkan informasi tabel
-        scrollX: true, // Aktifkan scroll horizontal
-        autoWidth: false, // Hindari ukuran otomatis
+        searching: true,
+        paging: true,
+        info: true,
+        scrollX: true,
+        autoWidth: false,
     });
 
     $("#prodi, #semester, #tahun_ajaran").on("change", function () {

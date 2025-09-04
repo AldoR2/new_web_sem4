@@ -1,21 +1,8 @@
-// import { defineConfig } from "vite";
-// import laravel from "laravel-vite-plugin";
-
-// export default defineConfig({
-//     plugins: [
-//         laravel({
-//             input: ["resources/css/app.css", "resources/js/app.js"],
-//             refresh: true,
-//         }),
-//     ],
-// });
-
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import fs from "fs";
 import path from "path";
 
-// Fungsi untuk mengambil semua file .js dari subfolder tertentu
 function getJsFilesFrom(dir) {
     const fullPath = path.resolve(__dirname, dir);
     if (!fs.existsSync(fullPath)) return [];
@@ -26,7 +13,6 @@ function getJsFilesFrom(dir) {
         .map((file) => `${dir}/${file}`);
 }
 
-// Ambil semua file JS dari folder halaman
 const adminPages = getJsFilesFrom("resources/js/pages/admin");
 const dosenPages = getJsFilesFrom("resources/js/pages/dosen");
 const mahasiswaPages = getJsFilesFrom("resources/js/pages/mahasiswa");

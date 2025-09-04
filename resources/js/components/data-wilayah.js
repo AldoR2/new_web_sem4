@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         );
     }
 
-    // Event listeners
     provinsi.addEventListener("change", async () => {
         const id = provinsi.value;
         await loadWilayah(`/wilayah/kotas/${id}`, kota, "Pilih Kota");

@@ -37,7 +37,6 @@
                 <tr class="hover:bg-gray-50">
                     <td class="border border-gray-300 px-4 py-2">{{$item['pertemuan_ke'] ?? ''}}</td>
                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['tanggal'] ?? '' }}</td>
-                    {{-- <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['tanggal'] ?? ''}}</td> --}}
                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['dosen'] ?? ''}}</td>
                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['jumlah_hadir'] ?? ''}}</td>
                     <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">{{$item['totalMahasiswa'] ?? ''}}</td>

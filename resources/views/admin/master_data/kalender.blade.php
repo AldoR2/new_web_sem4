@@ -1,6 +1,5 @@
 <x-layout>
     @vite(['resources/js/pages/admin/kalender-akademik.js'])
-
     <div class="relative dark:text-white">
         <x-slot:title>{{ $title}}</x-slot:title>
         <p class="dark:text-gray-300">Seluruh Daftar Kegiatan Akademik</p>

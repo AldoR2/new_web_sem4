@@ -1,6 +1,5 @@
 <x-layout>
     @vite(['resources/js/pages/dosen/data-presensi.js'])
-
     <div class="h-full dark:bg-darkCard dark:text-white">
         <x-slot:title>{{ $title }}</x-slot:title>
 
@@ -16,9 +15,6 @@
                         <option value="week">Minggu Ini</option>
                         <option value="month">Bulan ini</option>
                         <option value="all">Semua Periode</option>
-                        {{-- <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                        <option value="uts" {{ request('status') == 'uts' ? 'selected' : '' }}>UTS</option>
-                        <option value="uas" {{ request('status') == 'uas' ? 'selected' : '' }}>UAS</option> --}}
                     </select>
                 </div>
                 <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0">

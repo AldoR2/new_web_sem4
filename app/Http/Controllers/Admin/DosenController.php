@@ -24,7 +24,6 @@ class DosenController extends Controller
         $title = 'Data Dosen';
         $dosen = Dosen::with( 'prodi')->orderByDesc('id')->get();
         return view('admin.master_data.dosen',compact('title','dosen'));
-
     }
 
     public function create()
@@ -58,7 +57,7 @@ class DosenController extends Controller
 
                 $fotoPath = null;
                 if ($request->hasFile('foto')) {
-                    $filename = 'dosen/profile_' . $request->nip . '.' . $request->file('foto')->extension();
+                    $filename = 'dosen/profile_' . $user->id . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs( 'profiles', $filename, 'public');
                 }
 
@@ -146,7 +145,7 @@ class DosenController extends Controller
                         Storage::disk('public')->delete($dosen->foto);
                     }
 
-                    $filename = 'dosen/profile_' . $request->nip . '.' . $request->file('foto')->extension();
+                    $filename = 'dosen/profile_' . $dosen->id . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs('profiles', $filename, 'public');
                     $dosen->foto = $fotoPath;
                 }
@@ -221,7 +220,6 @@ class DosenController extends Controller
                 'message' => 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage()
             ]);
         }
-
     }
 
     public function validateField(Request $request)
@@ -255,7 +253,6 @@ class DosenController extends Controller
     }
 
     public function import(Request $request){
-
         try {
             $request->validate([
             'file' => 'required|mimes:xls,xlsx'
@@ -280,6 +277,5 @@ class DosenController extends Controller
             ]);
         }
     }
-
 
 }

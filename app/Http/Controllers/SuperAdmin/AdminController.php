@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\StoreMasterAdmin;
 use Maatwebsite\Excel\Facades\Excel;
-// use Illuminate\Validation\ValidationException;
 
 
 
@@ -136,7 +135,6 @@ class AdminController extends Controller
             $user = $admin->user;
 
             if ($request->hasFile('foto')) {
-                // Hapus foto lama kalau ada
                 if ($admin->foto && Storage::disk('public')->exists($admin->foto)) {
                     Storage::disk('public')->delete($admin->foto);
                 }

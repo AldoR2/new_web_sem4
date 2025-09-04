@@ -48,9 +48,5 @@
         </tbody>
     </table>
 
-    {{-- <p style="margin-top: 20px;">Keterangan:</p>
-    <p>M = Mengajar</p>
-    <p>- = Tidak terselenggara perkuliahan</p> --}}
-
 </body>
 </html>

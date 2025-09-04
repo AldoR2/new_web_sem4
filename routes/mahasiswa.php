@@ -8,7 +8,7 @@ use App\Http\Controllers\Mahasiswa\JadwalController;
 use App\Http\Controllers\Mahasiswa\RekapPresensiController;
 
 Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-    Route::resource('presensi', PresensiController::class);
+    Route::get('/presensi', [PresensiController::class,'index'])->name('presensi');
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
 
     Route::get('/jadwal',[JadwalController::class,'index'])->name('jadwal');
@@ -19,9 +19,9 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->name('mahasi
     Route::get('/rekap-presensi',[RekapPresensiController::class,'index'])->name('rekap');
     Route::get('/rekap-presensi/export/pdf', [RekapPresensiController::class, 'exportRekapPdf'])->name('export.mahasiswa.pdf');
     Route::get('/rekap-presensi/export/excel', [RekapPresensiController::class, 'exportRekapExcel'])->name('export.mahasiswa.excel');
+    Route::get('/getFilterRekap', [RekapPresensiController::class, 'getFilterRekap']);
 
     Route::get('/change-password', [PasswordController::class, 'changePassword'])->name('change-password');
     Route::put('/change-password', [PasswordController::class, 'update'])->name('password.update');
-    Route::get('/getFilterRekap', [MahasiswaController::class, 'getFilterRekap']);
     Route::put('/update-profil', [MahasiswaController::class, 'updateProfil'])->name('profil.update');
 });

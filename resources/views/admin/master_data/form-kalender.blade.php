@@ -1,6 +1,6 @@
 <x-layout>
     <div class="h-full dark:text-white">
-            @vite(['resources/js/components/form-validasi.js'])
+        @vite(['resources/js/components/form-validasi.js'])
         <x-slot:title>{{ $title }}</x-slot:title>
         <p class="dark:text-white">Silahkan tambahkan data Kalender Akademik</p>
 

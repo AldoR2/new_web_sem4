@@ -3,15 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UpdatePasswordRequest;
-use App\Models\User;
-use App\Models\Admin;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -22,7 +16,6 @@ class ProfileController extends Controller
     {
         $title = "Profil Administrator";
         $user = $request->user()->load(['admin.provinsi', 'admin.kota', 'admin.kecamatan', 'admin.kelurahan']);
-
         return view('admin.profil', compact('title', 'user'));
     }
 
@@ -35,12 +28,10 @@ class ProfileController extends Controller
             ]);
 
             if ($request->hasFile('foto')) {
-                // Hapus foto lama jika ada
                 if ($admin->foto && Storage::disk('public')->exists($admin->foto)) {
                     Storage::disk('public')->delete($admin->foto);
                 }
 
-                // Simpan foto baru
                 $filename = 'admin/profile_' . $admin->id . '.' . $request->file('foto')->extension();
                 $fotoPath = $request->file('foto')->storeAs('profiles', $filename, 'public');
                 $admin->update(['foto' => $fotoPath]);

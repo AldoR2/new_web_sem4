@@ -33,7 +33,6 @@ class JadwalController extends Controller
             abort(403, 'Dosen tidak ditemukan atau tidak terhubung dengan akun.');
         }
 
-        // $rekapData = $service->getRekapDosen($dosen->id);
         $jadwal = Jadwal::with('prodi','dosen','ruangan','tahun','matkul')->where('dosen_id', $dosen->id)->when($tahunAjaran, function ($q) use ($tahunAjaran){
             $q->where('tahun_ajaran_id', $tahunAjaran->id);
         })
@@ -44,9 +43,7 @@ class JadwalController extends Controller
             'nama' => $dosen->nama,
             'prodi' => $dosen->prodi->jenjang . ' ' . $dosen->prodi->nama_prodi,
             'tahun' => $tahunAjaran,
-            // 'tahun_ajaran' => $tahunAjaran ? "{$tahunAjaran->tahun_awal}/{$tahunAjaran->tahun_akhir}" : '-',
             'jadwal' => $jadwal,
-            // 'totalPertemuan' => $rekapData['totalPertemuan'],
         ];
 
         $pdf = Pdf::loadView('dosen.export.jadwal-pdf', $data)->setPaper('a4', 'landscape');
@@ -60,12 +57,9 @@ class JadwalController extends Controller
         $tahunId = $request->query('tahun_ajaran');
         $tahunAjaran = $tahunId ? TahunAjaran::find($tahunId) : TahunAjaran::where('status', true)->first();
 
-        // $rekapData = $service->getRekapDosen($dosen->id);
         $jadwal = Jadwal::with('prodi','dosen','ruangan','tahun','matkul')->where('dosen_id', $dosen->id)->when($tahunAjaran, function ($q) use ($tahunAjaran){
             $q->where('tahun_ajaran_id', $tahunAjaran->id);
-        })
-            ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
-        // $totalPertemuan = $rekapData['totalPertemuan'] ?? 16;
+        })->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")->orderBy('jam')->get();
 
         $export = new class($dosen, $jadwal, $tahunAjaran) implements FromView {
 

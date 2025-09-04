@@ -17,7 +17,7 @@ export default {
             },
             colors: {
                 customblue: "#1E88E4",
-                darkBg: "#1E293B", // kamu bisa ganti sesuai kebutuhan
+                darkBg: "#1E293B",
                 darkCard: "#334155",
                 darkBorder: "#475569",
                 primary: {
@@ -35,7 +35,7 @@ export default {
             },
         },
     },
-    darkMode: "class", // Atur dark mode menggunakan kelas 'dark'
+    darkMode: "class",
 
     plugins: [forms],
 };

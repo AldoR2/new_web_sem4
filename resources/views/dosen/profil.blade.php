@@ -1,11 +1,11 @@
 <x-layout>
-    <div x-data="{ 
+    <div x-data="{
         photoPreview: null,
         originalPhoto: '{{ isset($user->dosen) && $user->dosen->foto ? asset('storage/' . $user->dosen->foto) : asset('images/profil-kosong.png') }}'
     }">
-    <div class="mb-9">
-        <x-slot:title>{{ $title }}</x-slot:title>
-    </div>    
+        <div class="mb-9">
+            <x-slot:title>{{ $title }}</x-slot:title>
+        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-1">
@@ -13,7 +13,7 @@
                     <form action="{{ route('dosen.profile.update') }}" enctype="multipart/form-data" method="POST" class="form-validasi">
                         @csrf
                         @method('patch')
-                        
+
                         <div class="bg-indigo-600 px-6 py-4">
                             <h2 class="font-bold text-white flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,18 +23,15 @@
                                 Foto Profil
                             </h2>
                         </div>
-                        
+
                         <div class="p-6">
                             <div class="flex flex-col items-center">
                                 <div class="relative group mb-6">
                                     <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl ring-4 ring-green-100 dark:ring-green-900">
-                                        <img :src="photoPreview || originalPhoto" 
-                                             id="previewImage" 
-                                             class="w-full h-full object-cover" 
-                                             alt="Preview Foto">
+                                        <img :src="photoPreview || originalPhoto" id="previewImage" class="w-full h-full object-cover" alt="Preview Foto">
                                     </div>
                                 </div>
-  
+
                                 <div class="w-full mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                                     <div class="flex items-center text-blue-800 dark:text-blue-200">
                                         <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,13 +43,9 @@
                                         </div>
                                     </div>
                                 </div>
-  
+
                                 <div class="w-full mb-6">
-                                    <input type="file" 
-                                           name="foto" 
-                                           id="foto" 
-                                           accept="image/jpeg,image/jpg,image/png" 
-                                           class="hidden"
+                                    <input type="file" name="foto" id="foto" accept="image/jpeg,image/jpg,image/png" class="hidden"
                                            @change="
                                                const file = $event.target.files[0];
                                                if (file) {
@@ -66,18 +59,16 @@
                                                    reader.readAsDataURL(file);
                                                }
                                            ">
-                                    
-                                    <label for="foto" 
-                                           class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg shadow-lg cursor-pointer transition-all duration-200 transform hover:scale-105">
+
+                                    <label for="foto" class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg shadow-lg cursor-pointer transition-all duration-200 transform hover:scale-105">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                         </svg>
                                         Pilih Foto Baru
                                     </label>
                                 </div>
-  
-                                <button type="submit" 
-                                        class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white rounded-lg font-semibold shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
+
+                                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white rounded-lg font-semibold shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -88,6 +79,7 @@
                     </form>
                 </div>
             </div>
+
             <div class="lg:col-span-2">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <div class="bg-gradient-to-r from-purple-600 to-indigo-700 px-6 py-4">
@@ -98,14 +90,14 @@
                             Informasi Detail
                         </h2>
                     </div>
-                    
+
                     <div class="p-6">
                         <div class="mb-8">
                             <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 pb-2 border-b-2 border-blue-200 dark:border-blue-800 flex items-center">
                                 <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                                 Informasi Pribadi
                             </h3>
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -115,9 +107,8 @@
                                         Nama Lengkap
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                value="{{ old('nama', $user->dosen->nama ?? '') }}">
                                     </div>
                                 </div>
@@ -129,9 +120,8 @@
                                         NIP
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="209393472384709">
                                     </div>
                                 </div>
@@ -143,9 +133,8 @@
                                         Tempat, Tanggal Lahir
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->tempat_lahir . ', ' . $user->dosen->tgl_lahir }}">
                                     </div>
                                 </div>
@@ -157,9 +146,8 @@
                                         Jenis Kelamin
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}">
                                     </div>
                                 </div>
@@ -171,9 +159,8 @@
                                         Agama
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->agama ?? '' }}">
                                     </div>
                                 </div>
@@ -184,9 +171,8 @@
                                 <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                                 Informasi Kontak
                             </h3>
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Email -->
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
                                         <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,9 +181,8 @@
                                         Email
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->email}}">
                                     </div>
                                 </div>
@@ -209,9 +194,8 @@
                                         Telepon
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->no_telp }}">
                                     </div>
                                 </div>
@@ -222,7 +206,7 @@
                                 <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                                 Informasi Akademik
                             </h3>
-                            
+
                             <div class="grid grid-cols-1 gap-6">
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -232,9 +216,8 @@
                                         Program Studi
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text" disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->dosen->prodi->nama_prodi }}">
                                     </div>
                                 </div>
@@ -247,9 +230,7 @@
                                         Alamat Lengkap
                                     </label>
                                     <div class="relative">
-                                        <textarea disabled 
-                                                  rows="3"
-                                                  class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg resize-none">{{ $user->dosen->alamat }}, {{ $user->dosen->kelurahan->name }}, {{ $user->dosen->kecamatan->name }}, {{ $user->dosen->kota->name }}, {{ $user->dosen->provinsi->name }}</textarea>
+                                        <textarea disabled rows="3" class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg resize-none">{{ $user->dosen->alamat }}, {{ $user->dosen->kelurahan->name }}, {{ $user->dosen->kecamatan->name }}, {{ $user->dosen->kota->name }}, {{ $user->dosen->provinsi->name }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -259,4 +240,4 @@
             </div>
         </div>
     </div>
-  </x-layout>
+</x-layout>

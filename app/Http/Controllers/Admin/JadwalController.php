@@ -34,10 +34,9 @@ class JadwalController extends Controller
         $title = 'Data Jadwal';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
-        $matkul = Matkul::all();
         $dosen = Dosen::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
-        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','matkul','dosen','tahun'));
+        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','dosen','tahun'));
     }
 
     public function store(StoreMasterJadwal $request)
@@ -173,7 +172,26 @@ class JadwalController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $jadwal = Jadwal::findOrFail($id);
+            $jadwal->delete();
+
+            return redirect()->route('admin.master-jadwal.index')->with([
+                'status' => 'success',
+                'message' => 'Data Berhasil Dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Gagal Menghapus Dosen', [
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+
+            return redirect()->back()->withInput()->with([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function validateField(Request $request)

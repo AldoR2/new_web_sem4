@@ -1,6 +1,6 @@
 <x-layout>
     <div class="h-full dark:text-white">
-            @vite(['resources/js/components/form-validasi.js'])
+        @vite(['resources/js/components/form-validasi.js'])
         <x-slot:title>{{ $title }}</x-slot:title>
         <p class="text-gray-800 dark:text-gray-100">Silahkan tambahkan data Mata Kuliah</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">

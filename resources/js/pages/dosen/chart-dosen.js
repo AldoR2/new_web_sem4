@@ -18,14 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
             categories: categories,
             labels: {
                 style: {
-                    colors: "#888", // warna putih agak abu untuk sumbu X
+                    colors: "#888", 
                 },
             },
         },
         yaxis: {
             labels: {
                 style: {
-                    colors: "#888", // warna putih agak abu untuk sumbu Y
+                    colors: "#888", 
                 },
             },
         },
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dataLabels: {
             enabled: true,
             style: {
-                colors: ["#888"], // warna teks di atas batang
+                colors: ["#888"],
             },
         },
     };

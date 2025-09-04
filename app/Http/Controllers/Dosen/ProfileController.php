@@ -31,12 +31,10 @@ class ProfileController extends Controller
             ]);
 
             if ($request->hasFile('foto')) {
-                // Hapus foto lama jika ada
                 if ($dosen->foto && Storage::disk('public')->exists($dosen->foto)) {
                     Storage::disk('public')->delete($dosen->foto);
                 }
 
-                // Simpan foto baru
                 $filename = 'dosen/profile_' . $dosen->id . '.' . $request->file('foto')->extension();
                 $fotoPath = $request->file('foto')->storeAs('profiles', $filename, 'public');
                 $dosen->update(['foto' => $fotoPath]);

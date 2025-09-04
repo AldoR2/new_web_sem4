@@ -3,18 +3,11 @@
 namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
-use App\Models\DetailPresensi;
-use App\Models\Jadwal;
-use App\Models\Mahasiswa;
-use App\Models\Presensi;
 use App\Models\TahunAjaran;
 use App\Services\RekapMahasiswaService;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Facades\Excel;
@@ -102,7 +95,6 @@ class RekapPresensiController extends Controller
     {
         $data['title'] = 'Rekap Mahasiswa';
         $data['judul'] = 'Rekap Mahasiswa';
-        $mahasiswa = Auth::user()->mahasiswa;
         $data['rekap'] = [];
         $data['totalPertemuan'] = 16;
 

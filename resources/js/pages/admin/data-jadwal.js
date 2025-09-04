@@ -126,14 +126,6 @@ $(document).ready(function () {
                             );
                         }
                     });
-
-                    // data.forEach((item) => {
-                    //     mataKuliahSelect.append(
-                    //         `<option value="${item.id}" ${
-                    //             item.id == oldMatkulId ? "selected" : ""
-                    //         }>${item.nama_matkul}</option>`
-                    //     );
-                    // });
                 })
                 .catch((error) => {
                     console.error("Error fetching mata kuliah:", error);
@@ -141,7 +133,6 @@ $(document).ready(function () {
         }
     }
 
-    // Trigger saat user ganti
     $("#prodi, #semester, #tahun-ajaran").on("change", function () {
         const prodiId = $("#prodi").val();
         const semester = $("#semester").val();
@@ -149,7 +140,6 @@ $(document).ready(function () {
         loadMatkul(prodiId, semester, tahunAjaran);
     });
 
-    // Trigger otomatis saat halaman reload karena error validasi
     const oldProdi = $("#prodi").val();
     const oldSemester = $("#semester").val();
     const oldTahunAjaran = $("#tahun-ajaran").val();

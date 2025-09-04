@@ -1,8 +1,8 @@
 <x-layout>
     @vite(['resources/js/pages/dosen/data-jadwal.js'])
     <div class="h-full dark:bg-darkCard dark:text-white">
-    <x-slot:title>{{ $title }}</x-slot:title>
-    <p>Lihat Jadwal Perkuliahan</p>
+        <x-slot:title>{{ $title }}</x-slot:title>
+        <p>Lihat Jadwal Perkuliahan</p>
         <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="flex flex-col md:flex-row">
 
@@ -52,13 +52,13 @@
                     <tbody>
                         @foreach ($jadwal as $j)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <td class="dark:border-gray-600 px-4 py-2">{{$j->hari}}</td>
-                                <td class="dark:border-gray-600 px-4 py-2">{{substr($j->jam,0,5)}}</td>
-                                <td class="dark:border-gray-600 px-4 py-2">{{$j->durasi}} SKS</td>
-                                <td class="dark:border-gray-600 px-4 py-2">{{$j->matkul->nama_matkul}}</td>
-                                <td class="dark:border-gray-600 px-4 py-2">{{$j->prodi->nama_prodi}}</td>
-                                <td class="dark:border-gray-600 px-4 py-2 text-center">{{$j->semester}}</td>
-                                <td class="dark:border-gray-600 px-4 py-2">{{$j->ruangan->nama_ruangan}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{$j->hari ?? ''}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{substr($j->jam,0,5) ?? ''}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{$j->durasi ?? ''}} SKS</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{$j->matkul->nama_matkul ?? ''}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{$j->prodi->nama_prodi ?? ''}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2 text-center">{{$j->semester ?? ''}}</td>
+                                <td class="dark:border-gray-600 px-4 py-2">{{$j->ruangan->nama_ruangan ?? ''}}</td>
                             </tr>
                         @endforeach
                     </tbody>

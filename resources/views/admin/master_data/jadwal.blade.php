@@ -6,7 +6,6 @@
 
         <div class="w-full overflow-x-auto max-w-full mt-5 p-5 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
             <div class="flex flex-col xl:flex-row">
-                <!-- Program Studi -->
                 <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
                     <label for="prodi" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Filter By Program Studi:</label>
                     <select id="prodi" name="prodi" class="dark:bg-gray-700 dark:text-white dark:border-gray-600">
@@ -17,7 +16,6 @@
                     </select>
                 </div>
 
-                <!-- Semester -->
                 <div class="flex flex-col w-full mb-4 xl:w-1/3 mr-0 md:mr-4">
                     <label for="dosen" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Filter By Dosen:</label>
                     <select id="dosen" name="dosen_id" class="dark:bg-gray-700 dark:text-white dark:border-gray-600">
@@ -28,7 +26,6 @@
                     </select>
                 </div>
 
-                <!-- Tahun Ajaran -->
                 <div class="flex flex-col w-full mb-4 xl:w-1/3">
                     <label for="tahun-ajaran" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Filter By Tahun Ajaran:</label>
                     <select id="tahun-ajaran" name="tahun_ajaran" class="dark:bg-gray-700 dark:text-white dark:border-gray-600">
@@ -61,7 +58,7 @@
                             <th class=" dark:border-gray-600 px-4 py-2">No</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Hari</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Jam Perkuliahan</th>
-                            <th class=" dark:border-gray-600 px-4 py-2">Durasi</th>
+                            <th class=" dark:border-gray-600 px-4 py-2">SKS</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Dosen Koordinator</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Program Studi</th>
                             <th class=" dark:border-gray-600 px-4 py-2">Tahun Ajaran</th>

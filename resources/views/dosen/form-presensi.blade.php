@@ -6,50 +6,12 @@
 
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl">
 
-            {{-- @if ($errors->any())
-                <div class="alert alert-danger text-red-600 dark:text-red-400">
-                    <ul>
-                        @foreach ($errors->all() as $err)
-                            <li>{{ $err }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif --}}
-
             <form action="{{ isset($presensi) ? route('dosen.presensi.update', $presensi->id) : route('dosen.presensi.store') }}" method="POST" class="form-validasi">
-            @csrf
-            @if (isset($presensi))
-                @method('PUT')
-                <input type="hidden" id="edit_id" value="{{ $presensi->id }}">
-            @endif
-
-                {{-- <div class="flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
-                        <label for="prodi" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Program Studi:</label>
-                        <select id="prodi" name="prodi_id" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-2 border-gray-400 rounded-sm" required>
-                            <option value="" hidden selected>Pilih Program Studi</option>
-                            @foreach ($prodi as $p)
-                                <option value="{{ $p->id }}" {{ old('prodi_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->jenjang . ' ' . $p->nama_prodi }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <span class="text-red-600 text-sm" id="prodi_id_error">@error('prodi_id'){{ $message }}@enderror</span>
-                    </div>
-
-                    <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0">
-                        <label for="semester" class="mb-1 font-semibold text-gray-800 dark:text-gray-200">Pilih Semester:</label>
-                        <select id="semester" name="semester" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-2 border-gray-400 rounded-sm" required>
-                            <option value="" hidden selected>Pilih Semester</option>
-                            @for ($i = 1; $i <= 8; $i++)
-                                <option value="{{ $i }}" {{ old('semester') == $i ? 'selected' : '' }}>
-                                    Semester {{ $i }}
-                                </option>
-                            @endfor
-                        </select>
-                        <span class="text-red-600 text-sm" id="semester_error">@error('semester'){{ $message }}@enderror</span>
-                    </div>
-                </div> --}}
+                @csrf
+                @if (isset($presensi))
+                    @method('PUT')
+                    <input type="hidden" id="edit_id" value="{{ $presensi->id }}">
+                @endif
 
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
@@ -57,7 +19,7 @@
                         <select id="prodi" name="prodi_id" class="w-full" required @if (isset($presensi)) disabled @endif>
                             <option value="" hidden selected>Pilih Program Studi</option>
                             @foreach ($prodi as $p)
-                            <option value="{{ $p->id }}" @if (old('prodi_id', $presensi->pertemuan->prodi_id ?? '') == $p->id) selected @endif>
+                                <option value="{{ $p->id }}" @if (old('prodi_id', $presensi->pertemuan->prodi_id ?? '') == $p->id) selected @endif>
                                     {{ $p->nama_prodi }}
                                 </option>
                             @endforeach
@@ -144,18 +106,16 @@
 
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
-                        {{-- <div x-show="status === 'aktif'" x-transition x-cloak> --}}
-
-                            <label for="jenis" class="mb-1 font-semibold dark:text-white">Jenis Perkuliahan:</label>
-                            <select id="jenis" name="jenis" x-model="jenis" class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" x-bind:disabled="status && status !== 'aktif'">
-                                <option value="" hidden selected>Pilih Jenis Perkuliahan</option>
-                                <option value="teori" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'teori' ? 'selected' : ''}}>Teori</option>
-                                <option value="praktik" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'praktik' ? 'selected' : ''}}>Praktik</option>
-                            </select>
-                            @error('jenis')
-                                <span class="text-red-600 text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        <label for="jenis" class="mb-1 font-semibold dark:text-white">Jenis Perkuliahan:</label>
+                        <select id="jenis" name="jenis" x-model="jenis" class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" x-bind:disabled="status && status !== 'aktif'">
+                            <option value="" hidden selected>Pilih Jenis Perkuliahan</option>
+                            <option value="teori" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'teori' ? 'selected' : ''}}>Teori</option>
+                            <option value="praktik" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'praktik' ? 'selected' : ''}}>Praktik</option>
+                        </select>
+                        @error('jenis')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
                         <div x-show="status && status !== 'libur'" x-transition x-cloak>

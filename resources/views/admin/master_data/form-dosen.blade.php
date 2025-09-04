@@ -1,10 +1,9 @@
 <x-layout>
     <div class="h-full dark:text-white">
         @vite(['resources/js/components/data-wilayah.js','resources/js/components/image-preview.js','resources/js/components/form-validasi.js'])
-    <x-slot:title>{{ $title }}</x-slot:title>
-    <p class="dark:text-white">Silahkan tambahkan data Admin</p>
+        <x-slot:title>{{ $title }}</x-slot:title>
+        <p class="dark:text-white">Silahkan tambahkan data Admin</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 dark:text-white rounded-sm shadow-xl">
-
             <form action="{{ isset($dosen) ? route('admin.master-dosen.update', $dosen->id) : route('admin.master-dosen.store') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 @if (isset($dosen))
@@ -16,12 +15,10 @@
                 <hr class="my-2 text-gray-600 mb-6">
 
                 <div class="flex flex-col md:flex-row items-center gap-6 mb-6">
-                    <!-- Preview Foto -->
                     <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-300 shadow-sm">
                         <img src="{{ isset($dosen) && $dosen->foto ? asset('storage/' . $dosen->foto) : asset('images/profil-kosong.png') }}" id="previewImage" class="w-full h-full object-cover" alt="Preview Foto">
                     </div>
 
-                    <!-- Info & Tombol -->
                     <div class="flex flex-col gap-3 text-center md:text-left md:ml-4">
                         <p class="text-gray-600 text-sm">Format file yang didukung: <span class="font-medium">JPEG, JPG, PNG</span></p>
 
@@ -145,24 +142,20 @@
 
                         <div class="relative">
                             <input :type="showPassword ? 'text' : 'password'" class="p-2 pr-10 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm w-full" name="new_password" id="new_password" placeholder="Masukkan password baru" data-validate="dosen">
-
                             <button type="button"
                                     class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                                     @click="showPassword = !showPassword">
 
-                                <!-- Icon mata terbuka (show password) -->
                                 <svg x-show="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
 
-                                <!-- Icon mata tertutup (hide password) -->
                                 <svg x-show="showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L8.464 8.464m1.414 1.414L12 12m0 0l2.122 2.122m-2.122-2.122l2.122-2.122"></path>
                                 </svg>
                             </button>
                         </div>
-                            {{-- <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" data-validate="dosen"> --}}
                             <span class="text-red-600 text-sm" id="new_password_error">
                                 @error('new_password'){{ $message }}@enderror
                             </span>

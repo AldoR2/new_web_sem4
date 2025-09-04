@@ -1,5 +1,5 @@
 <x-layout>
-    <div x-data="{ 
+    <div x-data="{
         photoPreview: null,
         originalPhoto: '{{ isset($user->admin) && $user->admin->foto ? asset('storage/' . $user->admin->foto) : asset('images/profil-kosong.png') }}'
     }">
@@ -13,7 +13,7 @@
                     <form action="{{route('admin.profile.update')}}" enctype="multipart/form-data" method="POST" class="form-validasi">
                         @csrf
                         @method('patch')
-                        
+
                         <div class="bg-indigo-600 px-6 py-4">
                             <h2 class="font-bold text-white flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,15 +23,12 @@
                                 Foto Profil
                             </h2>
                         </div>
-                        
+
                         <div class="p-6">
                             <div class="flex flex-col items-center">
                                 <div class="relative group mb-6">
                                     <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl ring-4 ring-blue-100 dark:ring-blue-900">
-                                        <img :src="photoPreview || originalPhoto" 
-                                            id="previewImage" 
-                                            class="w-full h-full object-cover" 
-                                            alt="Preview Foto">
+                                        <img :src="photoPreview || originalPhoto" id="previewImage" class="w-full h-full object-cover" alt="Preview Foto">
                                     </div>
                                 </div>
                                 <div class="w-full mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -47,11 +44,7 @@
                                 </div>
 
                                 <div class="w-full mb-6">
-                                    <input type="file" 
-                                        name="foto" 
-                                        id="foto" 
-                                        accept="image/jpeg,image/jpg,image/png" 
-                                        class="hidden"
+                                    <input type="file" name="foto" id="foto" accept="image/jpeg,image/jpg,image/png" class="hidden"
                                         @change="
                                             const file = $event.target.files[0];
                                             if (file) {
@@ -65,9 +58,8 @@
                                                 reader.readAsDataURL(file);
                                             }
                                         ">
-                                    
-                                    <label for="foto" 
-                                        class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg shadow-lg cursor-pointer transition-all duration-200 transform hover:scale-105">
+
+                                    <label for="foto" class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg shadow-lg cursor-pointer transition-all duration-200 transform hover:scale-105">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                         </svg>
@@ -75,8 +67,7 @@
                                     </label>
                                 </div>
 
-                                <button type="submit" 
-                                        class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white rounded-lg font-semibold shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
+                                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white rounded-lg font-semibold shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -87,7 +78,7 @@
                     </form>
                 </div>
             </div>
-  
+
             <div class="lg:col-span-2">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-700 px-6 py-4">
@@ -98,14 +89,14 @@
                             Informasi Detail
                         </h2>
                     </div>
-                    
+
                     <div class="p-6">
                         <div class="mb-8">
                             <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 pb-2 border-b-2 border-red-200 dark:border-red-800 flex items-center">
                                 <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
                                 Informasi Pribadi
                             </h3>
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -115,13 +106,12 @@
                                         Nama Lengkap
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3  border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" 
+                                        <input type="text" disabled
+                                               class="w-full p-3  border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                                value="{{old('nama', $user->admin->nama ?? '')}}">
                                     </div>
                                 </div>
-  
+
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
                                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,9 +120,9 @@
                                         Email
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text"
+                                               disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{$user->admin->email}}">
                                     </div>
                                 </div>
@@ -144,13 +134,13 @@
                                         Telepon
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text"
+                                               disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{$user->admin->no_telp}}">
                                     </div>
                                 </div>
-  
+
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
                                         <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,13 +149,13 @@
                                         Agama
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text"
+                                               disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{$user->admin->agama ?? ''}}">
                                     </div>
                                 </div>
-  
+
                                 <div class="space-y-2">
                                     <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
                                         <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,9 +164,9 @@
                                         Tempat, Tanggal Lahir
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text"
+                                               disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{$user->admin->tempat_lahir .', '. $user->admin->tgl_lahir}}">
                                     </div>
                                 </div>
@@ -188,21 +178,21 @@
                                         Jenis Kelamin
                                     </label>
                                     <div class="relative">
-                                        <input type="text" 
-                                               disabled 
-                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg" 
+                                        <input type="text"
+                                               disabled
+                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg"
                                                value="{{ $user->admin->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}">
                                     </div>
                                 </div>
                             </div>
                         </div>
-  
+
                         <div class="mb-8">
                             <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 pb-2 border-b-2 border-orange-200 dark:border-orange-800 flex items-center">
                                 <div class="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
                                 Informasi Alamat
                             </h3>
-                            
+
                             <div class="space-y-2">
                                 <label class="flex items-center text-sm font-semibold text-gray-600 dark:text-gray-300">
                                     <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +202,7 @@
                                     Alamat Lengkap
                                 </label>
                                 <div class="relative">
-                                    <textarea disabled 
+                                    <textarea disabled
                                               rows="3"
                                               class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg resize-none">{{$user->admin->alamat}}, {{$user->admin->kelurahan->name}}, {{$user->admin->kecamatan->name}}, {{$user->admin->kota->name}}, {{$user->admin->provinsi->name}}</textarea>
                                 </div>
@@ -223,4 +213,4 @@
             </div>
         </div>
     </div>
-  </x-layout>
+</x-layout>

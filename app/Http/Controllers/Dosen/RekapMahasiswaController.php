@@ -25,13 +25,12 @@ class RekapMahasiswaController extends Controller
     {
         $title = 'Rekap Mahasiswa';
         $prodi = Prodi::all();
-        $matkul = Matkul::all();
         $rekap = [];
         $totalPertemuan = 16;
         $prodiTerpilih = $request->prodi ? Prodi::find($request->prodi) : null;
         $matkulTerpilih = $request->matkul ? Matkul::find($request->matkul) : null;
         $semesterTerpilih = $request->input('semester') ?? null;
-        return view('dosen.rekap-mahasiswa', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','matkul','rekap','totalPertemuan'));
+        return view('dosen.rekap-mahasiswa', compact('title','prodi','prodiTerpilih','matkulTerpilih','semesterTerpilih','rekap','totalPertemuan'));
     }
 
     public function exportPdf(Request $request, RekapMahasiswaService $service)

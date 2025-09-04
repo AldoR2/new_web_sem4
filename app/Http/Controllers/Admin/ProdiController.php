@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMasterProdi;
-use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use App\Models\Prodi;
 use Illuminate\Http\RedirectResponse;
