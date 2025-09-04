@@ -91,7 +91,7 @@
 
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
-                        <label for="matkul" class="mb-1 font-semibold dark:text-white">Pilih Matkul:</label>
+                        <label for="matkul" class=" font-semibold dark:text-white">Pilih Matkul:</label>
                         <select id="matkul" name="matkul_id" class="w-full" required @if (isset($presensi)) disabled @endif data-old="{{ old('matkul_id', $presensi->pertemuan->matkul_id ?? '') }}" data-matkul-text="{{ $presensi->pertemuan->matkul->nama_matkul ?? '' }}">
                         </select>
                         @if(isset($presensi))
@@ -114,7 +114,7 @@
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                         <label for="pertemuan" class="mb-1 font-semibold dark:text-white">Pertemuan Ke :</label>
-                        <select id="pertemuan" name="pertemuan_ke" class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" required>
+                        <select id="pertemuan" name="pertemuan_ke" class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" required>
                             <option value="" hidden selected>Pilih Pertemuan</option>
                                 @for($i = 1; $i <= 50; $i++)
                                     <option value="{{ $i }}" @if (old('pertemuan_ke', $presensi->pertemuan->pertemuan_ke ?? '') == $i) selected @endif>
@@ -129,7 +129,7 @@
 
                     <div class="flex flex-col w-full mb-4 md:w-1/2">
                         <label for="status" class="mb-1 font-semibold dark:text-white">Status Pertemuan:</label>
-                        <select id="status" name="status" x-model="status" required class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
+                        <select id="status" name="status" x-model="status" required class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm">
                             <option value="" hidden selected>Pilih Status</option>
                             <option value="aktif" {{old('status', $presensi->pertemuan->status ?? '') == 'aktif' ? 'selected' : ''}}>Aktif</option>
                             <option value="libur" {{old('status', $presensi->pertemuan->status ?? '') == 'libur' ? 'selected' : ''}}>Libur</option>
@@ -147,7 +147,7 @@
                         {{-- <div x-show="status === 'aktif'" x-transition x-cloak> --}}
 
                             <label for="jenis" class="mb-1 font-semibold dark:text-white">Jenis Perkuliahan:</label>
-                            <select id="jenis" name="jenis" x-model="jenis" class="p-2 w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" x-bind:disabled="status && status !== 'aktif'">
+                            <select id="jenis" name="jenis" x-model="jenis" class="p-2 w-full border-2 border-gray-400 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-sm" x-bind:disabled="status && status !== 'aktif'">
                                 <option value="" hidden selected>Pilih Jenis Perkuliahan</option>
                                 <option value="teori" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'teori' ? 'selected' : ''}}>Teori</option>
                                 <option value="praktik" {{old('jenis', $presensi->pertemuan->jenis ?? '') == 'praktik' ? 'selected' : ''}}>Praktik</option>
