@@ -50,4 +50,13 @@ class StoreMasterMatkul extends FormRequest
             'durasi_matkul.max' => 'Maksimal 10 SKS.',
         ];
     }
+
+    public function prepareForValidation(){
+        $data = [
+            'nama_matkul' => ucwords(trim($this->nama_matkul)),
+            'durasi_matkul' => trim($this->durasi_matkul),
+        ];
+
+        $this->merge($data);
+    }
 }

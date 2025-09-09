@@ -44,6 +44,7 @@ class StoreMasterMahasiswa extends FormRequest
             'kota_id' => 'required',
             'kecamatan_id' => 'required',
             'kelurahan_id' => 'required',
+            'rfid' => ['nullable',Rule::unique('mahasiswas','rfid')->ignore($id),]
         ];
 
             if ($this->isMethod('put') || $this->isMethod('patch')) {
@@ -103,7 +104,28 @@ class StoreMasterMahasiswa extends FormRequest
             'kecamatan_id.required' => 'Kecamatan wajib dipilih',
             'kelurahan_id.required' => 'Kelurahan wajib dipilih',
 
+            'rfid.unique' => 'RFID sudah terdaftar pada mahasiswa lain',
+
             'new_password.min' => 'Password baru harus minimal 8 karakter'
         ];
+    }
+
+    public function prepareForValidation(){
+        $data = [
+            'nim' => strtoupper(trim($this->nim)),
+            'rfid' => trim($this->rfid),
+            'nama' => ucwords(trim($this->nama)),
+            'tempat_lahir' => ucwords(trim($this->tempat_lahir)),
+            'email' => strtolower(trim($this->email)),
+            'no_telp' => trim($this->no_telp),
+            'alamat' => ucwords(trim($this->alamat)),
+            'tahun_masuk' => trim($this->tahun_masuk),
+        ];
+
+        if ($this->has('new_password')) {
+            $data['password'] = trim($this->new_password);
+        }
+
+        $this->merge($data);
     }
 }

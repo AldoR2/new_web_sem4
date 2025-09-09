@@ -2,9 +2,9 @@
     <div class="h-full dark:text-white">
         @vite(['resources/js/components/data-wilayah.js','resources/js/components/image-preview.js','resources/js/components/form-validasi.js'])
         <x-slot:title>{{ $title }}</x-slot:title>
-        <p class="dark:text-white">Silahkan tambahkan data Admin</p>
+        <p class="dark:text-white">{{$subtitle}}</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 dark:text-white rounded-sm shadow-xl">
-            <form action="{{ isset($dosen) ? route('admin.master-dosen.update', $dosen->id) : route('admin.master-dosen.store') }}" enctype="multipart/form-data" method="POST">
+            <form action="{{ isset($dosen) ? route('admin.master-dosen.update', $dosen->id) : route('admin.master-dosen.store') }}" enctype="multipart/form-data" method="POST" class="form-validasi">
                 @csrf
                 @if (isset($dosen))
                     @method('PUT')

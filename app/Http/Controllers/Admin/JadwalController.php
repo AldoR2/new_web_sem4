@@ -31,12 +31,13 @@ class JadwalController extends Controller
 
     public function create()
     {
-        $title = 'Data Jadwal';
+        $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Jadwal Perkuliahan';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
         $dosen = Dosen::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
-        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','dosen','tahun'));
+        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','dosen','tahun','subtitle'));
     }
 
     public function store(StoreMasterJadwal $request)
@@ -58,10 +59,6 @@ class JadwalController extends Controller
 
                 $mahasiswa = Mahasiswa::where('prodi_id', $request['prodi_id'])
                 ->where('semester', $request['semester'])->get();
-
-                if ($mahasiswa->isEmpty()) {
-                    return back()->withErrors(['semester' => 'Tidak ada mahasiswa untuk prodi dan semester ini.']);
-                }
 
                 foreach ($mahasiswa as $mhs) {
                     DetailJadwal::create([
@@ -101,14 +98,15 @@ class JadwalController extends Controller
      */
     public function edit(string $id)
     {
-        $title = 'Update Jadwal';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Jadwal Perkuliahan';
         $prodi = Prodi::all();
         $ruangan = Ruangan::all();
         $matkul = Matkul::all();
         $dosen = Dosen::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
         $jadwal = Jadwal::with('dosen','prodi','ruangan','matkul','tahun')->findOrFail($id);
-        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','matkul','dosen','tahun','jadwal'));
+        return view('admin.master_data.form-jadwal', compact('title','prodi','ruangan','matkul','dosen','tahun','jadwal','subtitle'));
     }
 
     /**
@@ -137,10 +135,6 @@ class JadwalController extends Controller
 
                 $mahasiswa = Mahasiswa::where('prodi_id', $request['prodi_id'])
                 ->where('semester', $request['semester'])->get();
-
-                if ($mahasiswa->isEmpty()) {
-                    return back()->withErrors(['semester' => 'Tidak ada mahasiswa untuk prodi dan semester ini.']);
-                }
 
                 foreach ($mahasiswa as $mhs) {
                     DetailJadwal::create([

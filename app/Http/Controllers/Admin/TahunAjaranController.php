@@ -22,7 +22,9 @@ class TahunAjaranController extends Controller
 
     public function create()
     {
-        return view('admin.master_data.form-tahunAjaran',['title' =>'Tambah Data']);
+        $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Tahun Ajaran';
+        return view('admin.master_data.form-tahunAjaran',compact('title','subtitle'));
     }
 
     public function store(StoreMasterTahun $request)
@@ -67,9 +69,10 @@ class TahunAjaranController extends Controller
 
     public function edit(string $id)
     {
-        $title = 'Edit Tahun Ajaran';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Tahun Ajaran';
         $tahun = TahunAjaran::findOrFail($id);
-        return view('admin.master_data.form-tahunAjaran', compact('title', 'tahun'));
+        return view('admin.master_data.form-tahunAjaran', compact('title', 'tahun','subtitle'));
     }
 
     public function update(StoreMasterTahun $request, $id)

@@ -22,18 +22,22 @@ class ProdiController extends Controller
 
     public function create()
     {
-        return view('admin.master_data.form-prodi',['title' => 'Tambah Data']);
+        $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Program Studi';
+        return view('admin.master_data.form-prodi',compact('title','subtitle'));
     }
 
     public function store(StoreMasterProdi $request)
     {
-        $request->merge([
-            'kode_prodi' => strtoupper(trim($request->kode_prodi)),
-            'nama_prodi' => ucwords(trim($request->nama_prodi)),
-        ]);
-
         try {
-            Prodi::create($request->only(['kode_prodi', 'jenjang', 'nama_prodi']));
+            $data = $request->validated();
+            $data = [
+                'kode_prodi' => $request->kode_prodi,
+                'jenjang' => $request->jenjang,
+                'nama_prodi' => $request->nama_prodi,
+            ];
+
+            Prodi::create($data);
 
             return redirect()->route('admin.master-prodi.index')->with([
                 'status' => 'success',
@@ -60,22 +64,24 @@ class ProdiController extends Controller
 
     public function edit($id)
     {
-        $title = 'Edit Program Studi';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Program Studi';
         $prodi = Prodi::findOrFail($id);
-        return view('admin.master_data.form-prodi', compact('title', 'prodi'));
+        return view('admin.master_data.form-prodi', compact('title', 'prodi','subtitle'));
     }
 
     public function update(StoreMasterProdi $request, $id)
     {
-        $request->merge([
-            'kode_prodi' => strtoupper(trim($request->kode_prodi)),
-            'nama_prodi' => ucwords(trim($request->nama_prodi)),
-        ]);
-
         try {
             $prodi = Prodi::findOrFail($id);
+            $data = $request->validated();
+            $data = [
+                'kode_prodi' => $request->kode_prodi,
+                'jenjang' => $request->jenjang,
+                'nama_prodi' => $request->nama_prodi,
+            ];
 
-            $prodi->update($request->only(['kode_prodi', 'jenjang', 'nama_prodi']));
+            $prodi->update($data);
 
             return redirect()->route('admin.master-prodi.index')->with([
                 'status' => 'success',

@@ -24,29 +24,18 @@ class MahasiswaController extends Controller
         $title = 'Data Mahasiswa';
         $prodi = Prodi::all();
         $mahasiswa = Mahasiswa::with( ['prodi', 'tahun','provinsi','kota','kecamatan','kelurahan'])->orderByDesc('id')->get();
-
         return view('admin.master_data.mahasiswa',compact('title','prodi','mahasiswa'));
     }
     public function create()
     {
         $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Mahasiswa';
         $prodi = Prodi::all();
-        return view('admin.master_data.form-mahasiswa', compact('title','prodi'));
+        return view('admin.master_data.form-mahasiswa', compact('title','prodi','subtitle'));
     }
 
     public function store(StoreMasterMahasiswa $request)
     {
-        $request->merge([
-            'nim' => strtoupper(trim($request->nim)),
-            'rfid' => trim($request->rfid),
-            'nama' => ucwords(trim($request->nama)),
-            'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
-            'email' => strtolower(trim($request->email)),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-            'tahun_masuk' => trim($request->tahun_masuk),
-        ]);
-
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
@@ -63,8 +52,8 @@ class MahasiswaController extends Controller
                 }
 
                 $tahunAjaranAktif = TahunAjaran::where('status', true)->first();
-
-                Mahasiswa::create([
+                $data = $request->validated();
+                $data = [
                     'user_id' => $user->id,
                     'nim' => $request->nim,
                     'nama' => $request->nama,
@@ -84,7 +73,10 @@ class MahasiswaController extends Controller
                     'kota_id' => $request->kota_id,
                     'kecamatan_id' => $request->kecamatan_id,
                     'kelurahan_id' => $request->kelurahan_id,
-                ]);
+                ];
+
+                Mahasiswa::create($data);
+
             });
 
             return redirect()->route('admin.master-mahasiswa.index')->with([
@@ -124,23 +116,12 @@ class MahasiswaController extends Controller
         $prodi = Prodi::all();
         $mahasiswa = Mahasiswa::findOrFail($id);
         $title = 'Edit Data';
-        return view('admin.master_data.form-mahasiswa', compact('mahasiswa','prodi', 'title'));
+        $subtitle = 'Silahkan Perbarui Data Mahasiswa';
+        return view('admin.master_data.form-mahasiswa', compact('mahasiswa','prodi', 'title','subtitle'));
     }
 
     public function update(StoreMasterMahasiswa $request, $id)
     {
-        $request->merge([
-            'nim' => strtoupper(trim($request->nim)),
-            'rfid' => trim($request->rfid),
-            'nama' => ucwords(trim($request->nama)),
-            'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
-            'email' => strtolower(trim($request->email)),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-            'tahun_masuk' => trim($request->tahun_masuk),
-            'password' => trim($request->new_password),
-        ]);
-
         try {
             DB::transaction(function () use ($request, $id) {
                 $mahasiswa = Mahasiswa::findOrFail($id);
@@ -157,8 +138,8 @@ class MahasiswaController extends Controller
                 }
 
                 $tahunAjaranAktif = TahunAjaran::where('status', true)->first();
-
-                $mahasiswa->update([
+                $data = $request->validated();
+                $data = [
                     'nim' => $request->nim,
                     'rfid' => $request->filled('rfid') ? $request->rfid : null,
                     'nama' => $request->nama,
@@ -178,7 +159,9 @@ class MahasiswaController extends Controller
                     'kota_id' => $request->kota_id,
                     'kecamatan_id' => $request->kecamatan_id,
                     'kelurahan_id' => $request->kelurahan_id,
-                ]);
+                ];
+
+                $mahasiswa->update($data);
 
                 $userData =[
                     'name' => $request->nama,

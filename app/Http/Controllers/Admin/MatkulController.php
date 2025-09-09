@@ -30,28 +30,27 @@ class MatkulController extends Controller
         $prodi = Prodi::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
         $title = 'Tambah Data';
-        return view('admin.master_data.form-matkul', compact('prodi','tahun', 'title'));
+        $subtitle = 'Silahkan Tambahkan Data Mata Kuliah';
+        return view('admin.master_data.form-matkul', compact('prodi','tahun', 'title','subtitle'));
     }
 
     public function store(StoreMasterMatkul $request)
     {
-        $request->merge([
-            'nama_matkul' => ucwords(trim($request->nama_matkul)),
-            'durasi_matkul' => trim($request->durasi_matkul),
-        ]);
-
         try {
             DB::transaction(function () use ($request) {
                 $kodeMatkul = $this->generateKodeMatkul($request->prodi_id);
 
-                Matkul::create([
+                $data = $request->validated();
+                $data = [
                     'kode_matkul' => $kodeMatkul,
                     'nama_matkul' => $request->nama_matkul,
                     'tahun_ajaran_id' => $request->tahun_ajaran_id,
                     'semester' => $request->semester,
                     'durasi_matkul' => $request->durasi_matkul,
                     'prodi_id' => $request->prodi_id,
-                ]);
+                ];
+
+                Matkul::create($data);
             });
 
             return redirect()->route('admin.master-matkul.index')->with([
@@ -79,24 +78,28 @@ class MatkulController extends Controller
 
     public function edit(string $id)
     {
-        $title = 'Update Data';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Mata Kuliah';
         $matkul = Matkul::findOrFail($id);
         $prodi = Prodi::all();
         $tahun = TahunAjaran::orderBy('tahun_awal')->get();
-        return view('admin.master_data.form-matkul', compact('matkul','prodi','tahun', 'title'));
+        return view('admin.master_data.form-matkul', compact('matkul','prodi','tahun', 'title','subtitle'));
     }
 
     public function update(StoreMasterMatkul $request, $id)
     {
-        $request->merge([
-            'nama_matkul' => ucwords(trim($request->nama_matkul)),
-            'durasi_matkul' => trim($request->durasi_matkul),
-        ]);
-
         try {
             DB::transaction(function () use ($request, $id) {
                 $matkul = Matkul::findOrFail($id);
-                $matkul->update($request->only(['nama_matkul', 'tahun_ajaran_id', 'semester', 'durasi_matkul','prodi_id']));
+                $data = $request->validated();
+                $data = [
+                    'nama_matkul' => $request->nama_matkul,
+                    'tahun_ajaran_id' => $request->tahun_ajaran_id,
+                    'semester' => $request->semester,
+                    'durasi_matkul' => $request->durasi_matkul,
+                    'prodi_id' => $request->prodi_id,
+                ];
+                $matkul->update($data);
             });
 
             return redirect()->route('admin.master-matkul.index')->with([

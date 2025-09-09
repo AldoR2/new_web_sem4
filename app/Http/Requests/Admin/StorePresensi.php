@@ -91,47 +91,106 @@ class StorePresensi extends FormRequest
         ];
     }
 
-private function pertemuanRule()
-{
-    return function ($attribute, $value, $fail) {
-        $index = explode('.', $attribute)[1] ?? null; // ambil index inputs.*
-        if ($index === null) return;
+    private function pertemuanRule()
+    {
+        return function ($attribute, $value, $fail) {
+            $index = explode('.', $attribute)[1] ?? null; // ambil index inputs.*
+            if ($index === null) return;
 
-        $pertemuanKe = $this->input("inputs.$index.pertemuan_ke");
+            $pertemuanKe = $this->input(key: "inputs.$index.pertemuan_ke");
 
-        $conflict = Pertemuan::where('prodi_id', $this->input('prodi_id'))
-            ->where('semester', $this->input('semester'))
-            ->where('matkul_id', $this->input('matkul_id'))
-            ->where('pertemuan_ke', $pertemuanKe)
-            ->exists();
+            $conflict = Pertemuan::where('prodi_id', $this->input('prodi_id'))
+                ->where('semester', $this->input('semester'))
+                ->where('matkul_id', $this->input('matkul_id'))
+                ->where('pertemuan_ke', $pertemuanKe)
+                ->exists();
 
-        if ($conflict) {
-            $fail("Pertemuan Ke-$pertemuanKe sudah ada untuk mata kuliah ini (baris ke-".($index+1).").");
-        }
-
-        $inputs = $this->input('inputs', []);
-        foreach ($inputs as $i => $input) {
-            if ($i == $index) continue; // skip diri sendiri
-
-            $pertemuanKe2 = $input['pertemuan_ke'] ?? null;
-            if ($pertemuanKe2 && $pertemuanKe2 == $pertemuanKe) {
-                $fail("Pertemuan Ke-$pertemuanKe duplikat dengan input ke-" . ($i+1) );
+            if ($conflict) {
+                $fail("Pertemuan Ke-$pertemuanKe sudah ada untuk mata kuliah ini (baris ke-".($index+1).").");
             }
-        }
-    };
-}
+
+            $inputs = $this->input('inputs', []);
+            foreach ($inputs as $i => $input) {
+                if ($i == $index) continue; // skip diri sendiri
+
+                $pertemuanKe2 = $input['pertemuan_ke'] ?? null;
+                if ($pertemuanKe2 && $pertemuanKe2 == $pertemuanKe) {
+                    $fail("Pertemuan Ke-$pertemuanKe duplikat dengan input ke-" . ($i+1) );
+                }
+            }
+        };
+    }
 
 
-private function ruanganRule(){
-    return function($attribute, $value, $fail){
-        foreach ($this->inputs as $i => $input) {
-            $jamAwal = $input['jam_awal'] ?? null;
-            $jamAkhir = $input['jam_akhir'] ?? null;
-            $tglPresensi = $input['tgl_presensi'] ?? null;
+    private function ruanganRule(){
+        return function($attribute, $value, $fail){
+            foreach ($this->inputs as $i => $input) {
+                $jamAwal = $input['jam_awal'] ?? null;
+                $jamAkhir = $input['jam_akhir'] ?? null;
+                $tglPresensi = $input['tgl_presensi'] ?? null;
 
-            $conflictRuangan = Presensi::where('tgl_presensi',$tglPresensi)
-                ->where('ruangan_id', $this->input('ruangan_id'))
-                ->where(function($query) use ($jamAwal, $jamAkhir){
+                $conflictRuangan = Presensi::where('tgl_presensi',$tglPresensi)
+                    ->where('ruangan_id', $this->input('ruangan_id'))
+                    ->where(function($query) use ($jamAwal, $jamAkhir){
+                        $query->where(function ($q) use ($jamAwal) {
+                            $q->where('jam_awal', '<=', $jamAwal)
+                            ->where('jam_akhir', '>', $jamAwal);
+                        })->orWhere(function ($q) use ($jamAkhir) {
+                            $q->where('jam_awal', '<', $jamAkhir)
+                            ->where('jam_akhir', '>=', $jamAkhir);
+                        })->orWhere(function ($q) use ($jamAwal, $jamAkhir) {
+                            $q->where('jam_awal', '>=', $jamAwal)
+                            ->where('jam_akhir', '<=', $jamAkhir);
+                        });
+                    })->exists();
+
+                if ($conflictRuangan) {
+                    $fail("Ruangan sedang dipakai pada waktu tersebut (input ke-" . ($i+1) . ").");
+                }
+            }
+        };
+    }
+
+    private function dosenRule(){
+        return function($attribute, $value, $fail){
+            foreach ($this->inputs as $i => $input) {
+                $jamAwal = $input['jam_awal'] ?? null;
+                $jamAkhir = $input['jam_akhir'] ?? null;
+                $tglPresensi = $input['tgl_presensi'] ?? null;
+
+                $conflictDosen = Presensi::where('tgl_presensi', $tglPresensi)
+                    ->where('dosen_id', $this->input('dosen_id'))
+                    ->where(function ($query) use ($jamAwal, $jamAkhir){
+                        $query->where(function ($q) use ($jamAwal){
+                            $q->where('jam_awal', '<=', $jamAwal)
+                            ->where('jam_akhir', '>', value: $jamAwal);
+                        })->orWhere(function ($q) use ($jamAkhir) {
+                            $q->where('jam_awal', '<', $jamAkhir)
+                            ->where('jam_akhir', '>=', $jamAkhir);
+                        });
+                    })->exists();
+
+                if ($conflictDosen) {
+                    $fail("Dosen bentrok pada waktu tersebut (input ke-" . ($i+1) . ").");
+                }
+            }
+        };
+    }
+
+    private function jadwalRule(){
+        return function($attribute, $value, $fail){
+            $index = explode('.', $attribute)[1] ?? null;
+            if ($index === null) return;
+
+            $jamAwal = $this->input("inputs.$index.jam_awal");
+            $jamAkhir = $this->input("inputs.$index.jam_akhir");
+            $tglPresensi = $this->input("inputs.$index.tgl_presensi");
+
+            $conflictJadwal = Presensi::where('tgl_presensi', $tglPresensi)
+                ->whereHas('pertemuan', function ($query) {
+                    $query->where('prodi_id', $this->input('prodi_id'))
+                        ->where('semester', $this->input('semester'));
+                })->where(function ($query) use ($jamAwal, $jamAkhir) {
                     $query->where(function ($q) use ($jamAwal) {
                         $q->where('jam_awal', '<=', $jamAwal)
                         ->where('jam_akhir', '>', $jamAwal);
@@ -144,155 +203,92 @@ private function ruanganRule(){
                     });
                 })->exists();
 
-            if ($conflictRuangan) {
-                $fail("Ruangan sedang dipakai pada waktu tersebut (input ke-" . ($i+1) . ").");
+            if ($conflictJadwal) {
+                $fail("Jadwal bentrok untuk prodi & semester.");
             }
-        }
-    };
-}
+            // === 2. Cek bentrok antar input dalam request ===
+            $inputs = $this->input('inputs', []);
+            foreach ($inputs as $i => $input) {
+                if ($i == $index) continue; // jangan cek diri sendiri
 
-private function dosenRule(){
-    return function($attribute, $value, $fail){
-        foreach ($this->inputs as $i => $input) {
-            $jamAwal = $input['jam_awal'] ?? null;
-            $jamAkhir = $input['jam_akhir'] ?? null;
-            $tglPresensi = $input['tgl_presensi'] ?? null;
+                $jamAwal2 = $input['jam_awal'] ?? null;
+                $jamAkhir2 = $input['jam_akhir'] ?? null;
+                $tgl2 = $input['tgl_presensi'] ?? null;
 
-            $conflictDosen = Presensi::where('tgl_presensi', $tglPresensi)
-                ->where('dosen_id', $this->input('dosen_id'))
-                ->where(function ($query) use ($jamAwal, $jamAkhir){
-                    $query->where(function ($q) use ($jamAwal){
-                        $q->where('jam_awal', '<=', $jamAwal)
-                        ->where('jam_akhir', '>', value: $jamAwal);
-                    })->orWhere(function ($q) use ($jamAkhir) {
-                        $q->where('jam_awal', '<', $jamAkhir)
-                        ->where('jam_akhir', '>=', $jamAkhir);
-                    });
-                })->exists();
+                if (!$jamAwal2 || !$jamAkhir2 || !$tgl2) continue;
 
-            if ($conflictDosen) {
-                $fail("Dosen bentrok pada waktu tersebut (input ke-" . ($i+1) . ").");
-            }
-        }
-    };
-}
-
-private function jadwalRule(){
-    return function($attribute, $value, $fail){
-        $index = explode('.', $attribute)[1] ?? null;
-        if ($index === null) return;
-
-        $jamAwal = $this->input("inputs.$index.jam_awal");
-        $jamAkhir = $this->input("inputs.$index.jam_akhir");
-        $tglPresensi = $this->input("inputs.$index.tgl_presensi");
-
-        $conflictJadwal = Presensi::where('tgl_presensi', $tglPresensi)
-            ->whereHas('pertemuan', function ($query) {
-                $query->where('prodi_id', $this->input('prodi_id'))
-                    ->where('semester', $this->input('semester'));
-            })->where(function ($query) use ($jamAwal, $jamAkhir) {
-                $query->where(function ($q) use ($jamAwal) {
-                    $q->where('jam_awal', '<=', $jamAwal)
-                    ->where('jam_akhir', '>', $jamAwal);
-                })->orWhere(function ($q) use ($jamAkhir) {
-                    $q->where('jam_awal', '<', $jamAkhir)
-                    ->where('jam_akhir', '>=', $jamAkhir);
-                })->orWhere(function ($q) use ($jamAwal, $jamAkhir) {
-                    $q->where('jam_awal', '>=', $jamAwal)
-                    ->where('jam_akhir', '<=', $jamAkhir);
-                });
-            })->exists();
-
-        if ($conflictJadwal) {
-            $fail("Jadwal bentrok untuk prodi & semester.");
-        }
-        // === 2. Cek bentrok antar input dalam request ===
-        $inputs = $this->input('inputs', []);
-        foreach ($inputs as $i => $input) {
-            if ($i == $index) continue; // jangan cek diri sendiri
-
-            $jamAwal2 = $input['jam_awal'] ?? null;
-            $jamAkhir2 = $input['jam_akhir'] ?? null;
-            $tgl2 = $input['tgl_presensi'] ?? null;
-
-            if (!$jamAwal2 || !$jamAkhir2 || !$tgl2) continue;
-
-            // hanya cek jika tanggal sama
-            if ($tglPresensi === $tgl2) {
-                // logika overlap
-                if (($jamAwal < $jamAkhir2) && ($jamAkhir > $jamAwal2)) {
-                    $fail("Jadwal bentrok dengan input ke-" . ($i+1) . " pada request ini.");
+                // hanya cek jika tanggal sama
+                if ($tglPresensi === $tgl2) {
+                    // logika overlap
+                    if (($jamAwal < $jamAkhir2) && ($jamAkhir > $jamAwal2)) {
+                        $fail("Jadwal bentrok dengan input ke-" . ($i+1) . " pada request ini.");
+                    }
                 }
             }
-        }
-    };
-}
+        };
+    }
 
-private function ujianRule(){
-    return function ($attribute, $value, $fail){
-        if (in_array($this->input('status'), ['uts', 'uas'])) {
-            $conflictUjian = Pertemuan::where('prodi_id', $this->input('prodi_id'))
-                ->where('semester', $this->input('semester'))
-                ->where('matkul_id', $this->input('matkul_id'))
-                ->where('status', $this->input('status'))
-                ->exists();
+    private function ujianRule(){
+        return function ($attribute, $value, $fail){
+            if (in_array($this->input('status'), ['uts', 'uas'])) {
+                $conflictUjian = Pertemuan::where('prodi_id', $this->input('prodi_id'))
+                    ->where('semester', $this->input('semester'))
+                    ->where('matkul_id', $this->input('matkul_id'))
+                    ->where('status', $this->input('status'))
+                    ->exists();
 
-            if ($conflictUjian) {
-                $fail('Perkuliahan untuk ' . strtoupper($this->input('status')) . ' sudah ada.');
+                if ($conflictUjian) {
+                    $fail('Perkuliahan untuk ' . strtoupper($this->input('status')) . ' sudah ada.');
+                }
             }
-        }
-    };
-}
+        };
+    }
 
-private function cekMahasiswa(){
-    return function($attribute, $value, $fail){
-        $mahasiswa = Mahasiswa::where('prodi_id', $this->input('prodi_id'))
-        ->where('semester', $this->input('semester'))->exists();
+    private function cekMahasiswa(){
+        return function($attribute, $value, $fail){
+            $mahasiswa = Mahasiswa::where('prodi_id', $this->input('prodi_id'))
+            ->where('semester', $this->input('semester'))->exists();
 
-        if(!$mahasiswa){
-            $fail('Tidak ada Mahasiswa pada Program Studi dan Semester tersebut');
-        }
-    };
-}
+            if(!$mahasiswa){
+                $fail('Tidak ada Mahasiswa pada Program Studi dan Semester tersebut');
+            }
+        };
+    }
 
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->input('status') === 'aktif') {
+                foreach ($this->inputs as $i => $input) {
 
-public function withValidator($validator)
-{
-    $validator->after(function ($validator) {
-        if ($this->input('status') === 'aktif') {
-            foreach ($this->inputs as $i => $input) {
+                    $jamAwal = $input['jam_awal'] ?? null;
+                    $jamAkhir = $input['jam_akhir'] ?? null;
 
-                $jamAwal = $input['jam_awal'] ?? null;
-                $jamAkhir = $input['jam_akhir'] ?? null;
+                    if ($jamAwal && $jamAkhir) {
+                        $awal  = strtotime($jamAwal);
+                        $akhir = strtotime($jamAkhir);
 
-                if ($jamAwal && $jamAkhir) {
-                    $awal  = strtotime($jamAwal);
-                    $akhir = strtotime($jamAkhir);
+                        if ($awal && $akhir) {
+                            // Jam akhir harus lebih besar dari jam awal
+                            if ($akhir <= $awal) {
+                                $validator->errors()->add(
+                                    "inputs.$i.jam_akhir",
+                                    "Jam selesai harus lebih besar dari jam mulai pada baris ke-" . ($i + 1)
+                                );
+                            }
 
-                    if ($awal && $akhir) {
-                        // Jam akhir harus lebih besar dari jam awal
-                        if ($akhir <= $awal) {
-                            $validator->errors()->add(
-                                "inputs.$i.jam_akhir",
-                                "Jam selesai harus lebih besar dari jam mulai pada baris ke-" . ($i + 1)
-                            );
-                        }
-
-                        // Durasi minimal 30 menit
-                        if (($akhir - $awal) < 30 * 60) {
-                            $validator->errors()->add(
-                                "inputs.$i.jam_awal",
-                                "Durasi perkuliahan minimal 30 menit pada baris ke-" . ($i + 1)
-                            );
+                            // Durasi minimal 30 menit
+                            if (($akhir - $awal) < 30 * 60) {
+                                $validator->errors()->add(
+                                    "inputs.$i.jam_awal",
+                                    "Durasi perkuliahan minimal 30 menit pada baris ke-" . ($i + 1)
+                                );
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-}
-
-
-
+        });
+    }
 
 }

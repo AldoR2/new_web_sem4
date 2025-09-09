@@ -2,10 +2,10 @@
     @vite(['resources/js/components/data-wilayah.js','resources/js/components/image-preview.js','resources/js/pages/superadmin/form-validasi.js'])
     <div class="h-full dark:text-white">
         <x-slot:title>{{ $title }}</x-slot:title>
-        <p class="dark:text-white">Silahkan Tambahkan Data Admin</p>
+        <p class="dark:text-white">{{$subtitle}}</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 dark:text-white rounded-sm shadow-xl">
 
-            <form id="form-admin" action="{{ isset($admin) ? route('superadmin.master-admin.update', $admin->id) : route('superadmin.master-admin.store') }}" enctype="multipart/form-data" method="POST">
+            <form id="form-admin" action="{{ isset($admin) ? route('superadmin.master-admin.update', $admin->id) : route('superadmin.master-admin.store') }}" enctype="multipart/form-data" method="POST" class="form-validasi">
                 @csrf
                 @if (isset($admin))
                     @method('PUT')
@@ -112,7 +112,18 @@
                         </span>
                     </div>
 
-                    <div class="flex flex-col w-full mb-4 md:w-1/2" x-data="{ showPassword: false }">
+
+                    <div class="flex flex-col w-full mb-4 md:w-1/2">
+                        <label for="no_telp" class="mb-1 font-semibold">Nomor Telepon:</label>
+                        <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="no_telp" id="no_telp" value="{{old('no_telp', $admin->no_telp ?? '')}}" data-validate="admin" required autocomplete="tel" placeholder="contoh: 08xxxx">
+                        <span class="text-red-600 text-sm" id="no_telp_error">
+                            @error('no_telp'){{ $message }}@enderror
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row">
+                    <div class="flex flex-col w-full mb-4 md:w-1/2 mr:0 md:mr-8" x-data="{ showPassword: false }">
                         @if (isset($admin))
                         <label for="new_password" class="mb-1 font-semibold">Password:</label>
                         <input type="hidden" name="old_password" id="old_password" value="{{$admin->password ?? ''}}">
@@ -140,19 +151,6 @@
                                 </svg>
                             </button>
                         </div>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full mb-4 md:w-1/2">
-                        @if (isset($admin))
-                            <label for="new_password" class="mb-1 font-semibold">Password Baru:</label>
-                            <input type="hidden" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="old_password" id="old_password" value="{{($admin->password ?? '')}}">
-                            <input type="password" class="p-2 border-2 border-gray-400 dark:border-gray-600  bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="new_password" id="new_password" data-validate="admin">
-                            <span class="text-red-600 text-sm" id="new_password_error">
-                                @error('new_password'){{ $message }}@enderror
-                            </span>
                         @endif
                     </div>
                     <div class="flex flex-col w-full mb-4 md:w-1/2"></div>

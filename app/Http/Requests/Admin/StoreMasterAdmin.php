@@ -98,4 +98,21 @@ class StoreMasterAdmin extends FormRequest
             'new_password.min' => 'Password baru harus minimal 8 karakter'
         ];
     }
+
+    public function prepareForValidation(){
+        $data = [
+            'nip' => trim($this->nip),
+            'nama' => ucwords(trim($this->nama)),
+            'tempat_lahir' => ucwords(trim($this->tempat_lahir)),
+            'email' => strtolower(trim($this->email)),
+            'no_telp' => trim($this->no_telp),
+            'alamat' => ucwords(trim($this->alamat)),
+        ];
+
+        if ($this->has('new_password')) {
+            $data['password'] = trim($this->new_password);
+        }
+
+        $this->merge($data);
+    }
 }

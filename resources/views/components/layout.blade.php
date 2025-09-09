@@ -48,13 +48,15 @@
                 class="fixed inset-0 z-20 bg-gray-600 transition-opacity duration-300"></div>
 
             <main class="relative mt-16 xl:mt-0 p-6 bg-gray-200 dark:bg-darkCard">
-                <div>
-                    <h1 class="font-bold text-gray-800 dark:text-white text-2xl">{{ $title }}</h1>
-                    {{ $slot }}
-                </div>
+                <x-loader />
+                    <div>
+                        <h1 class="font-bold text-gray-800 dark:text-white text-2xl">{{ $title }}</h1>
+                        {{ $slot }}
+                    </div>
             </main>
         </div>
     </div>
+
     <script>
         document.addEventListener('submit', function (e) {
             if (e.target.classList.contains('form-hapus')) {

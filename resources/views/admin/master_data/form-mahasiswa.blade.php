@@ -2,10 +2,10 @@
     <div class="h-full dark:text-white">
         @vite(['resources/js/components/data-wilayah.js','resources/js/components/image-preview.js','resources/js/components/form-validasi.js'])
         <x-slot:title>{{ $title }}</x-slot:title>
-        <p class="dark:text-white">Silahkan tambahkan data Mahasiswa</p>
+        <p class="dark:text-white">{{$subtitle}}</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 dark:text-white rounded-sm shadow-xl">
 
-            <form action="{{ isset($mahasiswa) ? route('admin.master-mahasiswa.update', $mahasiswa->id) : route('admin.master-mahasiswa.store') }}" enctype="multipart/form-data" method="POST">
+            <form action="{{ isset($mahasiswa) ? route('admin.master-mahasiswa.update', $mahasiswa->id) : route('admin.master-mahasiswa.store') }}" enctype="multipart/form-data" method="POST" class="form-validasi">
                 @csrf
                 @if (isset($mahasiswa))
                     @method('PUT')
@@ -124,7 +124,10 @@
                     <div class="flex flex-col md:flex-row">
                         <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
                             <label for="rfid" class="mb-1 font-semibold">RFID:</label>
-                            <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="rfid" id="rfid" value="{{$mahasiswa->rfid ?? ''}}" placeholder="Masukkan Kode Rfid">
+                            <input type="text" class="p-2 border-2 border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" name="rfid" id="rfid" value="{{$mahasiswa->rfid ?? ''}}" placeholder="Masukkan Kode Rfid" data-validate="mahasiswa">
+                        <span class="text-red-600 text-sm" id="rfid_error">
+                            @error('rfid'){{ $message }}@enderror
+                        </span>
                         </div>
 
                         <div class="flex flex-col w-full mb-4 md:w-1/2" x-data="{ showPassword: false }">
@@ -219,9 +222,9 @@
 
                 <div class="flex flex-col md:flex-row">
                     <div class="flex flex-col w-full mb-4 md:w-1/2 mr-0 md:mr-8">
-                        <label for="prodi_id" class="mb-1 font-semibold">Jenjang Studi:</lab>
+                        <label for="prodi_id" class="mb-1 font-semibold">Program Studi:</lab>
                         <select name="prodi_id" id="prodi_id" class="p-2 mt-1 py-[10.5px] w-full flex border-2 font-normal border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-sm" required>
-                            <option value="" hidden selected>Pilih jenjang studi</option>
+                            <option value="" hidden selected>Pilih Program Studi</option>
                             @foreach ($prodi as $p)
                                 <option value="{{ $p->id }}" @if (old('prodi_id', $mahasiswa->prodi_id ?? '') == $p->id) selected @endif>
                                     {{ $p->nama_prodi }}

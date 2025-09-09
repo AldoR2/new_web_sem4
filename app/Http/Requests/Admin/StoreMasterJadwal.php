@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Mahasiswa;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,7 @@ class StoreMasterJadwal extends FormRequest
             'durasi' => 'required|integer|min:1|max:10',
             'dosen_id' => 'required',
             'prodi_id' => 'required',
-            'semester' => 'required',
+            'semester' => ['required', $this->cekMahasiswa()],
             'matkul_id' => 'required',
             'ruangan_id' => 'required',
         ];
@@ -57,6 +58,17 @@ class StoreMasterJadwal extends FormRequest
 
             'ruangan_id.required' => 'Ruangan harus dipilih.',
         ];
+    }
+
+    private function cekMahasiswa(){
+        return function($attribute, $value, $fail){
+            $mahasiswa = Mahasiswa::where('prodi_id', $this->input('prodi_id'))
+            ->where('semester', $this->input('semester'))->exists();
+
+            if(!$mahasiswa){
+                $fail('Tidak ada Mahasiswa pada Program Studi dan Semester tersebut');
+            }
+        };
     }
 
 }

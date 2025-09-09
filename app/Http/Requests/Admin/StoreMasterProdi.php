@@ -47,4 +47,13 @@ class StoreMasterProdi extends FormRequest
             'nama_prodi.unique' => 'Nama Program Studi sudah terdaftar.',
         ];
     }
+
+    public function prepareForValidation(){
+        $data = [
+            'kode_prodi' => strtoupper(trim($this->kode_prodi)),
+            'nama_prodi' => ucwords(trim($this->nama_prodi)),
+        ];
+
+        $this->merge($data);
+    }
 }

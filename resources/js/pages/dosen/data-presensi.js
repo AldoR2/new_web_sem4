@@ -37,6 +37,7 @@ $(document).ready(function () {
         info: true,
         scrollX: true,
         autoWidth: false,
+        order: [],
     });
 
     let defaultFilter = "today";

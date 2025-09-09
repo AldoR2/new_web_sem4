@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
@@ -56,11 +55,16 @@ class MahasiswaController extends Controller
 
         if (!$mahasiswa) {
             return response()->json(['status' => 'error', 'message' => 'Mahasiswa tidak ditemukan'], 404);
+        }elseif (!$mahasiswa->email_verified_at) {
+            return response()->json(['status' => 'error', 'message' => 'Akun mahasiswa belum aktif'], 403);
         }
         $now = Carbon::now();
 
         try {
             $presensi = Presensi::whereDate('tgl_presensi', Carbon::today())
+                ->whereHas('detailPresensi', function ($q) use ($mahasiswa) {
+                    $q->where('mahasiswa_id', $mahasiswa->id);
+                })
                 ->where(function ($q) {
                     $q->whereNull('link_zoom')->orWhere('link_zoom','');
                 })
@@ -87,6 +91,7 @@ class MahasiswaController extends Controller
 
             DetailPresensi::where('mahasiswa_id', $mahasiswa->id)
                 ->where('presensi_id', $presensi->id)
+                ->whereNull('waktu_presensi')
                 ->update([
                     'waktu_presensi' => now(),
                     'status' => 1,

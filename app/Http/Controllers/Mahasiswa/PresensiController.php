@@ -59,43 +59,4 @@ class PresensiController extends Controller
 
         return view('mahasiswa.presensi', compact('presensi','title','biodata','presensiTercatat','riwayat'));
     }
-
-    // public function prosesPresensi(Request $request){
-    //     $rfid = $request->input('rfid');
-
-    //     $mahasiswa = Mahasiswa::where('rfid', $rfid)->first();
-    //     if (!$mahasiswa) {
-    //         return response()->json(['status'=>'error', 'message'=>'Mahasiswa Tidak ditemukan'], 404);
-    //     }
-
-    //     $presensi = DetailPresensi::where('id', $mahasiswa->id)->where('status',0)->whereHas('presensi', function ($query){
-    //         $query->whereNull('link_zoom')->orWhere('link_zoom','');
-    //     })->with('presensi')->first();
-
-    //     if (!$presensi) {
-    //         return response()->json(['status' => 'error', 'message' => 'Tidak ada presensi aktif'], 404);
-    //     }
-
-    //     $tglPresensi = $presensi->presensi->tgl_presensi;
-    //     $jamAwal = $presensi->presensi->jam_awal;
-    //     $jamAkhir = $presensi->presensi->jam_akhir;
-
-    //     $timeMulai = Carbon::parse("$tglPresensi $jamAwal");
-    //     $timeBerakhir = Carbon::parse("$tglPresensi $jamAkhir");
-    //     $now = Carbon::now();
-
-    //     if ($now->lt($timeMulai)) {
-    //         return response()->json(['status' => 'error', 'message' => 'Absensi belum dimulai']);
-    //     } elseif ($now->gt($timeBerakhir)) {
-    //         return response()->json(['status' => 'error', 'message' => 'Absensi sudah kadaluarsa']);
-    //     }
-
-    //     $presensi->update([
-    //         'status' => 1,
-    //         'waktu_presensi' => now()
-    //     ]);
-
-    //     return response()->json(['status' => 'success', 'message' => 'Presensi berhasil']);
-
-    // }
 }

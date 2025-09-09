@@ -28,23 +28,15 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('superadmin.form-admin',['title' =>'Tambah Data']);
+        $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Admin';
+        return view('superadmin.form-admin',compact('title','subtitle'));
 
     }
 
     public function store(StoreMasterAdmin $request)
     {
-        $request->merge([
-            'nip' => trim($request->nip),
-            'nama' => ucwords(trim($request->nama)),
-            'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
-            'email' => strtolower(trim($request->email)),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-        ]);
-
         try {
-
             DB::transaction(function () use ($request) {
                 $user = User::create([
                     'name' => $request->nama,
@@ -59,7 +51,8 @@ class AdminController extends Controller
                     $fotoPath = $request->file('foto')->storeAs( 'profiles',$filename,'public');
                 }
 
-                Admin::create([
+                $data = $request->validated();
+                $data = [
                     'user_id' => $user->id,
                     'nip' => $request->nip,
                     'nama' => $request->nama,
@@ -75,7 +68,9 @@ class AdminController extends Controller
                     'kota_id' => $request->kota_id,
                     'kecamatan_id' => $request->kecamatan_id,
                     'kelurahan_id' => $request->kelurahan_id,
-                ]);
+                ];
+
+                Admin::create($data);
             });
 
 
@@ -113,26 +108,19 @@ class AdminController extends Controller
 
     public function edit(string $id)
     {
-        $title = 'Edit Data Admin';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Admin';
         $admin = Admin::findOrFail($id);
-        return view('superadmin.form-admin', compact('title', 'admin'));
+        return view('superadmin.form-admin', compact('title', 'admin','subtitle'));
     }
 
     public function update(StoreMasterAdmin $request, $id)
     {
-        $request->merge([
-            'nama' => ucwords(trim($request->nama)),
-            'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
-            'email' => strtolower(trim($request->email)),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-            'password' => trim($request->new_password),
-        ]);
-
         try {
             DB::transaction(function () use ($request, $id) {
             $admin = Admin::findOrFail($id);
             $user = $admin->user;
+            $data = $request->validated();
 
             if ($request->hasFile('foto')) {
                 if ($admin->foto && Storage::disk('public')->exists($admin->foto)) {
@@ -144,7 +132,7 @@ class AdminController extends Controller
                 $admin->foto = $fotoPath;
             }
 
-            $admin->update([
+            $data = [
                 'nip' => $request->nip,
                 'nama' => $request->nama,
                 'jenis_kelamin' => $request->jenis_kelamin,
@@ -159,7 +147,9 @@ class AdminController extends Controller
                 'kota_id' => $request->kota_id,
                 'kecamatan_id' => $request->kecamatan_id,
                 'kelurahan_id' => $request->kelurahan_id,
-            ]);
+            ];
+
+            $admin->update($data);
 
             $userData =[
                 'name' => $request->nama,

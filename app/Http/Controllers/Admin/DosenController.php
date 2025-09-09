@@ -30,20 +30,12 @@ class DosenController extends Controller
     {
         $prodi = Prodi::all();
         $title = 'Tambah Data';
-        return view('admin.master_data.form-dosen', compact('prodi', 'title'));
+        $subtitle = 'Silahkan Tambahkan Data Dosen';
+        return view('admin.master_data.form-dosen', compact('prodi', 'title','subtitle'));
     }
 
     public function store(StoreMasterDosen $request)
     {
-        $request->merge([
-            'nip' => trim($request->nip),
-            'nama' => ucwords(trim($request->nama)),
-            'tempat_lahir' => ucwords(trim($request->tempat_lahir)),
-            'email' => strtolower(trim($request->email)),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-        ]);
-
         try {
 
             DB::transaction(function () use ($request) {
@@ -60,8 +52,8 @@ class DosenController extends Controller
                     $filename = 'dosen/profile_' . $user->id . '.' . $request->file('foto')->extension();
                     $fotoPath = $request->file('foto')->storeAs( 'profiles', $filename, 'public');
                 }
-
-                Dosen::create([
+                $data = $request->validated();
+                $data = [
                     'user_id' => $user->id,
                     'nip' => $request->nip,
                     'nama' => $request->nama,
@@ -78,7 +70,9 @@ class DosenController extends Controller
                     'kota_id' => $request->kota_id,
                     'kecamatan_id' => $request->kecamatan_id,
                     'kelurahan_id' => $request->kelurahan_id,
-                ]);
+                ];
+
+                Dosen::create($data);
             });
 
             return redirect()->route('admin.master-dosen.index')->with([
@@ -118,27 +112,19 @@ class DosenController extends Controller
         $prodi = Prodi::all();
         $dosen = Dosen::findOrFail($id);
         $title = 'Edit Data';
-        return view('admin.master_data.form-dosen', compact('dosen','prodi', 'title'));
+        $subtitle = 'Silahkan Perbarui Data Dosen';
+        return view('admin.master_data.form-dosen', compact('dosen','prodi', 'title','subtitle'));
     }
 
     public function update(StoreMasterDosen $request, $id)
     {
-        $request->merge([
-            'nip' => trim($request->nip),
-            'nama' => trim($request->nama),
-            'tempat_lahir' => trim($request->tempat_lahir),
-            'email' => trim($request->email),
-            'no_telp' => trim($request->no_telp),
-            'alamat' => ucwords(trim($request->alamat)),
-            'password' => trim($request->new_password),
-        ]);
-
         try {
 
             DB::transaction(function () use($request, $id) {
 
                 $dosen = Dosen::findOrFail($id);
                 $user = $dosen->user;
+                $data = $request->validated();
 
                 if ($request->hasFile('foto')) {
                     if ($dosen->foto && Storage::disk('public')->exists($dosen->foto)) {
@@ -150,7 +136,7 @@ class DosenController extends Controller
                     $dosen->foto = $fotoPath;
                 }
 
-                $dosen->update([
+                $data = [
                     'nip' => $request->nip,
                     'nama' => $request->nama,
                     'jenis_kelamin' => $request->jenis_kelamin,
@@ -166,7 +152,9 @@ class DosenController extends Controller
                     'kota_id' => $request->kota_id,
                     'kecamatan_id' => $request->kecamatan_id,
                     'kelurahan_id' => $request->kelurahan_id,
-                ]);
+                ];
+
+                $dosen->update($data);
 
                 $userData =[
                     'name' => $request->nama,

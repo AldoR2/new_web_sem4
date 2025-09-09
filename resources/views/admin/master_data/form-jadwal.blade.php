@@ -2,7 +2,7 @@
     @vite(['resources/js/pages/admin/data-jadwal.js','resources/js/components/form-validasi.js'])
     <div class="h-full dark:text-white">
         <x-slot:title>{{ $title }}</x-slot:title>
-        <p class="text-gray-900 dark:text-gray-200">Silahkan tambahkan data Admin</p>
+        <p class="dark:text-white">{{$subtitle}}</p>
         <div class="w-full h-max max-w-full mt-5 p-8 bg-white dark:bg-gray-800 rounded-sm shadow-xl transition-colors duration-300">
             <form action="{{ isset($jadwal) ? route('admin.master-jadwal.update', $jadwal->id) : route('admin.master-jadwal.store') }}" method="POST" class="form-validasi">
                 @csrf

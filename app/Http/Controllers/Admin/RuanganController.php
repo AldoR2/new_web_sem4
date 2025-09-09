@@ -21,8 +21,9 @@ class RuanganController extends Controller
 
     public function create()
     {
-        $title = 'Data Ruangan';
-        return view('admin.master_data.form-ruangan', compact('title'));
+        $title = 'Tambah Data';
+        $subtitle = 'Silahkan Tambahkan Data Ruangan';
+        return view('admin.master_data.form-ruangan', compact('title','subtitle'));
     }
 
     public function store(StoreMasterRuangan $request)
@@ -59,9 +60,10 @@ class RuanganController extends Controller
 
     public function edit(string $id)
     {
-        $title = 'Edit Ruangan';
+        $title = 'Edit Data';
+        $subtitle = 'Silahkan Perbarui Data Ruangan';
         $ruangan = Ruangan::findOrFail($id);
-        return view('admin.master_data.form-ruangan', compact('title', 'ruangan'));
+        return view('admin.master_data.form-ruangan', compact('title', 'ruangan','subtitle'));
     }
 
     public function update(StoreMasterRuangan $request, string $id)

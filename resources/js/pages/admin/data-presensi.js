@@ -37,6 +37,7 @@ $(document).ready(function () {
         info: true,
         scrollX: true,
         autoWidth: false,
+        order: [], // <- tidak ada sorting dari DataTables
     });
 
     let defaultFilter = "today";
